@@ -1,4 +1,20 @@
+
+using Messages;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add NServiceBus
+
+builder.Host.UseNServiceBus(context =>
+{
+    var endpointConfiguration = new EndpointConfiguration("Gateway");
+    var transport = endpointConfiguration.UseTransport<LearningTransport>();
+    var route = transport.Routing();
+
+    route.RouteToEndpoint(typeof(GetAllProduct), "Product");
+
+    return endpointConfiguration;
+});
 
 // Add services to the container.
 
@@ -15,6 +31,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(builder => builder
+    .AllowAnyHeader()
+    .AllowAnyOrigin()
+    .AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
