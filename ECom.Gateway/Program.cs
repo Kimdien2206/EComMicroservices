@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseNServiceBus(context =>
 {
     var endpointConfiguration = new EndpointConfiguration("Gateway");
+    endpointConfiguration.EnableCallbacks();
+    endpointConfiguration.MakeInstanceUniquelyAddressable("A");
+
     var transport = endpointConfiguration.UseTransport<LearningTransport>();
     var route = transport.Routing();
 

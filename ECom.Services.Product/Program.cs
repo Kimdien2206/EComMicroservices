@@ -2,8 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using NServiceBus;
+using Microsoft.Extensions.DependencyInjection;
+using ECom.Services.Products.Data;
+using Microsoft.Extensions.Configuration;
 
-namespace ECom.Services.Product
+namespace ECom.Services.Products
 {
     class Program
     {
@@ -20,6 +23,7 @@ namespace ECom.Services.Product
                     return endpointConfiguration;
                 })
                 .RunConsoleAsync();
+
         }
     }
 }

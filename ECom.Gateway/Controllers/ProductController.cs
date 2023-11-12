@@ -1,4 +1,4 @@
-﻿using ECom.Gateway.Dto;
+﻿using Dto.ProductDto;
 using Messages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +24,8 @@ namespace ECom.Gateway.Controllers
 
             log.Info("Received request");
             var message = new GetAllProduct();
-            await this.massageSession.Send(message);
-            log.Info("Message sent");
+            var response = await this.massageSession.Request<GetAllProductRes>(message);
+            log.Info($"Message sent, received: {response.productDtos}");
         }
     }
 }
