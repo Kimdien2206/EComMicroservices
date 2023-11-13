@@ -68,14 +68,14 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
             }
           } : undefined,
           image: createImageName(imageList, slugString),
-          HaveTag: {
-            createMany: {
-              data: data.tags.map((item: number) => {
-                return { tagID: item }
-              }),
-              skipDuplicates: true
-            }
-          },
+          //HaveTag: {
+          //  createMany: {
+          //    data: data.tags.map((item: number) => {
+          //      return { tagID: item }
+          //    }),
+          //    skipDuplicates: true
+          //  }
+          //},
           collection: data.collection ? {
             connect: {
               id: data.collection
@@ -87,7 +87,8 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
               skipDuplicates: true
             }
           }
-        }
+          }
+          console.log("Clicked");
         postProduct(newProduct).then(async (response) => {
           await uploadImageFunc(imageList, slugString);
           importProduct(response.data, data);

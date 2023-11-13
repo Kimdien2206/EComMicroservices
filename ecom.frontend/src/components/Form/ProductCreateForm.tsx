@@ -57,7 +57,7 @@ const ProductCreateForm: FC<ProductCreateProps> = ({ form, tagInit, collectionIn
             </Form.Item>
           </Descriptions.Item>
           <Descriptions.Item label="Nhãn" span={3}>
-            <Form.Item name={'tags'} rules={[REQUIRED_RULE]} style={FORM_NO_BOTTOM_MARGIN}>
+            <Form.Item name={'tags'}  style={FORM_NO_BOTTOM_MARGIN}>
               <Select
                 mode="multiple"
                 allowClear

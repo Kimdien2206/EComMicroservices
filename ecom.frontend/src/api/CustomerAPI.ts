@@ -2,7 +2,7 @@ import { http } from ".";
 import ICart from "../interface/Cart";
 
 export function fetchAllProducts(){
-  return http.get(`/Product`);
+  return http.get(`/product`);
 };
 
 export function fetchProductDetail(where: any){

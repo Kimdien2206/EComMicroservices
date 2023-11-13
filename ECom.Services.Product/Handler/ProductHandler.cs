@@ -14,9 +14,13 @@ using ECom.Services.Products.Utility;
 
 namespace ECom.Services.Products.Handler
 {
-    public class ProductHandler : IHandleMessages<GetAllProduct>
+    public class ProductHandler : 
+        IHandleMessages<GetAllProduct>,
+        IHandleMessages<ViewProduct>,
+        IHandleMessages<CreateProduct>
     {
         private IMapper mapper;
+        static ILog log = LogManager.GetLogger<ProductHandler>();
 
         public ProductHandler()
         {
@@ -35,13 +39,54 @@ namespace ECom.Services.Products.Handler
             {
                 productDtos = products.Select(
                 emp => mapper.Map<Product, ProductDto>(emp)
-                )
+                ),
             };
-            var options = new ReplyOptions();
             await context.Reply(responseMessage).ConfigureAwait(false);
             log.Info("Response sent");
         }
 
-        static ILog log = LogManager.GetLogger<ProductHandler>();
+        public async Task Handle(ViewProduct message, IMessageHandlerContext context)
+        {
+            if (message.productID == 0)
+            {
+                log.Error("BadRequest, missing product id");
+            }
+            else
+            {
+                int productID = message.productID;
+                Product product = DataAccess.Ins.DB.Products.First(x => x.Id == productID);
+                product.View++;
+                try
+                {
+                    DataAccess.Ins.DB.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString()); 
+                }
+            }
+        }
+
+        public async Task Handle(CreateProduct message, IMessageHandlerContext context)
+        {
+            if(message.newProduct == null)
+            {
+                log.Error("BadRequest, missing product info");
+            }
+            else
+            {
+                Product newProduct = mapper.Map<Product>(message.newProduct);
+                try
+                {
+                    log.Info("Adding new Product");
+                    DataAccess.Ins.DB.Products.Add(newProduct);
+                    log.Info("Product added");
+                }
+                catch(Exception ex) 
+                {
+                    log.Error($"Error: {ex}");
+                }
+            }
+        }
     }
 }

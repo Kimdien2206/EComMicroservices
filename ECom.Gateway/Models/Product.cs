@@ -1,5 +1,5 @@
 ﻿
-namespace ECom.Gateway.Dto
+namespace ECom.Gateway.Models
 {
     public class Product
     {

@@ -1,4 +1,3 @@
-
 using Messages;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +14,7 @@ builder.Host.UseNServiceBus(context =>
     var route = transport.Routing();
 
     route.RouteToEndpoint(typeof(GetAllProduct), "Product");
+    route.RouteToEndpoint(typeof(ViewProduct), "Product");
 
     return endpointConfiguration;
 });
@@ -25,6 +25,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//builder.Services.AddHttpContextAccessor();
+
+// Register IHttpContextAccessor for accessing HttpContext in the handler
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddScoped<ProductHandler>();
+
+
+
+
 
 var app = builder.Build();
 
