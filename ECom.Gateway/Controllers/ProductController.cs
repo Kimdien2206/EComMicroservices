@@ -24,25 +24,6 @@ namespace ECom.Gateway.Controllers
             this._mapper = mapper;
         }
 
-        public IActionResult ReturnWithStatus<T, Y>(Response<Y> response)
-        {
-            if (response.ErrorCode == 200)
-            {
-                if (response.responseData != null)
-                {
-                    return Ok(response.responseData);
-                }
-                else
-                {
-                    return Ok("Request handled");
-                }
-            }
-            else
-            {
-                return response.ErrorCode != 0 ? StatusCode(response.ErrorCode) : StatusCode(500);
-            }
-        }
-
         [HttpGet]
         [EnableCors]
         public async Task<IActionResult> GetAllProducts()
@@ -166,6 +147,7 @@ namespace ECom.Gateway.Controllers
         
         [HttpPatch]
         [EnableCors]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateProduct(Product newProduct)
         {
             if (newProduct == null)

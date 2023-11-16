@@ -21,6 +21,7 @@ namespace ECom.Gateway.Controllers
             this.messageSession = messageSession;
             this._mapper = mapper;
         }
+
         [HttpGet]
         [EnableCors]
         public async Task<IActionResult> GetAllDiscount()
@@ -39,6 +40,71 @@ namespace ECom.Gateway.Controllers
             {
                 log.Info($"Message sent, but {ex}");
                 Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        [EnableCors]
+        public async Task<IActionResult> CreateDiscount(Discount newDiscount)
+        {
+            if (newDiscount == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
+                var message = new CreateDiscount() { discount = newDiscountDto };
+                var response = await this.messageSession.Request<Response<DiscountDto>>(message);
+                return ReturnWithStatus<Discount, DiscountDto>(response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPatch]
+        [EnableCors]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateDiscount(Discount newDiscount)
+        {
+            if (newDiscount == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
+                var message = new UpdateDiscount() { discount = newDiscountDto, id = newDiscountDto.Id };
+                var response = await this.messageSession.Request<Response<DiscountDto>>(message);
+                return ReturnWithStatus<Discount, DiscountDto>(response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete]
+        [EnableCors]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteDiscount(string id)
+        {
+            int productID = Int32.Parse(id);
+            if (productID == 0)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var message = new DeleteDiscount() { Id = productID };
+                var response = await this.messageSession.Request<Response<DiscountDto>>(message);
+                return ReturnWithStatus<Discount, DiscountDto>(response);
+            }
+            catch
+            {
                 return StatusCode(500);
             }
         }

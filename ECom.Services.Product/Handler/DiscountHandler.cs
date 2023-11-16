@@ -13,7 +13,11 @@ using System.Threading.Tasks;
 
 namespace ECom.Services.Products.Handler
 {
-    public class DiscountHandler : IHandleMessages<GetAllDiscount>
+    public class DiscountHandler : 
+        IHandleMessages<GetAllDiscount>,
+        IHandleMessages<CreateDiscount>,
+        IHandleMessages<UpdateDiscount>,
+        IHandleMessages<DeleteDiscount>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<DiscountHandler>();
@@ -44,6 +48,88 @@ namespace ECom.Services.Products.Handler
             {
                 log.Info("Something went wrong");
                 responseMessage.ErrorCode = 500;
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(CreateDiscount message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<DiscountDto>();
+            if (message.discount == null)
+            {
+                log.Error("BadRequest, missing product info");
+                responseMessage.ErrorCode = 403;
+            }
+            else
+            {
+                Discount newDiscount = mapper.Map<Discount>(message.discount);
+                try
+                {
+                    log.Info("Adding new Discount");
+                    DataAccess.Ins.DB.Discounts.Add(newDiscount);
+                    log.Info("Discount added");
+                    responseMessage.ErrorCode = 200;
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Error: {ex}");
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(UpdateDiscount message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<DiscountDto>();
+            if (message.id == 0)
+            {
+                log.Error("BadRequest, missing product id");
+                responseMessage.ErrorCode = 403;
+            }
+            else
+            {
+                try
+                {
+                    DiscountDto newDiscount = message.discount;
+                    Discount discount = DataAccess.Ins.DB.Discounts.First(x => x.Id == message.id);
+                    discount.Name = newDiscount.Name;
+                    discount.DiscountAmount = newDiscount.DiscountAmount;
+                    DataAccess.Ins.DB.SaveChanges();
+                    responseMessage.ErrorCode = 200;
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(DeleteDiscount message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<DiscountDto>();
+            if (message.Id == 0)
+            {
+                log.Error("BadRequest, missing product id");
+                responseMessage.ErrorCode = 403;
+            }
+            else
+            {
+                try
+                {
+
+                    Discount discount = DataAccess.Ins.DB.Discounts.First(u => u.Id == message.Id);
+                    DataAccess.Ins.DB.Discounts.Remove(discount);
+                    DataAccess.Ins.DB.SaveChanges();
+                    responseMessage.ErrorCode = 200;
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    responseMessage.ErrorCode = 500;
+                }
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
