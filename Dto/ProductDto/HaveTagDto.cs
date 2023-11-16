@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dto.ProductDto
 {
-    public class HaveTagDto
+    public class HaveTagDto 
     {
         public int Id { get; set; }
 

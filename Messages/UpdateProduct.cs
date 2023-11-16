@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Messages
 {
-    public class GetAllProductRes : IMessage
+    public class UpdateProduct : ICommand
     {
-        public IEnumerable<ProductDto> productDtos { get; set; }
+        public int Id { get; set; }
+        public ProductDto product { get; set; }
     }
 }

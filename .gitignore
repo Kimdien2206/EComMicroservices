@@ -393,3 +393,6 @@ lerna-debug.log*
 *.launch
 .settings/
 *.sublime-workspace
+
+#NServiceBus transport error log
+.learningtransport/

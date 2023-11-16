@@ -1,6 +1,6 @@
 ﻿namespace Dto.ProductDto
 {
-    public class ProductDto
+    public class ProductDto 
     {
         public int Id { get; set; }
 

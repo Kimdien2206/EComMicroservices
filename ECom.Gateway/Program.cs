@@ -1,4 +1,6 @@
 using Messages;
+using ECom.Gateway.Utility;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,12 @@ builder.Host.UseNServiceBus(context =>
 
     route.RouteToEndpoint(typeof(GetAllProduct), "Product");
     route.RouteToEndpoint(typeof(ViewProduct), "Product");
+    route.RouteToEndpoint(typeof(CreateProduct), "Product");
+    route.RouteToEndpoint(typeof(GetBestSellers), "Product");
+    route.RouteToEndpoint(typeof(GetMostViewed), "Product");
+    route.RouteToEndpoint(typeof(GetProductByID), "Product");
+    route.RouteToEndpoint(typeof(UpdateProduct), "Product");
+    route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
 
     return endpointConfiguration;
 });
@@ -25,14 +33,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddHttpContextAccessor();
 
-// Register IHttpContextAccessor for accessing HttpContext in the handler
-//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-//builder.Services.AddScoped<ProductHandler>();
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new MappingProfile());
+});
+IMapper mapper = config.CreateMapper();
 
-
-
+builder.Services.AddSingleton(mapper);
 
 
 var app = builder.Build();

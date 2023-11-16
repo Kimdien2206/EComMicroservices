@@ -14,6 +14,9 @@ namespace ECom.Services.Products.Utility
         public MappingProfile() {
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>();
+            CreateMap<Discount, DiscountDto>();
+            CreateMap<DiscountDto, Discount>();
+
         }
     }
 }
