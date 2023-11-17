@@ -16,6 +16,8 @@ namespace ECom.Services.Products.Utility
             CreateMap<ProductDto, Product>();
             CreateMap<Discount, DiscountDto>();
             CreateMap<DiscountDto, Discount>();
+            CreateMap<Collection, CollectionDto>();
+            CreateMap<CollectionDto, Collection>();
 
         }
     }

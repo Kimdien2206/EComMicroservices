@@ -68,16 +68,17 @@ namespace ECom.Gateway.Controllers
         [HttpPatch]
         [EnableCors]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateDiscount(Discount newDiscount)
+        public async Task<IActionResult> UpdateDiscount(string id, Discount newDiscount)
         {
-            if (newDiscount == null)
+            int discountID = Int32.Parse(id);
+            if (newDiscount == null || discountID == 0)
             {
                 return BadRequest();
             }
             try
             {
                 DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
-                var message = new UpdateDiscount() { discount = newDiscountDto, id = newDiscountDto.Id };
+                var message = new UpdateDiscount() { discount = newDiscountDto, id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
                 return ReturnWithStatus<Discount, DiscountDto>(response);
             }
@@ -92,14 +93,14 @@ namespace ECom.Gateway.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteDiscount(string id)
         {
-            int productID = Int32.Parse(id);
-            if (productID == 0)
+            int discountID = Int32.Parse(id);
+            if (discountID == 0)
             {
                 return BadRequest();
             }
             try
             {
-                var message = new DeleteDiscount() { Id = productID };
+                var message = new DeleteDiscount() { Id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
                 return ReturnWithStatus<Discount, DiscountDto>(response);
             }

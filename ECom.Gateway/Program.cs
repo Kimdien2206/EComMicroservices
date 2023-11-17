@@ -25,6 +25,11 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
     route.RouteToEndpoint(typeof(CreateDiscount), "Product");
     route.RouteToEndpoint(typeof(DeleteDiscount), "Product");
+    route.RouteToEndpoint(typeof(UpdateDiscount), "Product"); 
+    route.RouteToEndpoint(typeof(GetAllCollection), "Product");
+    route.RouteToEndpoint(typeof(CreateCollection), "Product");
+    route.RouteToEndpoint(typeof(DeleteCollection), "Product");
+    route.RouteToEndpoint(typeof(UpdateCollection), "Product");
 
     return endpointConfiguration;
 });

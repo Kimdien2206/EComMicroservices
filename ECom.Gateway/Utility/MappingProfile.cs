@@ -10,6 +10,10 @@ namespace ECom.Gateway.Utility
         {
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>();
+            CreateMap<Discount, DiscountDto>();
+            CreateMap<DiscountDto, Discount>();
+            CreateMap<Collection, CollectionDto>();
+            CreateMap<CollectionDto, Collection>();
         }
     }
 }
