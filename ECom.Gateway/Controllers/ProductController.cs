@@ -47,18 +47,17 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{slug}")]
         [EnableCors]
-        public async Task<IActionResult> GetProductsByID(string id)
+        public async Task<IActionResult> GetProductsBySlug(string slug)
         {
-            int productID = Int32.Parse(id);
-            if (productID == 0)
+            if (slug == null)
             {
                 return BadRequest();
             }
             try
             {
-                var message = new GetProductByID() { productID = productID };
+                var message = new GetProductByID() { productSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus<Product, ProductDto>(response);

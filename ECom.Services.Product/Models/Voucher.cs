@@ -13,7 +13,7 @@ public partial class Voucher
     public string Code { get; set; } = null!;
 
     [Required]
-    [Column ("name")]
+    [Column("name")]
     public string Name { get; set; } = null!;
 
     [Required]

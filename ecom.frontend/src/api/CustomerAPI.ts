@@ -13,8 +13,8 @@ export function increaseViewForProduct(id: number) {
   return http.post(`/product/viewed/${id}`);
 }
 
-export function fetchProduct(id: number){
-  return http.get(`/product/${id}`)
+export function fetchProduct(slug: string){
+  return http.get(`/product/${slug}`)
 }
 
 export function createOrder(order: any){

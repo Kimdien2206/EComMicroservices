@@ -13,7 +13,7 @@ interface ProductInventoryFormProps {
 }
 
 const ProductInventoryForm: React.FC<ProductInventoryFormProps> = ({ isReadOnly = false, form, selectedItem, setTotalAmount }) => {
-    const colorSet = Array.from(new Set(selectedItem.product_item.map(item => item.color)));
+    const colorSet = Array.from(new Set(selectedItem.productItem.map(item => item.color)));
     const initialValue = {
         import_price: '',
         actual_price: '',

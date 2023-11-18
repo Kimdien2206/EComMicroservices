@@ -29,7 +29,11 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetAllCollection), "Product");
     route.RouteToEndpoint(typeof(CreateCollection), "Product");
     route.RouteToEndpoint(typeof(DeleteCollection), "Product");
-    route.RouteToEndpoint(typeof(UpdateCollection), "Product");
+    route.RouteToEndpoint(typeof(UpdateCollection), "Product"); 
+    route.RouteToEndpoint(typeof(GetAllTag), "Product");
+    route.RouteToEndpoint(typeof(CreateTag), "Product");
+    route.RouteToEndpoint(typeof(DeleteTag), "Product");
+    route.RouteToEndpoint(typeof(UpdateTag), "Product");
 
     return endpointConfiguration;
 });

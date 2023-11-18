@@ -46,7 +46,7 @@ const ImportingModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, selec
         if(item.amount[property] > 0){
           console.log(property);
           
-          const productItem = selectedItem?.product_item.filter((product) => product.color === item.color && product.size.trim() === property);
+          const productItem = selectedItem?.productItem.filter((product) => product.color === item.color && product.size.trim() === property);
           result = [
             ...result,
             { 

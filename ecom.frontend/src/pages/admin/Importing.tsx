@@ -46,7 +46,7 @@ const Importing = () => {
         <Input.Search value={searchText} size="middle" placeholder="Nhập tên sản phẩm" enterButton style={{ width: '20%' }} onChange={onChange} />
         <ImportingTable data={searchData} setIsModalOpen={setIsImportModalOpen} setIsReadOnly={setIsReadModalOpen} setSelectedItem={setSelectedItem} />
         <ImportingModal isOpen={isImportModalOpen} setIsModalOpen={setIsImportModalOpen} selectedItem={selectedItem} />
-        <ImportingQuantityModal isOpen={isReadModalOpen} setIsModalOpen={setIsReadModalOpen} data={selectedItem?.product_item} />
+        <ImportingQuantityModal isOpen={isReadModalOpen} setIsModalOpen={setIsReadModalOpen} data={selectedItem?.productItem} />
       </Space>
     </Spin>
   )

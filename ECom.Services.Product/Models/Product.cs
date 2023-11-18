@@ -41,14 +41,22 @@ public partial class Product
     public bool? IsActive { get; set; }
 
     [Column("discount_id")]
-    [ForeignKey("Discount")]
     public int? DiscountId { get; set; }
 
     [Column("collection_id")]
-    [ForeignKey("Collection")]
     public int? CollectionId { get; set; }
 
     [Column("slug")]
     public string Slug { get; set; } = null!;
+
+    public virtual Collection? Collection { get; set; }
+
+    public virtual Discount? Discount { get; set; }
+
+    public virtual ICollection<HaveTag> HaveTags { get; set; } = new List<HaveTag>();
+
+    public virtual ICollection<ProductItem> ProductItems { get; set; } = new List<ProductItem>();
+
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
 }

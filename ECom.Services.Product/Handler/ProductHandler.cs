@@ -11,6 +11,7 @@ using Dto.ProductDto;
 using NServiceBus;
 using AutoMapper;
 using ECom.Services.Products.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECom.Services.Products.Handler
 {
@@ -134,17 +135,19 @@ namespace ECom.Services.Products.Handler
         public async Task Handle(GetProductByID message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
-            if (message.productID == 0)
+            if (message.productSlug == null)
             {
                 log.Error("BadRequest, missing product id");
                 responseMessage.ErrorCode = 403;
             }
             else
             {
-                int productID = message.productID;
+                string slug = message.productSlug;
                 try
                 {
-                    List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Id == productID).ToList();
+                    List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Slug == slug)
+                        .Include(item => item.ProductItems)
+                        .ToList();
 
                     responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
                     responseMessage.ErrorCode = 200;

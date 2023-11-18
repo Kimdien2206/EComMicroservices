@@ -50,11 +50,11 @@ const ProductView = (props: ProductViewProps) => {
     const nav = useNavigate();
 
     useEffect(() => {
-        fetchProduct(props.id).then((data) => {
+        fetchProduct(props.slug).then((data) => {
             console.log(data.data)
-            setProduct(data.data);
-            setPreviewImg(convertImageToFormatGallaryItem(data.data?.image));
-            const colorSet = Array.from(new Set(data.data.product_item?.map((data: any) => data.color)));
+            setProduct(data.data[0]);
+            setPreviewImg(convertImageToFormatGallaryItem(data.data[0]?.image));
+            const colorSet = Array.from(new Set(data.data[0].productItems?.map((data: any) => data.color)));
             setColor(colorSet.map((data) => {
                 return {
                     value: data,
@@ -62,7 +62,7 @@ const ProductView = (props: ProductViewProps) => {
                     disabled: false
                 }
             }))
-            const sizeSet = Array.from(new Set(data.data.product_item?.map((data: any) => data.size)));
+            const sizeSet = Array.from(new Set(data.data[0].productItems?.map((data: any) => data.size)));
             setSize(sizeSet.map((data) => {
                 return {
                     value: data,
@@ -79,7 +79,7 @@ const ProductView = (props: ProductViewProps) => {
     const handleColorOnClick = ({ target }: RadioChangeEvent) => {
         console.log(color)
         setSelectedColor(target.value)
-        const size = Array.from(new Set(product?.product_item.filter((item) => item.color === target.value).map((data) => data.size)));
+        const size = Array.from(new Set(product?.productItem.filter((item) => item.color === target.value).map((data) => data.size)));
 
         console.log(size)
 
@@ -93,7 +93,7 @@ const ProductView = (props: ProductViewProps) => {
     }
     const handleSizeOnClick = ({ target }: RadioChangeEvent) => {
         setSelectedSize(target.value);
-        const color = Array.from(new Set(product?.product_item.filter((item) => item.size === target.value).map((data) => data.color)));
+        const color = Array.from(new Set(product?.productItem.filter((item) => item.size === target.value).map((data) => data.color)));
 
         console.log(color)
 
@@ -109,7 +109,7 @@ const ProductView = (props: ProductViewProps) => {
     const handleBuyNow = () => {
         const currentUser = LocalStorage.getItem('user');
         if (selectedColor && selectedSize) {
-            const productItem = product?.product_item.filter((item) => item.color === selectedColor && item.size === selectedSize)
+            const productItem = product?.productItem.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (currentUser) {
                 createCart({
                     userID: currentUser.id,
@@ -170,7 +170,7 @@ const ProductView = (props: ProductViewProps) => {
     const handleAddToCart = () => {
         const currentUser = LocalStorage.getItem('user');
         if (selectedColor && selectedSize) {
-            const productItem = product?.product_item.filter((item) => item.color === selectedColor && item.size === selectedSize)
+            const productItem = product?.productItem.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (currentUser) {
                 createCart({
                     userID: currentUser.id,
@@ -320,6 +320,6 @@ function convertImageToFormatGallaryItem(images: string[]) {
 }
 
 type ProductViewProps = {
-    id: number
+    slug: string
 }
 export default ProductView

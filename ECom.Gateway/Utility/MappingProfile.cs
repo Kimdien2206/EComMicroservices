@@ -13,7 +13,9 @@ namespace ECom.Gateway.Utility
             CreateMap<Discount, DiscountDto>();
             CreateMap<DiscountDto, Discount>();
             CreateMap<Collection, CollectionDto>();
-            CreateMap<CollectionDto, Collection>();
+            CreateMap<CollectionDto, Collection>(); 
+            CreateMap<Tag, TagDto>();
+            CreateMap<TagDto, Tag>();
         }
     }
 }

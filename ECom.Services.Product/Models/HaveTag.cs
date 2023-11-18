@@ -15,12 +15,15 @@ public partial class HaveTag
 
     [Column("tag_id")]
     [Required]
-    [ForeignKey("Tag")]
     public int TagId { get; set; }
 
     [Required]
     [Column("product_id")]
-    [ForeignKey("Product")]
     public int ProductId { get; set; }
+
+
+    public virtual Product Product { get; set; } = null!;
+
+    public virtual Tag Tag { get; set; } = null!;
 
 }

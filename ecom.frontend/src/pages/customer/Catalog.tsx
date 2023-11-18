@@ -71,7 +71,7 @@ const Catalog = () => {
         let productsTemp: IProduct[] = [];
         if (colorCheckedKey.length > 0)
             for (const product of products) {
-                for (const productItem of product.product_item) {
+                for (const productItem of product.productItem) {
                     if (colorCheckedKey.includes(productItem.color)) {
                         productsTemp.push(product);
                         break;
@@ -80,7 +80,7 @@ const Catalog = () => {
             }
         if (sizeCheckedKey.length > 0)
             for (const product of products) {
-                for (const productItem of product.product_item) {
+                for (const productItem of product.productItem) {
                     if (sizeCheckedKey.includes(productItem.size.trimEnd())) {
                         productsTemp.push(product);
                         break;

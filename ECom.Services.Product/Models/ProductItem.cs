@@ -17,7 +17,7 @@ public partial class ProductItem
     public string Color { get; set; } = null!;
 
     [Required]
-    [Column("size")]  
+    [Column("size")]
     public string Size { get; set; } = null!;
 
     [Required]
@@ -29,6 +29,6 @@ public partial class ProductItem
 
     [Required]
     [Column("product_id")]
-    [ForeignKey("Product")]
     public int ProductId { get; set; }
+
 }

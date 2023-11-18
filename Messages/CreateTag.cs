@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dto.ProductDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Messages
 {
-    public class GetProductByID : ICommand
+    public class CreateTag : ICommand
     {
-        public string productSlug;
+        public TagDto newTag { get; set; }
     }
 }

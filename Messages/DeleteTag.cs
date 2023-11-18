@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Messages
 {
-    public class GetProductByID : ICommand
+    public class DeleteTag : ICommand
     {
-        public string productSlug;
+        public int Id { get; set; } 
     }
 }

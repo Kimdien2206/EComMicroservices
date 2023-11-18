@@ -187,7 +187,7 @@ function importProduct(productCreateResponse: IProduct, formData: any) {
   console.log(productCreateResponse);
   console.log(formData);
   let importDetail: any = [];
-  productCreateResponse.product_item.forEach((item: IProduct_item) => {
+  productCreateResponse.productItem.forEach((item: IProduct_item) => {
     getProductItem(formData.inventory).forEach((inventory: any) => {
       console.log(inventory)
       if (inventory.size === item.size.trim() && inventory.color === item.color)
@@ -345,7 +345,7 @@ function renderModalContent(action: string, form: FormInstance<any>, tags: ITag[
           </Descriptions.Item>
         </Descriptions>
         <Divider />
-        <ProductInventoryTable data={selectedItem?.product_item} />
+        <ProductInventoryTable data={selectedItem?.productItem} />
       </Space>
     default:
       break;

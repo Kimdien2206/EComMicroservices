@@ -17,6 +17,8 @@ public partial class Tag
     public string Name { get; set; } = null!;
 
     [Column("discount_id")]
-    [ForeignKey("Discount")]
     public int? DiscountId { get; set; }
+
+    public virtual Discount? Discount { get; set; }
+
 }
