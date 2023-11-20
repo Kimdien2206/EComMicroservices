@@ -2,6 +2,8 @@ using Messages;
 using ECom.Gateway.Utility;
 using AutoMapper;
 
+
+Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add NServiceBus
@@ -34,9 +36,12 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateTag), "Product");
     route.RouteToEndpoint(typeof(DeleteTag), "Product");
     route.RouteToEndpoint(typeof(UpdateTag), "Product");
+    route.RouteToEndpoint(typeof(LoginMessage), "Auth");
+
 
     return endpointConfiguration;
 });
+
 
 // Add services to the container.
 

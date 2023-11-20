@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dto.AuthDto;
 using Dto.ProductDto;
 using ECom.Gateway.Models;
 
@@ -16,6 +17,8 @@ namespace ECom.Gateway.Utility
             CreateMap<CollectionDto, Collection>(); 
             CreateMap<Tag, TagDto>();
             CreateMap<TagDto, Tag>();
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
         }
     }
 }

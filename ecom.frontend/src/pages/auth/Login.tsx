@@ -21,18 +21,20 @@ const Login = () => {
     setLoading(true);
     try {
       const data = await login(values.email, values.password);
-      LocalStorage.setItem('access_token', data.data.access_token)
-      LocalStorage.setItem('user', data.data.user)
-      const updateData = await updateUser({ logged_date: dayjs(Date.now()) }, data.data.user.id);
-      getCart(data.data.user.id).then((res) => {
-        LocalStorage.setItem('cart', res.data);
-      });
-      appCtx?.setUser(data.data.user)
-      if (data.data.user.is_admin) {
-        nav('/admin/dashboard');
-      } else
+      console.log(data)
+      // LocalStorage.setItem('access_token', data.data.access_token)
+      LocalStorage.setItem('user', data.data[0].userInfo)
+      // const updateData = await updateUser({ logged_date: dayjs(Date.now()) }, data.data.user.id);
+      // getCart(data.data.user.id).then((res) => {
+      //   LocalStorage.setItem('cart', res.data);
+      // });
+      appCtx?.setUser(data.data[0].userInfo)
+      if (data.data[0].userInfo.isAdmin) {
+        nav('/admin')
+      }
+      else{
         nav('/')
-
+      }
     } catch (error) {
       ErrorAlert('Tài khoản không tồn tại hoặc thông tin chưa chính xác. Xin hãy kiểm tra lại.')
     } finally {

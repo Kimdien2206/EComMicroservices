@@ -1,4 +1,5 @@
-﻿using Messages;
+﻿using AutoMapper;
+using Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECom.Gateway.Controllers

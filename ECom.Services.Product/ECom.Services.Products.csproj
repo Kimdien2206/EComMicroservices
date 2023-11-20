@@ -16,9 +16,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
-    <PackageReference Include="NServiceBus" Version="8.1.5" />
+    <PackageReference Include="NServiceBus" Version="8.1.6" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
-    <PackageReference Include="NServiceBus.RabbitMQ" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>

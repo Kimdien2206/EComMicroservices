@@ -11,7 +11,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
-    <PackageReference Include="NServiceBus" Version="8.1.5" />
+    <PackageReference Include="NServiceBus" Version="8.1.6" />
     <PackageReference Include="NServiceBus.Callbacks" Version="4.0.0" />
     <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
