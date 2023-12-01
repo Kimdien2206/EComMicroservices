@@ -25,7 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dto", "Dto", "{83A4EB5C-C39
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dto", "Dto\Dto.csproj", "{E49232D8-EC96-4012-9864-A80FFD4FB6C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECom.Services.Auth", "ECom.Services.Auth\ECom.Services.Auth.csproj", "{ACE8094A-5F43-418A-B5C0-E01D166F617F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECom.Services.Auth", "ECom.Services.Auth\ECom.Services.Auth.csproj", "{ACE8094A-5F43-418A-B5C0-E01D166F617F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECom.Services.Sales", "ECom.Services.Sales\ECom.Services.Sales.csproj", "{89B0C89F-FE52-452E-90ED-A4C13991164E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{ACE8094A-5F43-418A-B5C0-E01D166F617F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACE8094A-5F43-418A-B5C0-E01D166F617F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACE8094A-5F43-418A-B5C0-E01D166F617F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89B0C89F-FE52-452E-90ED-A4C13991164E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B0C89F-FE52-452E-90ED-A4C13991164E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B0C89F-FE52-452E-90ED-A4C13991164E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B0C89F-FE52-452E-90ED-A4C13991164E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{83A4EB5C-C39A-4D7E-AE53-ADAF51B98349} = {62B5C067-D025-40D7-A7C5-7F3930A86316}
 		{E49232D8-EC96-4012-9864-A80FFD4FB6C5} = {83A4EB5C-C39A-4D7E-AE53-ADAF51B98349}
 		{ACE8094A-5F43-418A-B5C0-E01D166F617F} = {C638CD1B-9382-4C8D-846E-CEF820B661F4}
+		{89B0C89F-FE52-452E-90ED-A4C13991164E} = {C638CD1B-9382-4C8D-846E-CEF820B661F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0CBEEBD5-75D7-4D93-B3B5-04E30A9D6E7C}
