@@ -1,7 +1,10 @@
 using Messages;
 using ECom.Gateway.Utility;
 using AutoMapper;
-
+using Messages.CollectionMessages;
+using Messages.DiscountMessages;
+using Messages.ProductMessages;
+using Messages.TagMessages;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);

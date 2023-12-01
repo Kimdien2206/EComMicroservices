@@ -12,6 +12,7 @@ using NServiceBus;
 using AutoMapper;
 using ECom.Services.Products.Utility;
 using Microsoft.EntityFrameworkCore;
+using Messages.ProductMessages;
 
 namespace ECom.Services.Products.Handler
 {

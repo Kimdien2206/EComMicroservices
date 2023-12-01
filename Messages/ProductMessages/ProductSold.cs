@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.ProductMessages
 {
-    public class GetMostViewed : ICommand
+    public class ProductSold : IEvent
     {
+        public List<int> Id { get; set; }
     }
 }

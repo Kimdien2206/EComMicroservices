@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.ProductMessages
 {
-    public class DeleteCollection : ICommand
+    public class GetMostViewed : ICommand
     {
-        public int Id { get; set; } 
     }
 }

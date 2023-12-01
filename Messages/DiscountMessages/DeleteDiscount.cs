@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.DiscountMessages
 {
-    public class GetAllTag : ICommand
+    public class DeleteDiscount : ICommand
     {
-
+        public int Id { get; set; }
     }
 }

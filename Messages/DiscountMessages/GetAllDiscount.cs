@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.DiscountMessages
 {
     public class GetAllDiscount : ICommand
     {

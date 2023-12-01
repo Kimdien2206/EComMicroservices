@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Dto.ProductDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.TagMessages
 {
-    public class DeleteDiscount : ICommand
+    public class UpdateTag : ICommand
     {
         public int Id { get; set; }
+        public TagDto newTag { get; set; }
     }
 }

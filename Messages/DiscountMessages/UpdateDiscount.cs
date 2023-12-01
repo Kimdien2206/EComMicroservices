@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.DiscountMessages
 {
-    public class CreateDiscount : ICommand
+    public class UpdateDiscount : ICommand
     {
+        public int id { get; set; }
         public DiscountDto discount { get; set; }
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.ProductMessages
 {
-    public class CreateTag : ICommand
+    public class CreateProduct : ICommand
     {
-        public TagDto newTag { get; set; }
+        public ProductDto newProduct { get; set; }
     }
 }

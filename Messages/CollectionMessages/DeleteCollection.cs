@@ -1,15 +1,13 @@
-﻿using Dto.ProductDto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.CollectionMessages
 {
-    public class UpdateProduct : ICommand
+    public class DeleteCollection : ICommand
     {
         public int Id { get; set; }
-        public ProductDto product { get; set; }
     }
 }

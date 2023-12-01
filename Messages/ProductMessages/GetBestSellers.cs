@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.ProductMessages
 {
-    public class ProductSold : IEvent
+    public class GetBestSellers : ICommand
     {
-        public List<int> Id { get; set; }
+
     }
 }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.CollectionMessages
 {
-    public class GetProductByID : ICommand
+    public class GetAllCollection : ICommand
     {
-        public string productSlug;
+
     }
 }

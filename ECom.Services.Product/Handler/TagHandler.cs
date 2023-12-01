@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECom.Services.Products.Models;
+using Messages.TagMessages;
 
 namespace ECom.Services.Products.Handler
 {

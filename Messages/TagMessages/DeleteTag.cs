@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages
+namespace Messages.TagMessages
 {
-    public class ViewProduct : ICommand
+    public class DeleteTag : ICommand
     {
-        public int productID;
+        public int Id { get; set; }
     }
 }
