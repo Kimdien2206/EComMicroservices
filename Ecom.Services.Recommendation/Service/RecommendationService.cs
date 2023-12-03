@@ -14,6 +14,8 @@ namespace Ecom.Services.Recommendation.Service
     public class RecommendationService
     {
         MLContext mlContext;
+
+        public MLContext MLContext { get { return mlContext; } }
         public RecommendationService() {
             mlContext = new MLContext();
         }
@@ -49,7 +51,6 @@ namespace Ecom.Services.Recommendation.Service
                             age = rows[i].Age,
                             Label = rows[i].Rating
                         };
-                        Console.WriteLine(record);
                         if (i < rows.Count() * trainingSetRatio)
                         {
                             trainSamples.Add(record);
@@ -76,7 +77,7 @@ namespace Ecom.Services.Recommendation.Service
                 MatrixColumnIndexColumnName = "ageEncoded",
                 MatrixRowIndexColumnName = "productIdEncoded",
                 LabelColumnName = "Label",
-                NumberOfIterations = 20,
+                NumberOfIterations = 25,
                 ApproximationRank = 100
             };
 
@@ -99,5 +100,8 @@ namespace Ecom.Services.Recommendation.Service
             Console.WriteLine("Root Mean Squared Error : " + metrics.RootMeanSquaredError.ToString());
             Console.WriteLine("RSquared: " + metrics.RSquared.ToString());
         }
+
+
+
     }
 }
