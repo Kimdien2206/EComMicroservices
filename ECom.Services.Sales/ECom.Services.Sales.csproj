@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utility\" />
-  </ItemGroup>
-
 </Project>

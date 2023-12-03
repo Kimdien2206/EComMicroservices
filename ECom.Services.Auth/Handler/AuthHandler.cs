@@ -4,6 +4,7 @@ using ECom.Services.Auth.Data;
 using ECom.Services.Auth.Models;
 using ECom.Services.Auth.Utility;
 using Messages;
+using Messages.AuthMessages;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
 using System;

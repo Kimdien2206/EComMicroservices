@@ -8,7 +8,6 @@ using Messages;
 using NServiceBus.Logging;
 using ECom.Services.Products.Models;
 using Dto.ProductDto;
-using NServiceBus;
 using AutoMapper;
 using ECom.Services.Products.Utility;
 using Microsoft.EntityFrameworkCore;
@@ -216,7 +215,7 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
-        public async Task Handle(ProductSold message, IMessageHandlerContext context)
+        public Task Handle(ProductSold message, IMessageHandlerContext context)
         {
             List<int> listId = message.Id;
             if (listId == null)
@@ -240,6 +239,7 @@ namespace ECom.Services.Products.Handler
                     log.Error(ex.ToString());
                 }
             }
+            return Task.CompletedTask;
         }
     }
 }

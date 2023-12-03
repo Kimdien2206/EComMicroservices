@@ -1,10 +1,11 @@
-using Messages;
 using ECom.Gateway.Utility;
 using AutoMapper;
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
 using Messages.ProductMessages;
 using Messages.TagMessages;
+using Messages.AuthMessages;
+using Messages.OrderMessages;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +39,13 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetAllTag), "Product");
     route.RouteToEndpoint(typeof(CreateTag), "Product");
     route.RouteToEndpoint(typeof(DeleteTag), "Product");
-    route.RouteToEndpoint(typeof(UpdateTag), "Product");
+    route.RouteToEndpoint(typeof(UpdateTag), "Product"); 
+    route.RouteToEndpoint(typeof(GetAllOrder), "Sales");
+    route.RouteToEndpoint(typeof(GetOrderByStatus), "Sales");
+    route.RouteToEndpoint(typeof(UpdateOrderStatus), "Sales");
+    //route.RouteToEndpoint(typeof(CreateOrder), "Product");
+    //route.RouteToEndpoint(typeof(DeleteOrder), "Product");
+    //route.RouteToEndpoint(typeof(UpdateOrder), "Product");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
 
 

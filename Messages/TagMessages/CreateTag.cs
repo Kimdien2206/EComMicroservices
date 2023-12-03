@@ -9,6 +9,6 @@ namespace Messages.TagMessages
 {
     public class CreateTag : ICommand
     {
-        public TagDto newTag { get; set; }
+        public TagDto newTag { get; set; } = null!;
     }
 }

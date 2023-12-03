@@ -7,6 +7,7 @@ using System.Collections;
 using System.Net;
 using ECom.Gateway.Models;
 using AutoMapper;
+using Messages.ProductMessages;
 
 namespace ECom.Gateway.Controllers
 {

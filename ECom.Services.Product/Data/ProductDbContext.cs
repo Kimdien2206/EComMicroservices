@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using ECom.Services.Products.Models;
 using Microsoft.Extensions.Configuration;
 using E_commerce_shop_2.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace ECom.Services.Products.Data
 {
