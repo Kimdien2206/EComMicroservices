@@ -16,23 +16,34 @@ namespace ECom.Services.Forecast
 
             ForecastService service = new ForecastService();
 
-            var trainingDataPath = Path.Combine(Environment.CurrentDirectory, "Data", "data_2022.csv");
-            var testDataPath = Path.Combine(Environment.CurrentDirectory, "Data", "data_2021.csv");
+            var trainingData2018Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2018.csv");
+            var trainingData2019Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2019.csv");
+            var trainingData2020Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2020.csv");
+            var trainingData2021Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2021.csv");
+            var testData2022Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2022.csv");
 
-            IDataView training = service.LoadData(trainingDataPath);
-            Console.WriteLine(training.GetRowCount());
+            var traningDataPaths = new List<string>();
+            traningDataPaths.Add(trainingData2018Path);
+            traningDataPaths.Add(trainingData2019Path);
+            traningDataPaths.Add(trainingData2020Path);
+            traningDataPaths.Add(trainingData2021Path);
 
-            IDataView test = service.LoadData(testDataPath);
-            Console.WriteLine(test.GetRowCount());
+            var testDataPaths = new List<string>();
+            testDataPaths.Add(testData2022Path);
 
-            ITransformer model = service.BuildAndTrainModel(training);
-            service.EvaluateModel(test, model);
+            IDataView trainingData = service.LoadData(traningDataPaths);
+            IDataView testData = service.LoadData(testDataPaths);
+
+
+
+            ITransformer model = service.BuildAndTrainModel(trainingData);
+            service.EvaluateModel(testData, model);
 
             var forecastEngine = model.CreateTimeSeriesEngine<ModelInput, ModelOutput>(service.MLContext);
 
             //forecastEngine.CheckPoint(service.MLContext, modelPath);
 
-            service.Forecast(test, 7, forecastEngine, service.MLContext);
+            service.Forecast(testData, 7, forecastEngine, service.MLContext);
         }
     }
 }

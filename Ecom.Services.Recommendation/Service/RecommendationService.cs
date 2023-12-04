@@ -77,7 +77,7 @@ namespace Ecom.Services.Recommendation.Service
                 MatrixColumnIndexColumnName = "ageEncoded",
                 MatrixRowIndexColumnName = "productIdEncoded",
                 LabelColumnName = "Label",
-                NumberOfIterations = 25,
+                NumberOfIterations = 100,
                 ApproximationRank = 100
             };
 

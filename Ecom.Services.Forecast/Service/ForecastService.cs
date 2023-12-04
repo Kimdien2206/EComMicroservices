@@ -23,24 +23,29 @@ namespace Ecom.Services.Forecast.Service
             mlContext = new MLContext();
         }
 
-        public IDataView LoadData(string source)
+        public IDataView LoadData(List<string> sources)
         {
             IDataView trainingDataView;
+            List<ModelInput> trainingInputs = new List<ModelInput>();
 
-            using (var fileReader = new StreamReader(source))
+            for (int i = 0; i < sources.Count; i++)
             {
-                using (var csv = new CsvReader(fileReader, CultureInfo.InvariantCulture))
+                using (var fileReader = new StreamReader(sources[i]))
                 {
-                    var records = new List<ModelInput>();
-                    var rows = csv
-                        .GetRecords<ModelInput>()
-                        .ToList();
+                    using (var csv = new CsvReader(fileReader, CultureInfo.InvariantCulture))
+                    {
+                        var records = new List<ModelInput>();
+                        var rows = csv
+                            .GetRecords<ModelInput>()
+                            .ToList();
 
-
-                    trainingDataView  = mlContext.Data.LoadFromEnumerable<ModelInput>(rows);
+                        trainingInputs.AddRange(rows);
+                    }
                 }
+
             }
 
+            trainingDataView  = mlContext.Data.LoadFromEnumerable<ModelInput>(trainingInputs);
             return trainingDataView;
         }
 
@@ -53,7 +58,7 @@ namespace Ecom.Services.Forecast.Service
                 seriesLength: 30,
                 trainSize: 365,
                 horizon: 7,
-                confidenceLevel: 0.95f,
+                confidenceLevel: 0.90f,
                 confidenceLowerBoundColumn: "LowerBoundSold",
                 confidenceUpperBoundColumn: "UpperBoundSold");
 
