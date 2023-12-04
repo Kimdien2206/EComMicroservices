@@ -58,7 +58,7 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                var message = new GetProductByID() { productSlug = slug };
+                var message = new GetProductBySlug() { productSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus<Product, ProductDto>(response);

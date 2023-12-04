@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Dto.OrderDto
 {
@@ -26,5 +27,7 @@ namespace Dto.OrderDto
         public string? Lastname { get; set; }
 
         public string PhoneNumber { get; set; } = null!;
+
+        public virtual ICollection<OrderDetailDto> OrderDetailDtos { get; set; } = new List<OrderDetailDto>();  
     }
 }

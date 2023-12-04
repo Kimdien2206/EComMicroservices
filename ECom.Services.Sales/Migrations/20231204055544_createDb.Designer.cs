@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECom.Services.Sales.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20231201155852_seedingDB")]
-    partial class seedingDB
+    [Migration("20231204055544_createDb")]
+    partial class createDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace ECom.Services.Sales.Migrations
                         {
                             Id = 1,
                             Address = "Ba Đình, Tp HCM",
-                            Date = new DateTime(2023, 12, 1, 22, 58, 51, 916, DateTimeKind.Local).AddTicks(103),
+                            Date = new DateTime(2023, 12, 4, 12, 55, 44, 787, DateTimeKind.Local).AddTicks(7353),
                             Firstname = "Kim Điền",
                             Lastname = "Trương",
                             PhoneNumber = "0703391661",
@@ -87,7 +87,7 @@ namespace ECom.Services.Sales.Migrations
                         {
                             Id = 2,
                             Address = "Ba Đình, Tp HCM",
-                            Date = new DateTime(2023, 12, 1, 22, 58, 51, 916, DateTimeKind.Local).AddTicks(118),
+                            Date = new DateTime(2023, 12, 4, 12, 55, 44, 787, DateTimeKind.Local).AddTicks(7365),
                             Firstname = "Kim Điền",
                             Lastname = "Trương",
                             PhoneNumber = "0703391661",
@@ -98,7 +98,7 @@ namespace ECom.Services.Sales.Migrations
                         {
                             Id = 3,
                             Address = "Ba Đình, Tp HCM",
-                            Date = new DateTime(2023, 12, 1, 22, 58, 51, 916, DateTimeKind.Local).AddTicks(121),
+                            Date = new DateTime(2023, 12, 4, 12, 55, 44, 787, DateTimeKind.Local).AddTicks(7367),
                             Firstname = "Kim Điền",
                             Lastname = "Trương",
                             PhoneNumber = "0703391661",
@@ -109,7 +109,7 @@ namespace ECom.Services.Sales.Migrations
                         {
                             Id = 4,
                             Address = "Ba Đình, Tp HCM",
-                            Date = new DateTime(2023, 12, 1, 22, 58, 51, 916, DateTimeKind.Local).AddTicks(124),
+                            Date = new DateTime(2023, 12, 4, 12, 55, 44, 787, DateTimeKind.Local).AddTicks(7369),
                             Firstname = "Kim Điền",
                             Lastname = "Trương",
                             PhoneNumber = "0703391661",
@@ -135,6 +135,10 @@ namespace ECom.Services.Sales.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order_id");
 
+                    b.Property<int>("Price")
+                        .HasColumnType("int")
+                        .HasColumnName("price");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
                         .HasColumnName("quantity");
@@ -151,6 +155,7 @@ namespace ECom.Services.Sales.Migrations
                             Id = 1,
                             ItemId = 1,
                             OrderId = 1,
+                            Price = 0,
                             Quantity = 1
                         },
                         new
@@ -158,6 +163,7 @@ namespace ECom.Services.Sales.Migrations
                             Id = 2,
                             ItemId = 13,
                             OrderId = 2,
+                            Price = 0,
                             Quantity = 1
                         },
                         new
@@ -165,6 +171,7 @@ namespace ECom.Services.Sales.Migrations
                             Id = 3,
                             ItemId = 8,
                             OrderId = 2,
+                            Price = 0,
                             Quantity = 1
                         },
                         new
@@ -172,6 +179,7 @@ namespace ECom.Services.Sales.Migrations
                             Id = 4,
                             ItemId = 3,
                             OrderId = 3,
+                            Price = 0,
                             Quantity = 1
                         },
                         new
@@ -179,6 +187,7 @@ namespace ECom.Services.Sales.Migrations
                             Id = 5,
                             ItemId = 6,
                             OrderId = 4,
+                            Price = 0,
                             Quantity = 1
                         });
                 });

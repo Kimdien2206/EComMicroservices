@@ -15,8 +15,8 @@ namespace ECom.Services.Sales.Utility
         public MappingProfile() {
             CreateMap<Order, OrderDto>();
             CreateMap<OrderDto, Order>();
-            
-
+            CreateMap<OrderDetail, OrderDetailDto>();
+            CreateMap<OrderDetailDto, OrderDetail>();
         }
     }
 }

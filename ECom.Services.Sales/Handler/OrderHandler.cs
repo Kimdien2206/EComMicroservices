@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Dto.OrderDto;
-using Dto.ProductDto;
+using Dto.OrderDto;
 using ECom.Services.Sales.Data;
 using ECom.Services.Sales.Models;
 using ECom.Services.Sales.Utility;
 using Messages;
 using Messages.OrderMessages;
+using Messages.ProductMessages;
 using NServiceBus.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace ECom.Services.Sales.Handler
     public class OrderHandler : 
         IHandleMessages<GetAllOrder>,
         IHandleMessages<GetOrderByStatus>,
-        IHandleMessages<UpdateOrderStatus>
+        IHandleMessages<UpdateOrderStatus>,
+        IHandleMessages<CreateOrder>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<OrderHandler>();
@@ -31,6 +33,7 @@ namespace ECom.Services.Sales.Handler
             });
             this.mapper = config.CreateMapper();
         }
+
         public async Task Handle(GetAllOrder message, IMessageHandlerContext context)
         {
             log.Info("Received message");
@@ -51,6 +54,7 @@ namespace ECom.Services.Sales.Handler
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
+
         public async Task Handle(GetOrderByStatus message, IMessageHandlerContext context)
         {
             log.Info("Received message");
@@ -95,6 +99,47 @@ namespace ECom.Services.Sales.Handler
                 catch
                 {
                     log.Info("Something went wrong");
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(CreateOrder message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<OrderDto>();
+            if (message.newOrder == null)
+            {
+                log.Error("BadRequest, missing product info");
+                responseMessage.ErrorCode = 403;
+            }
+            else
+            {
+                Order newOrder = mapper.Map<Order>(message.newOrder);
+                newOrder.OrderDetails = message.newOrder.OrderDetailDtos.Select(emp => mapper.Map<OrderDetail>(emp)).ToList();
+
+                foreach(OrderDetail detail in newOrder.OrderDetails)
+                {
+                    var getProductPriceMessage = new GetProductByItemID() { ItemId = detail.ItemId };
+
+
+                }
+
+
+                try
+                {
+                    log.Info("Adding new Order");
+                    DataAccess.Ins.DB.Orders.Add(newOrder);
+
+                    DataAccess.Ins.DB.SaveChanges();
+
+
+                    log.Info("Order added");
+                    responseMessage.ErrorCode = 200;
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Error: {ex}");
                     responseMessage.ErrorCode = 500;
                 }
             }

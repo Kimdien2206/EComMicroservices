@@ -22,6 +22,8 @@ namespace ECom.Gateway.Utility
             CreateMap<UserDto, User>();
             CreateMap<Order, OrderDto>();
             CreateMap<OrderDto, Order>();
+            CreateMap<OrderDetail, OrderDetailDto>();
+            CreateMap<OrderDetailDto, OrderDetail>();
         }
     }
 }

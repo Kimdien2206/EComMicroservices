@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Dto.OrderDto;
+using Dto.ProductDto;
 using ECom.Gateway.Models;
 using Messages;
 using Messages.OrderMessages;
+using Messages.ProductMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
@@ -67,7 +69,7 @@ namespace ECom.Gateway.Controllers
         }
         
         [HttpGet]
-        [Route("complete")]
+        [Route("completed")]
         public async Task<IActionResult> GetCompletedOrders()
         {
 
@@ -200,6 +202,42 @@ namespace ECom.Gateway.Controllers
             {
                 log.Info($"Message sent, but {ex}");
                 Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(Order newOrder)
+        {
+            if (newOrder == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                OrderDto newOrderDto = _mapper.Map<OrderDto>(newOrder);
+                newOrderDto.OrderDetailDtos = newOrder.OrderDetails.Select(emp => _mapper.Map<OrderDetailDto>(emp)).ToList();
+
+                newOrderDto.TotalCost = 0;
+
+                foreach(OrderDetailDto detail in newOrderDto.OrderDetailDtos)
+                {
+                    var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
+                    var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);
+
+                    int productPrice = getProductResponse.responseData.First().Price;
+
+                    detail.Price = productPrice;
+                    newOrderDto.TotalCost += productPrice;
+                }
+
+
+                var message = new CreateOrder() { newOrder = newOrderDto };
+                var response = await this.messageSession.Request<Response<OrderDto>>(message);
+                return ReturnWithStatus<Order, OrderDto>(response);
+            }
+            catch
+            {
                 return StatusCode(500);
             }
         }

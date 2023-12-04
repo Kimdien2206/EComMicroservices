@@ -25,6 +25,10 @@ public partial class OrderDetail
     [Required]
     [Column("item_id")]
     public int ItemId { get; set; }
+    
+    [Required]
+    [Column("price")]
+    public int Price { get; set; }
 
     public virtual Order Order { get; set; } = null!;
 }

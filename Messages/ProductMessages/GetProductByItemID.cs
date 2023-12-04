@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Messages.ProductMessages
 {
-    public class GetProductByID : ICommand
+    public class GetProductByItemID : ICommand
     {
-        public string productSlug;
+        public int ItemId { get; set; }
     }
 }

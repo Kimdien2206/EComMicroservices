@@ -73,19 +73,17 @@ const Cart = () => {
                 phone_number: data.phoneNumber,
                 address: data.address,
                 total_cost: discountPrice,
-                buyer: LocalStorage.getItem('user') ? {
-                    connect: {
-                        id: LocalStorage.getItem('user').id
-                    }
-                } : undefined,
-                Order_detail: {
-                    createMany: {
-                        data: cartProducts.map((item: ICart) => { return { 
-                            item_id: item.itemID,
-                            quantity: item.quantity
-                        }})
-                    }
-                }
+                // buyer: LocalStorage.getItem('user') ? {
+                //     connect: {
+                //         id: LocalStorage.getItem('user').id
+                //     }
+                // } : undefined,
+                Order_detail: [
+                    cartProducts.map((item: ICart) => { return { 
+                        item_id: item.itemID,
+                        quantity: item.quantity
+                    }})
+                ]
             }
             createOrder(newOrder)
                 .then((response) => {
