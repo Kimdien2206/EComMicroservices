@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Dto.OrderDto;
-using Dto.OrderDto;
 using ECom.Services.Sales.Data;
 using ECom.Services.Sales.Models;
 using ECom.Services.Sales.Utility;
@@ -82,7 +81,7 @@ namespace ECom.Services.Sales.Handler
             var responseMessage = new Response<OrderDto>();
             int updateID = Int32.Parse(message.Id);
 
-            if(message.Id == null || message.Status == null)
+            if(message.Id == null || message.Status == ' ')
             {
                 responseMessage.ErrorCode = 500;
             }
