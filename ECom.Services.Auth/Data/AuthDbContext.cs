@@ -20,6 +20,7 @@ namespace ECom.Services.Auth.Data
         public AuthDbContext()
         {
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             var builder =
@@ -27,6 +28,7 @@ namespace ECom.Services.Auth.Data
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", true)
                     .AddEnvironmentVariables();
+
 
             IConfiguration config = builder.Build();
 

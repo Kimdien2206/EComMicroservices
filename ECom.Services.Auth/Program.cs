@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 //using ECom.Services.Auth.Data;
 using Microsoft.Extensions.Configuration;
 using Messages.MailerMessage;
+using ECom.Services.Auth.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECom.Services.Auth
 {
@@ -14,8 +16,7 @@ namespace ECom.Services.Auth
         static async Task Main(string[] args)
         {
             Console.Title = "Auth";
-            await Host.CreateDefaultBuilder(args)
-                .UseNServiceBus(context =>
+            await Host.CreateDefaultBuilder(args).UseNServiceBus(context =>
                 {
                     var endpointConfiguration = new EndpointConfiguration("Auth");
 
@@ -28,6 +29,8 @@ namespace ECom.Services.Auth
                     return endpointConfiguration;
                 })
                 .RunConsoleAsync();
+
+
 
         }
     }

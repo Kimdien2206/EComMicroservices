@@ -32,11 +32,11 @@ namespace ECom.Services.Recommendation
 
             if (Math.Round(predictScore.Score, 1) > 3.5)
             {
-                Console.WriteLine("Movie " + productRatingTest.productId + " is recommended for user " + productRatingTest.age);
+                Console.WriteLine("Product " + productRatingTest.productId + " is recommended for user " + productRatingTest.age);
             }
             else
             {
-                Console.WriteLine("Movie " + productRatingTest.productId + " is not recommended for user " + productRatingTest.age);
+                Console.WriteLine("Product " + productRatingTest.productId + " is not recommended for user " + productRatingTest.age);
             }
         }
     }

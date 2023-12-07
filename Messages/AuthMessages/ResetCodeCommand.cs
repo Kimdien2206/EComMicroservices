@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dto.AuthDto
+namespace Messages.AuthMessages
 {
-    public class VerificationCodeDto
+    public class ResetCodeCommand : ICommand
     {
-        public required int Code { get; set; }
         public required string Email { get; set; }
     }
 }

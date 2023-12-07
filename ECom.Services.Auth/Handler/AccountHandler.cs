@@ -15,15 +15,14 @@ using System.Threading.Tasks;
 
 namespace ECom.Services.Auth.Handler
 {
-    public class AccountHandler : IHandleMessages<ResetPasswordCommand>
+    public class AccountHandler : IHandleMessages<ResetCodeCommand>
     {
         static ILog log = LogManager.GetLogger<AccountHandler>();
 
-        public async Task Handle(ResetPasswordCommand message, IMessageHandlerContext context)
+        public async Task Handle(ResetCodeCommand message, IMessageHandlerContext context)
         {
             log.Info($"Handle reset password command for {message.Email}");
-            Account loginAccount = DataAccess.Ins.DB.Accounts.First(u => u.Email == message.Email);
-            log.Info(loginAccount.Email);
+            Account? loginAccount = DataAccess.Ins.DB.Accounts.FirstOrDefault(u => u.Email == message.Email);
             var response = new Response<string>();
 
             if (loginAccount != null)

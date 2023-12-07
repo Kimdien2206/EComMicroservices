@@ -49,6 +49,7 @@ builder.Host.UseNServiceBus(context =>
     //route.RouteToEndpoint(typeof(DeleteOrder), "Sales");
     //route.RouteToEndpoint(typeof(UpdateOrder), "Sales");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
+    route.RouteToEndpoint(typeof(ResetCodeCommand), "Auth");
     route.RouteToEndpoint(typeof(ResetPasswordCommand), "Auth");
 
     return endpointConfiguration;

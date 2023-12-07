@@ -8,6 +8,8 @@ namespace Dto.AuthDto
 {
     public class ResetPasswordDto
     {
-        public required string email { get; set; }
+        public required int Code { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }

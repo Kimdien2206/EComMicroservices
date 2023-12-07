@@ -16,23 +16,23 @@ namespace ECom.Services.Forecast
 
             ForecastService service = new ForecastService();
 
-            var trainingData2018Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2018.csv");
-            var trainingData2019Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2019.csv");
-            var trainingData2020Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2020.csv");
-            var trainingData2021Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2021.csv");
-            var testData2022Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2022.csv");
+            //var trainingData2018Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2018.csv");
+            //var trainingData2019Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2019.csv");
+            //var trainingData2020Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2020.csv");
+            var trainingData2021Path = Path.Combine(Environment.CurrentDirectory, "Data", "day.csv");
+            var testData2022Path = Path.Combine(Environment.CurrentDirectory, "Data", "day.csv");
 
             var traningDataPaths = new List<string>();
-            traningDataPaths.Add(trainingData2018Path);
-            traningDataPaths.Add(trainingData2019Path);
-            traningDataPaths.Add(trainingData2020Path);
+            //traningDataPaths.Add(trainingData2018Path);
+            //traningDataPaths.Add(trainingData2019Path);
+            //traningDataPaths.Add(trainingData2020Path);
             traningDataPaths.Add(trainingData2021Path);
 
             var testDataPaths = new List<string>();
             testDataPaths.Add(testData2022Path);
 
-            IDataView trainingData = service.LoadData(traningDataPaths);
-            IDataView testData = service.LoadData(testDataPaths);
+            IDataView trainingData = service.LoadData(traningDataPaths, 0);
+            IDataView testData = service.LoadData(testDataPaths, 1);
 
 
 

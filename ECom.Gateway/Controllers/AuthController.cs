@@ -50,7 +50,7 @@ namespace ECom.Gateway.Controllers
         [HttpPost]
         [EnableCors]
         [Route("reset-code")]
-        public async Task<IActionResult> SendResetCode(ResetPasswordDto forgotPassworDto)
+        public async Task<IActionResult> SendResetCode(ResetCodeDto forgotPassworDto)
         {
             if (forgotPassworDto.email == null)
             {
@@ -60,9 +60,8 @@ namespace ECom.Gateway.Controllers
             {
                 try
                 {
-                    var message = new ResetPasswordCommand() { Email = forgotPassworDto.email };
+                    var message = new ResetCodeCommand() { Email = forgotPassworDto.email };
                     var respond = await messageSession.Request<Response<string>>(message);
-                    log.Info(respond.responseData.First());
                     return ReturnWithStatus<string>(respond);
                 }
                 catch (Exception ex)
@@ -75,10 +74,10 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
-        [Route("verify-code")]
-        public async Task<IActionResult> verifyCode(VerificationCodeDto verificationCodeDto)
+        [Route("reset-password")]
+        public async Task<IActionResult> verifyCodeAndResetPassword(ResetPasswordDto resetPasswordDto)
         {
-            if (verificationCodeDto.Email == null)
+            if (resetPasswordDto.Email == null)
             {
                 return BadRequest();
             }
@@ -86,9 +85,8 @@ namespace ECom.Gateway.Controllers
             {
                 try
                 {
-                    var message = new VerificationCodeCommand() { Email = verificationCodeDto.Email, Code = verificationCodeDto.Code };
+                    var message = new ResetPasswordCommand() { Email = resetPasswordDto.Email, Code = resetPasswordDto.Code, NewPassword =  resetPasswordDto.Password};
                     var respond = await messageSession.Request<Response<string>>(message);
-                    log.Info(respond.responseData.First());
                     return ReturnWithStatus<string>(respond);
                 }
                 catch (Exception ex)

@@ -8,6 +8,9 @@ namespace Messages.AuthMessages
 {
     public class ResetPasswordCommand : ICommand
     {
+        public required int Code { get; set; }
         public required string Email { get; set; }
+
+        public required string NewPassword { get; set; }
     }
 }

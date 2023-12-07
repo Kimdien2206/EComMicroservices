@@ -9,12 +9,13 @@ namespace Ecom.Services.Forecast.Models
 {
     public class ModelInput
     {
-        [LoadColumn(1)]
-        public float TotalSold { get; set; }
-        [LoadColumn(2)]
-        public DateTime SoldDate { get; set; }
-        [LoadColumn(3)]
-        public float Year { get; set; }
         
+        [LoadColumn(0)]
+        public DateTime SoldDate { get; set; }
+        [LoadColumn(1)]
+        public float Year { get; set; }
+        [LoadColumn(2)]
+        public float TotalSold { get; set; }
+
     }
 }

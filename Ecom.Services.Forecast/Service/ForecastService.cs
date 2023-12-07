@@ -23,7 +23,7 @@ namespace Ecom.Services.Forecast.Service
             mlContext = new MLContext();
         }
 
-        public IDataView LoadData(List<string> sources)
+        public IDataView LoadData(List<string> sources, int year)
         {
             IDataView trainingDataView;
             List<ModelInput> trainingInputs = new List<ModelInput>();
@@ -37,12 +37,11 @@ namespace Ecom.Services.Forecast.Service
                         var records = new List<ModelInput>();
                         var rows = csv
                             .GetRecords<ModelInput>()
-                            .ToList();
+                            .Where(input => input.Year == year).ToList();
 
                         trainingInputs.AddRange(rows);
                     }
                 }
-
             }
 
             trainingDataView  = mlContext.Data.LoadFromEnumerable<ModelInput>(trainingInputs);

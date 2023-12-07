@@ -18,7 +18,8 @@ namespace ECom.Services.Auth.Handler
 {
     public class AuthHandler : 
         IHandleMessages<LoginMessage>,
-        IHandleMessages<MailSentEvent>
+        IHandleMessages<MailSentEvent>,
+        IHandleMessages<ResetPasswordCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<AuthHandler>();
@@ -95,6 +96,57 @@ namespace ECom.Services.Auth.Handler
             DataAccess.Ins.DB.SaveChanges();
 
             return Task.CompletedTask;
+        }
+
+        public async Task Handle(ResetPasswordCommand message, IMessageHandlerContext context)
+        {
+            var vertificationCodes = DataAccess.Ins.DB.Authenticators.Where(auth => auth.Email == message.Email).ToList();
+
+            var response = new Response<string>();
+
+            if (vertificationCodes.Count > 0)
+            {
+                bool isCodeValid = false;
+
+                foreach (var vertificationCode in vertificationCodes)
+                {
+                    if (vertificationCode.Code == message.Code && vertificationCode.Expiration > DateTime.Now)
+                    {
+                        isCodeValid = true;
+
+                        break;
+                    }
+                }
+
+                if (isCodeValid)
+                {
+                    response.ErrorCode = 200;
+                    response.responseData = new List<string>() { "OK" };
+
+                    Account? account = DataAccess.Ins.DB.Accounts.Where(acc => acc.Email == message.Email).FirstOrDefault();
+
+                    if (account != null)
+                    {
+                        account.Password = message.NewPassword;
+                        // update password to new password 
+                        DataAccess.Ins.DB.Accounts.Update(account);
+                        // delete all the vertification code relate to that email
+                        DataAccess.Ins.DB.Authenticators.RemoveRange(vertificationCodes);
+                        DataAccess.Ins.DB.SaveChanges();
+                    }
+                } else
+                {
+                    response.ErrorCode = 400;
+                    response.responseData = new List<string>() { "Vertification code is wrong or out of date" };
+                }
+
+            } else
+            {
+                response.ErrorCode = 400;
+                response.responseData = new List<string>() { "Vertification code is not exist or wrong" };
+            }
+
+            await context.Reply(response);
         }
     }
 }
