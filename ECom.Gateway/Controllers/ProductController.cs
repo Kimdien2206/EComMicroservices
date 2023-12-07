@@ -37,7 +37,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -61,7 +61,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetProductBySlug() { productSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {
@@ -78,7 +78,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetBestSellers();
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {
@@ -95,7 +95,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetMostViewed();
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {
@@ -116,7 +116,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new ViewProduct() { productID = productID };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {
@@ -137,7 +137,7 @@ namespace ECom.Gateway.Controllers
                 ProductDto newProductDto = _mapper.Map<ProductDto>(newProduct);
                 var message = new CreateProduct() { newProduct = newProductDto };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {
@@ -159,7 +159,7 @@ namespace ECom.Gateway.Controllers
                 ProductDto newProductDto = _mapper.Map<ProductDto>(newProduct);
                 var message = new UpdateProduct() { product = newProductDto, Id = newProductDto.Id };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<Product, ProductDto>(response);
+                return ReturnWithStatus<ProductDto>(response);
             }
             catch
             {

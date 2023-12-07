@@ -27,6 +27,18 @@ namespace ECom.Services.Auth.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Authenticators",
+                columns: table => new
+                {
+                    email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    code = table.Column<int>(type: "int", nullable: false),
+                    expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -55,7 +67,7 @@ namespace ECom.Services.Auth.Migrations
                 values: new object[,]
                 {
                     { "20520442@gmail.com", true, "123456" },
-                    { "20520453@gmail.com", false, "123456" }
+                    { "nguyenduc147862@gmail.com", false, "123456" }
                 });
 
             migrationBuilder.InsertData(
@@ -63,8 +75,8 @@ namespace ECom.Services.Auth.Migrations
                 columns: new[] { "phone_number", "address", "avatar", "email", "firstname", "lastname", "logged_date" },
                 values: new object[,]
                 {
-                    { "0703391661", "Ba Đình, TP. HCM", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "20520442@gmail.com", "Điền", "Trương Kim", new DateTime(2023, 11, 19, 12, 53, 16, 408, DateTimeKind.Local).AddTicks(7248) },
-                    { "0944124232", "Kiến Tường, Long An", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "20520453@gmail.com", "Đức", "Nguyễn Trí", new DateTime(2023, 11, 19, 12, 53, 16, 408, DateTimeKind.Local).AddTicks(7262) }
+                    { "0703391661", "Ba Đình, TP. HCM", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "20520442@gmail.com", "Điền", "Trương Kim", new DateTime(2023, 12, 7, 9, 5, 55, 728, DateTimeKind.Local).AddTicks(6453) },
+                    { "0944124232", "Kiến Tường, Long An", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "nguyenduc147862@gmail.com", "Đức", "Nguyễn Trí", new DateTime(2023, 12, 7, 9, 5, 55, 728, DateTimeKind.Local).AddTicks(6466) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -76,6 +88,9 @@ namespace ECom.Services.Auth.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Authenticators");
+
             migrationBuilder.DropTable(
                 name: "Users");
 

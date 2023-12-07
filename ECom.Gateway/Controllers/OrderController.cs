@@ -37,7 +37,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -58,7 +58,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -79,7 +79,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -100,7 +100,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -121,7 +121,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -146,7 +146,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -171,7 +171,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -196,7 +196,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -234,7 +234,7 @@ namespace ECom.Gateway.Controllers
 
                 var message = new CreateOrder() { newOrder = newOrderDto };
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
-                return ReturnWithStatus<Order, OrderDto>(response);
+                return ReturnWithStatus<OrderDto>(response);
             }
             catch
             {

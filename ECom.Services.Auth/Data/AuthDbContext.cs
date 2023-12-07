@@ -14,6 +14,7 @@ namespace ECom.Services.Auth.Data
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Authenticator> Authenticators { get; set; }
 
 
         public AuthDbContext()
@@ -53,13 +54,13 @@ namespace ECom.Services.Auth.Data
                     Lastname = "Nguyễn Trí",
                     Address = "Kiến Tường, Long An",
                     Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
-                    Email = "20520453@gmail.com",
+                    Email = "nguyenduc147862@gmail.com",
                     LoggedDate = DateTime.Now
                 }
                 );
             modelBuilder.Entity<Account>().HasData(
                 new Account { Email = "20520442@gmail.com", Password = "123456", IsAdmin = true },
-                new Account { Email = "20520453@gmail.com", Password = "123456", IsAdmin = false }
+                new Account { Email = "nguyenduc147862@gmail.com", Password = "123456", IsAdmin = false }
                 );
         }
     } 

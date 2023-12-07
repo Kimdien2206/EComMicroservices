@@ -17,7 +17,8 @@ using System.Threading.Tasks;
 namespace ECom.Services.Auth.Handler
 {
     public class AuthHandler : 
-        IHandleMessages<LoginMessage>
+        IHandleMessages<LoginMessage>,
+        IHandleMessages<MailSentEvent>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<AuthHandler>();
@@ -79,6 +80,21 @@ namespace ECom.Services.Auth.Handler
 
 
             await context.Reply(response);
+        }
+
+        public Task Handle(MailSentEvent message, IMessageHandlerContext context)
+        {
+            log.Info($"{message.Email} + {message.Code}");
+
+            Authenticator authenticator = new Authenticator() { Code = message.Code, 
+            Email = message.Email, 
+            Expiration = DateTime.Now.AddMinutes(30)};
+
+            DataAccess.Ins.DB.Authenticators.Add(authenticator);
+
+            DataAccess.Ins.DB.SaveChanges();
+
+            return Task.CompletedTask;
         }
     }
 }

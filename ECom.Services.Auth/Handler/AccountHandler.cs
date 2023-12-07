@@ -1,5 +1,11 @@
 ﻿using AutoMapper;
+using Dto.AuthDto;
+using ECom.Services.Auth.Data;
+using ECom.Services.Auth.Models;
 using ECom.Services.Auth.Utility;
+using Messages;
+using Messages.AuthMessages;
+using Messages.MailerMessage;
 using NServiceBus.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,20 +15,33 @@ using System.Threading.Tasks;
 
 namespace ECom.Services.Auth.Handler
 {
-    public class AccountHandler 
+    public class AccountHandler : IHandleMessages<ResetPasswordCommand>
     {
-        private IMapper mapper;
         static ILog log = LogManager.GetLogger<AccountHandler>();
 
-        public AccountHandler()
+        public async Task Handle(ResetPasswordCommand message, IMessageHandlerContext context)
         {
-            var config = new MapperConfiguration(cfg =>
+            log.Info($"Handle reset password command for {message.Email}");
+            Account loginAccount = DataAccess.Ins.DB.Accounts.First(u => u.Email == message.Email);
+            log.Info(loginAccount.Email);
+            var response = new Response<string>();
+
+            if (loginAccount != null)
             {
-                cfg.AddProfile(new MappingProfile());
-            });
-            this.mapper = config.CreateMapper();
+                SendMailMessage sendMail = new SendMailMessage() { Email = loginAccount.Email };
+                //log.Info(context.Send(sendMail).IsCompletedSuccessfully.ToString());
+                var sendRespond = context.Send(sendMail);
+                log.Info($"Route destination {sendRespond.Status.ToString()}");
+                log.Info($"Route destination {sendRespond.IsCompletedSuccessfully}");
+            } else
+            {
+                log.Warn("Reset password with user does not exist in system.");
+            }
+
+            response.responseData = new List<string>() { "OK" };
+            response.ErrorCode = 200;
+
+            await context.Reply(response);
         }
-
-
     }
 }

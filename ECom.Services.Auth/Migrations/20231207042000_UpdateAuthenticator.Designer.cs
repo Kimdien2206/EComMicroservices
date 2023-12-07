@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECom.Services.Auth.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20231119055316_initialDB")]
-    partial class initialDB
+    [Migration("20231207042000_UpdateAuthenticator")]
+    partial class UpdateAuthenticator
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,10 +54,38 @@ namespace ECom.Services.Auth.Migrations
                         },
                         new
                         {
-                            Email = "20520453@gmail.com",
+                            Email = "nguyenduc147862@gmail.com",
                             IsAdmin = false,
                             Password = "123456"
                         });
+                });
+
+            modelBuilder.Entity("ECom.Services.Auth.Models.Authenticator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int")
+                        .HasColumnName("code");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("email");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("expiration");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authenticators");
                 });
 
             modelBuilder.Entity("ECom.Services.Auth.Models.User", b =>
@@ -109,17 +137,17 @@ namespace ECom.Services.Auth.Migrations
                             Email = "20520442@gmail.com",
                             Firstname = "Điền",
                             Lastname = "Trương Kim",
-                            LoggedDate = new DateTime(2023, 11, 19, 12, 53, 16, 408, DateTimeKind.Local).AddTicks(7248)
+                            LoggedDate = new DateTime(2023, 12, 7, 11, 19, 59, 913, DateTimeKind.Local).AddTicks(1109)
                         },
                         new
                         {
                             PhoneNumber = "0944124232",
                             Address = "Kiến Tường, Long An",
                             Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
-                            Email = "20520453@gmail.com",
+                            Email = "nguyenduc147862@gmail.com",
                             Firstname = "Đức",
                             Lastname = "Nguyễn Trí",
-                            LoggedDate = new DateTime(2023, 11, 19, 12, 53, 16, 408, DateTimeKind.Local).AddTicks(7262)
+                            LoggedDate = new DateTime(2023, 12, 7, 11, 19, 59, 913, DateTimeKind.Local).AddTicks(1123)
                         });
                 });
 

@@ -6,7 +6,7 @@ namespace ECom.Gateway.Controllers
 {
     public class BaseController : ControllerBase
     {
-        public IActionResult ReturnWithStatus<T, Y>(Response<Y> response)
+        public IActionResult ReturnWithStatus<Y>(Response<Y> response)
         {
             if (response.ErrorCode == 200)
             {

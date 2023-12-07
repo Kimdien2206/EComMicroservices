@@ -35,7 +35,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Discount, DiscountDto>(response);
+                return ReturnWithStatus<DiscountDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -58,7 +58,7 @@ namespace ECom.Gateway.Controllers
                 DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
                 var message = new CreateDiscount() { discount = newDiscountDto };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<Discount, DiscountDto>(response);
+                return ReturnWithStatus<DiscountDto>(response);
             }
             catch
             {
@@ -81,7 +81,7 @@ namespace ECom.Gateway.Controllers
                 DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
                 var message = new UpdateDiscount() { discount = newDiscountDto, id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<Discount, DiscountDto>(response);
+                return ReturnWithStatus<DiscountDto>(response);
             }
             catch
             {
@@ -103,7 +103,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteDiscount() { Id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<Discount, DiscountDto>(response);
+                return ReturnWithStatus<DiscountDto>(response);
             }
             catch
             {

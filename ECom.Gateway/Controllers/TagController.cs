@@ -36,7 +36,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus<TagDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -59,7 +59,7 @@ namespace ECom.Gateway.Controllers
                 TagDto newTagDto = _mapper.Map<TagDto>(newTag);
                 var message = new CreateTag() { newTag = newTagDto };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus<TagDto>(response);
             }
             catch
             {
@@ -83,7 +83,7 @@ namespace ECom.Gateway.Controllers
                 TagDto newTagDto = _mapper.Map<TagDto>(newTag);
                 var message = new UpdateTag() { newTag = newTagDto, Id = tagID };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus<TagDto>(response);
             }
             catch
             {
@@ -105,7 +105,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteTag() { Id = tagID };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus<TagDto>(response);
             }
             catch
             {

@@ -35,7 +35,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Collection, CollectionDto>(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -58,7 +58,7 @@ namespace ECom.Gateway.Controllers
                 CollectionDto newCollectionDto = _mapper.Map<CollectionDto>(newCollection);
                 var message = new CreateCollection() { newCollection = newCollectionDto };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<Collection, CollectionDto>(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {
@@ -82,7 +82,7 @@ namespace ECom.Gateway.Controllers
                 CollectionDto newCollectionDto = _mapper.Map<CollectionDto>(newCollection);
                 var message = new UpdateCollection() { collection = newCollectionDto, id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<Collection, CollectionDto>(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {
@@ -104,7 +104,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteCollection() { Id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<Collection, CollectionDto>(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {
