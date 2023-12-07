@@ -2,6 +2,7 @@
 using Dto.AuthDto;
 using ECom.Gateway.Models;
 using Messages;
+using Messages.AuthMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;

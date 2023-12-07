@@ -8,10 +8,10 @@ using Messages;
 using NServiceBus.Logging;
 using ECom.Services.Products.Models;
 using Dto.ProductDto;
-using NServiceBus;
 using AutoMapper;
 using ECom.Services.Products.Utility;
 using Microsoft.EntityFrameworkCore;
+using Messages.ProductMessages;
 
 namespace ECom.Services.Products.Handler
 {
@@ -19,11 +19,12 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetAllProduct>,
         IHandleMessages<ViewProduct>,
         IHandleMessages<CreateProduct>,
-        IHandleMessages<GetProductByID>,
+        IHandleMessages<GetProductBySlug>,
         IHandleMessages<GetBestSellers>,
         IHandleMessages<GetMostViewed>,
         IHandleMessages<UpdateProduct>,
-        IHandleMessages<ProductSold>
+        IHandleMessages<ProductSold>,
+        IHandleMessages<GetProductByItemID>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -100,6 +101,7 @@ namespace ECom.Services.Products.Handler
                 {
                     log.Info("Adding new Product");
                     DataAccess.Ins.DB.Products.Add(newProduct);
+                    DataAccess.Ins.DB.SaveChanges();
                     log.Info("Product added");
                     responseMessage.ErrorCode = 200;
                 }
@@ -132,7 +134,7 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
-        public async Task Handle(GetProductByID message, IMessageHandlerContext context)
+        public async Task Handle(GetProductBySlug message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
             if (message.productSlug == null)
@@ -215,7 +217,7 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
-        public async Task Handle(ProductSold message, IMessageHandlerContext context)
+        public Task Handle(ProductSold message, IMessageHandlerContext context)
         {
             List<int> listId = message.Id;
             if (listId == null)
@@ -239,6 +241,44 @@ namespace ECom.Services.Products.Handler
                     log.Error(ex.ToString());
                 }
             }
+            return Task.CompletedTask;
+        }
+
+        public async Task Handle(GetProductByItemID message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            if (message.ItemId == 0)
+            {
+                log.Error("BadRequest, missing product id");
+                responseMessage.ErrorCode = 403;
+            }
+            else
+            {
+                int itemId = message.ItemId;
+                try
+                {
+                    ProductItem productItem = DataAccess.Ins.DB.ProductItems.Where(u => u.Id == itemId).First();
+
+                    if(productItem != null)
+                    {
+                        List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Id == productItem.ProductId).ToList();
+                        responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
+                        responseMessage.ErrorCode = 200;
+                    }
+                    else
+                    {
+                        log.Error("Product not found");
+                        responseMessage.ErrorCode = 404;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
         }
     }
 }

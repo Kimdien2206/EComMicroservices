@@ -1,7 +1,7 @@
 import { http } from "..";
 
 export function fetchWaitingOrders(){
-  return http.get(`/order/waiting`);
+  return http.get(`/order/pending`);
 };
 
 export function fetchCompletedOrders(){
@@ -13,7 +13,7 @@ export function fetchCanceledOrders(){
 };
 
 export function fetchDeliveryOrders(){
-  return http.get(`/order/delivery`);
+  return http.get(`/order/delivering`);
 };
 
 export function finishOrder(id: number){

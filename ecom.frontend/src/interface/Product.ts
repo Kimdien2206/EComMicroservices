@@ -2,7 +2,7 @@ import ICollection from "./Collection";
 import IDiscount from "./Discount";
 import { IHaveTag } from "./HaveTag";
 import IProduct_item from "./ProductItem";
-import IReceiptDetail from "./ReceiptDetail";
+// import IReceiptDetail from "./ReceiptDetail";
 import IReview from "./Review";
 import ITag from "./Tag";
 
@@ -20,7 +20,7 @@ export default interface IProduct {
   discountID?: number | null;
   collection?: ICollection | null;
   collectionID?: number | null;
-  ReceiptDetail: IReceiptDetail[];
+  // ReceiptDetail: IReceiptDetail[];
   Review: IReview[];
   HaveTag: IHaveTag[];
   productItem: IProduct_item[];

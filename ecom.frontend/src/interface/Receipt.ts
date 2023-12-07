@@ -1,5 +1,5 @@
 import IOrder from "./Order";
-import IReceiptDetail from "./ReceiptDetail";
+// import IReceiptDetail from "./ReceiptDetail";
 import IUser from "./User";
 import IVoucher from "./Voucher";
 

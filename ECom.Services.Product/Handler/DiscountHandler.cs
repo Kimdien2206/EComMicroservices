@@ -4,6 +4,7 @@ using ECom.Services.Products.Data;
 using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
 using Messages;
+using Messages.DiscountMessages;
 using NServiceBus.Logging;
 using System;
 using System.Collections.Generic;

@@ -31,7 +31,7 @@ const OrderTable = (props: OrderProps) => {
       title: 'Khách hàng',
       dataIndex: 'customer_name',
       key: 'customer_name',
-      render: (_, record) => <p>{`${record.buyer.lastname} ${record.buyer.firstname}`}</p>
+      render: (_, record) => <p>{`${record.lastname} ${record.firstname}`}</p>
     },
     {
       title: 'Tổng tiền (đ)',
