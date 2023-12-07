@@ -23,5 +23,5 @@ export default interface IProduct {
   // ReceiptDetail: IReceiptDetail[];
   Review: IReview[];
   HaveTag: IHaveTag[];
-  productItem: IProduct_item[];
+  productItems: IProduct_item[];
 }

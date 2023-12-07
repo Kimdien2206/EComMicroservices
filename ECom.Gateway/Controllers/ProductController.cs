@@ -104,17 +104,17 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpPatch]
-        [Route("viewed")]
+        [Route("viewed/{id}")]
         [EnableCors]
-        public async Task<IActionResult> ViewProduct(int productID)
+        public async Task<IActionResult> ViewProduct(int id)
         {
-            if(productID == 0)
+            if(id == 0)
             {
                 return BadRequest();
             }
             try
             {
-                var message = new ViewProduct() { productID = productID };
+                var message = new ViewProduct() { productID = id };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus<Product, ProductDto>(response);
             }

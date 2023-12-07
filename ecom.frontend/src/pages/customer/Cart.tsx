@@ -68,19 +68,18 @@ const Cart = () => {
         setSubmitLoading(true)
         form.validateFields().then((data) => {
             const newOrder = {
+                date: Date.now(),
+                status: "0",
                 firstname: data.firstname,
                 lastname: data.lastname,
-                phone_number: data.phoneNumber,
+                phoneNumber: data.phoneNumber,
                 address: data.address,
-                total_cost: discountPrice,
-                // buyer: LocalStorage.getItem('user') ? {
-                //     connect: {
-                //         id: LocalStorage.getItem('user').id
-                //     }
-                // } : undefined,
-                Order_detail: [
+                totalCost: 0,
+                OrderDetails: [
                     cartProducts.map((item: ICart) => { return { 
-                        item_id: item.itemID,
+                        id: 0,
+                        orderId: 0,
+                        itemId: item.itemID,
                         quantity: item.quantity
                     }})
                 ]

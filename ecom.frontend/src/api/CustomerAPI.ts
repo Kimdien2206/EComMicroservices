@@ -10,7 +10,7 @@ export function fetchProductDetail(where: any){
 }
 
 export function increaseViewForProduct(id: number) {
-  return http.post(`/product/viewed/${id}`);
+  return http.patch(`/product/viewed/${id}`);
 }
 
 export function fetchProduct(slug: string){
