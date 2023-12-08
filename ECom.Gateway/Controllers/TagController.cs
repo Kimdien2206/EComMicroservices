@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Dto.ProductDto;
-using ECom.Gateway.Models;
+﻿using Dto.ProductDto;
 using Messages;
 using Messages.TagMessages;
 using Microsoft.AspNetCore.Cors;
@@ -17,11 +15,9 @@ namespace ECom.Gateway.Controllers
 
         private readonly IMessageSession messageSession;
         private readonly ILog log = LogManager.GetLogger(typeof(TagController));
-        private readonly IMapper _mapper;
-        public TagController(IMessageSession messageSession, IMapper mapper)
+        public TagController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
-            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -36,7 +32,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -48,7 +44,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
-        public async Task<IActionResult> CreateTag(Tag newTag)
+        public async Task<IActionResult> CreateTag(TagDto newTag)
         {
             if (newTag == null)
             {
@@ -56,10 +52,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                TagDto newTagDto = _mapper.Map<TagDto>(newTag);
-                var message = new CreateTag() { newTag = newTagDto };
+                var message = new CreateTag() { newTag = newTag };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -70,7 +65,7 @@ namespace ECom.Gateway.Controllers
         [HttpPatch]
         [EnableCors]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateTag(string id, Tag newTag)
+        public async Task<IActionResult> UpdateTag(string id, TagDto newTag)
         {
             int tagID = Int32.Parse(id);
 
@@ -80,10 +75,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                TagDto newTagDto = _mapper.Map<TagDto>(newTag);
-                var message = new UpdateTag() { newTag = newTagDto, Id = tagID };
+                var message = new UpdateTag() { newTag = newTag, Id = tagID };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus (response);
             }
             catch
             {
@@ -105,7 +99,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteTag() { Id = tagID };
                 var response = await this.messageSession.Request<Response<TagDto>>(message);
-                return ReturnWithStatus<Tag, TagDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {

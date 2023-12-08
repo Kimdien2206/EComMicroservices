@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using Messages;
+﻿using Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECom.Gateway.Controllers
 {
     public class BaseController : ControllerBase
     {
-        public IActionResult ReturnWithStatus<T, Y>(Response<Y> response)
+        public IActionResult ReturnWithStatus<T>(Response<T> response)
         {
             if (response.ErrorCode == 200)
             {

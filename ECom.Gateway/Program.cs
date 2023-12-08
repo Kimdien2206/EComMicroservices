@@ -1,5 +1,3 @@
-using ECom.Gateway.Utility;
-using AutoMapper;
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
 using Messages.ProductMessages;
@@ -60,15 +58,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var config = new MapperConfiguration(cfg =>
-{
-    cfg.AddProfile(new MappingProfile());
-});
-IMapper mapper = config.CreateMapper();
-
-builder.Services.AddSingleton(mapper);
-
 
 var app = builder.Build();
 
