@@ -213,7 +213,7 @@ namespace ECom.Gateway.Controllers
             {
                 newOrder.TotalCost = 0;
 
-                foreach(OrderDetailDto detail in newOrder.OrderDetailDtos)
+                foreach(OrderDetailDto detail in newOrder.OrderDetails)
                 {
                     var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
                     var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);

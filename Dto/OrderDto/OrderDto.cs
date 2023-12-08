@@ -28,6 +28,6 @@ namespace Dto.OrderDto
 
         public string PhoneNumber { get; set; } = null!;
 
-        public virtual ICollection<OrderDetailDto> OrderDetailDtos { get; set; } = new List<OrderDetailDto>();  
+        public virtual ICollection<OrderDetailDto> OrderDetails { get; set; } = new List<OrderDetailDto>();  
     }
 }

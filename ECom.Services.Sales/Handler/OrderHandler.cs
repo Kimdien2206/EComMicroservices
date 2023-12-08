@@ -115,7 +115,7 @@ namespace ECom.Services.Sales.Handler
             else
             {
                 Order newOrder = mapper.Map<Order>(message.newOrder);
-                newOrder.OrderDetails = message.newOrder.OrderDetailDtos.Select(emp => mapper.Map<OrderDetail>(emp)).ToList();
+                newOrder.OrderDetails = message.newOrder.OrderDetails.Select(emp => mapper.Map<OrderDetail>(emp)).ToList();
 
                 foreach(OrderDetail detail in newOrder.OrderDetails)
                 {
