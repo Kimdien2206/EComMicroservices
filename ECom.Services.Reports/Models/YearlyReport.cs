@@ -15,21 +15,21 @@ public partial class YearlyReport
     [Column("income")]
     [Required]
     [DefaultValue(0)]
-    public int Income { get; set; }
+    public long Income { get; set; }
 
     [Column("outcome")]
     [Required]
     [DefaultValue(0)]
-    public int Outcome { get; set; }
+    public long Outcome { get; set; }
 
     [Column("profit")]
     [Required]
     [DefaultValue(0)]
-    public int Profit { get; set; }
+    public long Profit { get; set; }
 
     [Column("sold_quantity")]
     [DefaultValue(0)]
-    public int SoldQuantity { get; set; }
+    public long SoldQuantity { get; set; }
 
     public virtual ICollection<MonthlyReport> MonthlyReports { get; set; } = new List<MonthlyReport>();
 }
