@@ -6,7 +6,7 @@ namespace ECom.Services.Billing.Data
 {
     public class ReceiptDbContext : DbContext
     {
-        public DbSet<Receipt> Orders { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
 
         public ReceiptDbContext()
         {
