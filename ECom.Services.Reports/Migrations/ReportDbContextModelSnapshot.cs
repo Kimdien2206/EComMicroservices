@@ -36,9 +36,6 @@ namespace ECom.Services.Reports.Migrations
                         .HasColumnType("Date")
                         .HasColumnName("month");
 
-                    b.Property<DateOnly?>("MonthlyReportMonth")
-                        .HasColumnType("Date");
-
                     b.Property<long>("Outcome")
                         .HasColumnType("bigint")
                         .HasColumnName("outcome");
@@ -53,7 +50,7 @@ namespace ECom.Services.Reports.Migrations
 
                     b.HasKey("Date");
 
-                    b.HasIndex("MonthlyReportMonth");
+                    b.HasIndex("Month");
 
                     b.ToTable("DailyReports");
 
@@ -387,12 +384,9 @@ namespace ECom.Services.Reports.Migrations
                         .HasColumnType("Date")
                         .HasColumnName("year");
 
-                    b.Property<DateOnly?>("YearlyReportYear")
-                        .HasColumnType("Date");
-
                     b.HasKey("Month");
 
-                    b.HasIndex("YearlyReportYear");
+                    b.HasIndex("Year");
 
                     b.ToTable("MonthlyReports");
 
@@ -546,9 +540,13 @@ namespace ECom.Services.Reports.Migrations
 
             modelBuilder.Entity("ECom.Services.Reports.Models.DailyReport", b =>
                 {
-                    b.HasOne("ECom.Services.Reports.Models.MonthlyReport", null)
+                    b.HasOne("ECom.Services.Reports.Models.MonthlyReport", "MonthlyReport")
                         .WithMany("DailyReports")
-                        .HasForeignKey("MonthlyReportMonth");
+                        .HasForeignKey("Month")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MonthlyReport");
                 });
 
             modelBuilder.Entity("ECom.Services.Reports.Models.DailyReportDetail", b =>
@@ -564,9 +562,13 @@ namespace ECom.Services.Reports.Migrations
 
             modelBuilder.Entity("ECom.Services.Reports.Models.MonthlyReport", b =>
                 {
-                    b.HasOne("ECom.Services.Reports.Models.YearlyReport", null)
+                    b.HasOne("ECom.Services.Reports.Models.YearlyReport", "YearlyReport")
                         .WithMany("MonthlyReports")
-                        .HasForeignKey("YearlyReportYear");
+                        .HasForeignKey("Year")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("YearlyReport");
                 });
 
             modelBuilder.Entity("ECom.Services.Reports.Models.DailyReport", b =>

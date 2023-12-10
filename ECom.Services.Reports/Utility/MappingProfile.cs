@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dto.ReportDto;
 using ECom.Services.Reports.Models;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,12 @@ namespace ECom.Services.Reports.Utility
     public class MappingProfile : Profile
     {
         public MappingProfile() {
-            //CreateMap<Order, OrderDto>();
-            //CreateMap<OrderDto, Order>();
+            CreateMap<YearlyReport, YearlyReportDto>();
+            CreateMap<YearlyReportDto, YearlyReport>();
+            CreateMap<MonthlyReport, MonthlyReportDto>();
+            CreateMap<MonthlyReportDto, MonthlyReport>();
+            CreateMap<DailyReport, DailyReportDto>();
+            CreateMap<DailyReportDto, DailyReport>();
         }
     }
 }

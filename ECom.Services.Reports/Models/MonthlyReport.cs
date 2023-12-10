@@ -29,7 +29,10 @@ public partial class MonthlyReport
     public int SoldQuantity { get; set; }
 
     [Column("year")]
+    [ForeignKey("YearlyReport")]
     public DateOnly Year { get; set; }
+
+    public virtual YearlyReport YearlyReport { get; set; } = null!;
 
     public virtual ICollection<DailyReport> DailyReports { get; set; } = new List<DailyReport>();
 }

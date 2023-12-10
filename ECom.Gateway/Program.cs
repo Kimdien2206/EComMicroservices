@@ -5,6 +5,7 @@ using Messages.TagMessages;
 using Messages.AuthMessages;
 using Messages.OrderMessages;
 using Messages.ReceiptMessages;
+using Messages.ReportMessages;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,7 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetOrderByStatus), "Sales");
     route.RouteToEndpoint(typeof(UpdateOrderStatus), "Sales");
     route.RouteToEndpoint(typeof(CreateOrder), "Sales");
+    route.RouteToEndpoint(typeof(GetYearlyReport), "Reports");
     route.RouteToEndpoint(typeof(GetReceiptByStatus), "Billing");
     route.RouteToEndpoint(typeof(PaidReceipt), "Billing");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");

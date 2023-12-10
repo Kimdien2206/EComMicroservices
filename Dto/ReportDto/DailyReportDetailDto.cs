@@ -1,7 +1,7 @@
 ﻿
 namespace Dto.ReportDto
 {
-    public class DailyReportDetail
+    public class DailyReportDetailDto
     {
         public int Id { get; set; }
 
@@ -11,6 +11,6 @@ namespace Dto.ReportDto
 
         public DateOnly Date { get; set; }
 
-        public virtual DailyReport DateNavigation { get; set; } = null!;
+        public virtual DailyReportDto DateNavigation { get; set; } = null!;
     }
 }

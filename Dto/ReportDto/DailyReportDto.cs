@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Dto.ReportDto
 {
-    public class DailyReport
+    public class DailyReportDto
     {
         public DateOnly Date { get; set; }
 
-        public int Income { get; set; }
+        public long Income { get; set; }
 
-        public int Outcome { get; set; }
+        public long Outcome { get; set; }
 
-        public int Profit { get; set; }
+        public long Profit { get; set; }
 
         public int SoldQuantity { get; set; }
 
         public DateOnly Month { get; set; }
 
-        public virtual ICollection<DailyReportDetail> Details { get; set; } = null!;
+        public virtual ICollection<DailyReportDetailDto> Details { get; set; } = null!;
     }
 }

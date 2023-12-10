@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace Dto.ReportDto
 {
-    public class YearlyReport
+    public class YearlyReportDto
     {
         public DateOnly Year { get; set; }
 
-        public int Income { get; set; }
+        public long Income { get; set; }
 
-        public int Outcome { get; set; }
+        public long Outcome { get; set; }
 
-        public int Profit { get; set; }
+        public long Profit { get; set; }
 
         public int SoldQuantity { get; set; }
 
-        public virtual ICollection<MonthlyReport> MonthlyReports { get; set; } = new List<MonthlyReport>();
+        public virtual ICollection<MonthlyReportDto> MonthlyReports { get; set; } = new List<MonthlyReportDto>();
     }
 }
