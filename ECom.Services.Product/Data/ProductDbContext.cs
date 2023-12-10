@@ -1,13 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using E_commerce_shop_2.Models;
 using ECom.Services.Products.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using E_commerce_shop_2.Models;
 
 namespace ECom.Services.Products.Data
 {
@@ -664,5 +658,5 @@ namespace ECom.Services.Products.Data
                 new Voucher { Code = "ABC123", Name = "Khuyến mãi 2", Discount = 5, Description = "", Due = new DateOnly(2023, 12, 31), IsActive = false }
                 );
         }
-    } 
+    }
 }
