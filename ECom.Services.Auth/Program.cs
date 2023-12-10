@@ -19,6 +19,8 @@ namespace ECom.Services.Auth
                     var endpointConfiguration = new EndpointConfiguration("Auth");
 
                     endpointConfiguration.UseTransport<LearningTransport>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
 
                     return endpointConfiguration;
                 })

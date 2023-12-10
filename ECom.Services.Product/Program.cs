@@ -19,6 +19,8 @@ namespace ECom.Services.Products
                     var endpointConfiguration = new EndpointConfiguration("Product");
 
                     endpointConfiguration.UseTransport<LearningTransport>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
 
                     return endpointConfiguration;
                 })

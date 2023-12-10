@@ -18,6 +18,8 @@ namespace ECom.Services.Reports
                     var endpointConfiguration = new EndpointConfiguration("Reports");
 
                     endpointConfiguration.UseTransport<LearningTransport>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
 
                     return endpointConfiguration;
                 })

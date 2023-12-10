@@ -18,6 +18,8 @@ namespace ECom.Services.Billing
                     var endpointConfiguration = new EndpointConfiguration("Billing");
 
                     endpointConfiguration.UseTransport<LearningTransport>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
 
                     return endpointConfiguration;
                 })
