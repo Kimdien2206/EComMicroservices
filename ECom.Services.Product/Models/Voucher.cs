@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace E_commerce_shop_2.Models;
+namespace ECom.Services.Products.Models;
 
 public partial class Voucher
 {

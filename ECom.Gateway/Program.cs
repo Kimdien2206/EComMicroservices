@@ -18,6 +18,8 @@ builder.Host.UseNServiceBus(context =>
     var endpointConfiguration = new EndpointConfiguration("Gateway");
     endpointConfiguration.EnableCallbacks();
     endpointConfiguration.MakeInstanceUniquelyAddressable("A");
+    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
 
     var transport = endpointConfiguration.UseTransport<LearningTransport>();
     var route = transport.Routing();

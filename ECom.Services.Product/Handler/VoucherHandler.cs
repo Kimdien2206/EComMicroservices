@@ -2,6 +2,7 @@
 using AutoMapper;
 using Dto.ProductDto;
 using ECom.Services.Products.Data;
+using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
 using Messages;
 using Messages.VoucherMessage;

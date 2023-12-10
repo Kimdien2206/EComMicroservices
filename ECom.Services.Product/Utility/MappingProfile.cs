@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Dto.ProductDto;
-using E_commerce_shop_2.Models;
 using ECom.Services.Products.Models;
 
 namespace ECom.Services.Products.Utility

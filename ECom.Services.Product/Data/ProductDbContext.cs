@@ -1,5 +1,4 @@
-﻿using E_commerce_shop_2.Models;
-using ECom.Services.Products.Models;
+﻿using ECom.Services.Products.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
