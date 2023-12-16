@@ -61,6 +61,29 @@ namespace ECom.Gateway.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateReceipt(ReceiptDto newReceipt)
+        {
+            if(newReceipt == null)
+            {
+                return BadRequest();
+            }
+
+            log.Info("Received request");
+            var message = new CreateReceipt() { newReceipt = newReceipt };
+            try
+            {
+                var response = await this.messageSession.Request<Response<ReceiptDto>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (Exception ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                return StatusCode(500);
+            }
+        }
+        
         [HttpPatch]
         [Route("paid/{id}")]
         public async Task<IActionResult> PaidReceipt(string id)

@@ -49,6 +49,7 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateOrder), "Sales");
     route.RouteToEndpoint(typeof(GetYearlyReport), "Reports");
     route.RouteToEndpoint(typeof(GetReceiptByStatus), "Billing");
+    route.RouteToEndpoint(typeof(CreateReceipt), "Billing");
     route.RouteToEndpoint(typeof(PaidReceipt), "Billing");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
 

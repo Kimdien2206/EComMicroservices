@@ -7,19 +7,17 @@ using ECom.Services.Reports.Utility;
 using Messages;
 using Messages.OrderMessages;
 using Messages.ProductMessages;
+using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ECom.Services.Reports.Services;
 
 namespace ECom.Services.Reports.Handler
 {
     public class ReportHandler :
-        IHandleMessages<GetYearlyReport>
+        IHandleMessages<GetYearlyReport>,
+        IHandleMessages<ReceiptPaid>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ReportHandler>();
@@ -64,6 +62,26 @@ namespace ECom.Services.Reports.Handler
 
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(ReceiptPaid message, IMessageHandlerContext context)
+        {
+            log.Info("Receive event");
+            if (message.PaidDate == DateOnly.MinValue || message.Income == 0)
+            {
+                log.Info("Missing parameter when handle ReceiptPaid event");
+            }
+            else
+            {
+                DailyReport paidDate = ReportServices.FindDailyReport(message.PaidDate);
+
+                paidDate.Income += message.Income;
+                paidDate.Profit += message.Income;
+
+                await DataAccess.Ins.DB.SaveChangesAsync(context.CancellationToken);
+
+                ReportServices.UpdateReport(message.PaidDate);
+            }
         }
     }
 }
