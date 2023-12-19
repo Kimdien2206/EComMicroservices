@@ -59,14 +59,14 @@ namespace ECom.Services.Billing.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Receipts");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Cost = 500000,
-                            Date = new DateTime(2023, 12, 8, 13, 29, 1, 311, DateTimeKind.Local).AddTicks(6069),
+                            Date = new DateTime(2023, 12, 19, 14, 10, 28, 479, DateTimeKind.Local).AddTicks(4194),
                             OrderId = 1,
                             PaymentMethod = "cod",
                             Status = "0",
@@ -76,7 +76,7 @@ namespace ECom.Services.Billing.Migrations
                         {
                             Id = 2,
                             Cost = 500000,
-                            Date = new DateTime(2023, 12, 8, 13, 29, 1, 311, DateTimeKind.Local).AddTicks(6085),
+                            Date = new DateTime(2023, 12, 19, 14, 10, 28, 479, DateTimeKind.Local).AddTicks(4207),
                             OrderId = 2,
                             PaymentMethod = "cod",
                             Status = "1",

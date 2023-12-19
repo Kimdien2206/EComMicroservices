@@ -115,7 +115,7 @@ namespace ECom.Services.Reports.Services
         {
             DateOnly reportMonth = DateOnly.FromDateTime(TimeTruncate.TruncateToMonthStart(reportDate));
 
-            MonthlyReport monthlyReport = DataAccess.Ins.DB.MonthlyReports.First(u => u.Month == reportMonth);
+            MonthlyReport monthlyReport = FindMonthlyReport(reportMonth);
 
             monthlyReport.Profit = DataAccess.Ins.DB.DailyReports.Where(u => u.Month == reportMonth).Sum(i => i.Profit); 
             monthlyReport.Income = DataAccess.Ins.DB.DailyReports.Where(u => u.Month == reportMonth).Sum(i => i.Income); 
@@ -124,9 +124,9 @@ namespace ECom.Services.Reports.Services
 
             DataAccess.Ins.DB.SaveChanges();
 
-            DateOnly reportYear = DateOnly.FromDateTime(TimeTruncate.TruncateToMonthStart(reportDate));
+            DateOnly reportYear = DateOnly.FromDateTime(TimeTruncate.TruncateToYearStart(reportDate));
 
-            YearlyReport yearlyReport = DataAccess.Ins.DB.YearlyReports.First(u => u.Year == reportYear);
+            YearlyReport yearlyReport = FindYearlyReport(reportYear);
 
             yearlyReport.Profit = DataAccess.Ins.DB.MonthlyReports.Where(u => u.Year == reportYear).Sum(i => i.Profit); 
             yearlyReport.Income = DataAccess.Ins.DB.MonthlyReports.Where(u => u.Year == reportYear).Sum(i => i.Income); 

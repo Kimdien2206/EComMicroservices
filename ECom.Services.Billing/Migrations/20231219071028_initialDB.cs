@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECom.Services.Billing.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class initialDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Receipts",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -28,16 +28,16 @@ namespace ECom.Services.Billing.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.id);
+                    table.PrimaryKey("PK_Receipts", x => x.id);
                 });
 
             migrationBuilder.InsertData(
-                table: "Orders",
+                table: "Receipts",
                 columns: new[] { "id", "cost", "date", "order_id", "payment_method", "status", "voucher_code" },
                 values: new object[,]
                 {
-                    { 1, 500000, new DateTime(2023, 12, 8, 13, 29, 1, 311, DateTimeKind.Local).AddTicks(6069), 1, "cod", "0", "ABCDEF" },
-                    { 2, 500000, new DateTime(2023, 12, 8, 13, 29, 1, 311, DateTimeKind.Local).AddTicks(6085), 2, "cod", "1", "ABCDEF" }
+                    { 1, 500000, new DateTime(2023, 12, 19, 14, 10, 28, 479, DateTimeKind.Local).AddTicks(4194), 1, "cod", "0", "ABCDEF" },
+                    { 2, 500000, new DateTime(2023, 12, 19, 14, 10, 28, 479, DateTimeKind.Local).AddTicks(4207), 2, "cod", "1", "ABCDEF" }
                 });
         }
 
@@ -45,7 +45,7 @@ namespace ECom.Services.Billing.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Receipts");
         }
     }
 }
