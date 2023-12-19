@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Dto.OrderDto;
-using Dto.OrderDto;
 using ECom.Services.Sales.Data;
 using ECom.Services.Sales.Models;
 using ECom.Services.Sales.Utility;
@@ -82,7 +81,7 @@ namespace ECom.Services.Sales.Handler
             var responseMessage = new Response<OrderDto>();
             int updateID = Int32.Parse(message.Id);
 
-            if(message.Id == null || message.Status == null)
+            if(message.Id == null || message.Status == ' ')
             {
                 responseMessage.ErrorCode = 500;
             }
@@ -116,7 +115,7 @@ namespace ECom.Services.Sales.Handler
             else
             {
                 Order newOrder = mapper.Map<Order>(message.newOrder);
-                newOrder.OrderDetails = message.newOrder.OrderDetailDtos.Select(emp => mapper.Map<OrderDetail>(emp)).ToList();
+                newOrder.OrderDetails = message.newOrder.OrderDetails.Select(emp => mapper.Map<OrderDetail>(emp)).ToList();
 
                 foreach(OrderDetail detail in newOrder.OrderDetails)
                 {

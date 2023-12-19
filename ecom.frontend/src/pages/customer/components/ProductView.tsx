@@ -71,29 +71,31 @@ const ProductView = (props: ProductViewProps) => {
                 }
             }))
             if (!isViewedIncreasing)
-                increaseViewForProduct(data.data.id).then(() => { setIsViewedIncreasing(true) });
+                increaseViewForProduct(data.data[0].id).then(() => { setIsViewedIncreasing(true) });
         }).finally(() => setLoading(false))
     }, [props])
-
 
     const handleColorOnClick = ({ target }: RadioChangeEvent) => {
         console.log(color)
         setSelectedColor(target.value)
-        const size = Array.from(new Set(product?.productItem.filter((item) => item.color === target.value).map((data) => data.size)));
+        console.log(product)
+
+        const size = Array.from(new Set(product?.productItems.filter((item) => item.color === target.value).map((data) => data.size)));
 
         console.log(size)
 
         setSize((prev) => prev?.map((data) => {
-            if (!size?.some((item) => item === data.value))
+            if (!size?.some((item) => item === data?.value))
                 return { ...data, disabled: true };
             else
                 return { ...data, disabled: false };
         })
         )
     }
+
     const handleSizeOnClick = ({ target }: RadioChangeEvent) => {
         setSelectedSize(target.value);
-        const color = Array.from(new Set(product?.productItem.filter((item) => item.size === target.value).map((data) => data.color)));
+        const color = Array.from(new Set(product?.productItems.filter((item) => item.size === target.value).map((data) => data.color)));
 
         console.log(color)
 
@@ -108,8 +110,9 @@ const ProductView = (props: ProductViewProps) => {
 
     const handleBuyNow = () => {
         const currentUser = LocalStorage.getItem('user');
+
         if (selectedColor && selectedSize) {
-            const productItem = product?.productItem.filter((item) => item.color === selectedColor && item.size === selectedSize)
+            const productItem = product?.productItems.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (currentUser) {
                 createCart({
                     userID: currentUser.id,
@@ -170,7 +173,7 @@ const ProductView = (props: ProductViewProps) => {
     const handleAddToCart = () => {
         const currentUser = LocalStorage.getItem('user');
         if (selectedColor && selectedSize) {
-            const productItem = product?.productItem.filter((item) => item.color === selectedColor && item.size === selectedSize)
+            const productItem = product?.productItems.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (currentUser) {
                 createCart({
                     userID: currentUser.id,
@@ -223,7 +226,6 @@ const ProductView = (props: ProductViewProps) => {
             ErrorAlert("Vui lòng chọn size và màu");
         }
     }
-
 
     return (
         <Spin spinning={loading}>

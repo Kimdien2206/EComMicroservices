@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Dto.ProductDto;
-using ECom.Gateway.Models;
+﻿using Dto.ProductDto;
 using Messages;
 using Messages.DiscountMessages;
 using Microsoft.AspNetCore.Cors;
@@ -16,11 +14,9 @@ namespace ECom.Gateway.Controllers
     {
         private readonly IMessageSession messageSession;
         private readonly ILog log = LogManager.GetLogger(typeof(DiscountController));
-        private readonly IMapper _mapper;
-        public DiscountController(IMessageSession messageSession, IMapper mapper)
+        public DiscountController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
-            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -35,7 +31,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<DiscountDto>(response);
+                return ReturnWithStatus(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -47,7 +43,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
-        public async Task<IActionResult> CreateDiscount(Discount newDiscount)
+        public async Task<IActionResult> CreateDiscount(DiscountDto newDiscount)
         {
             if (newDiscount == null)
             {
@@ -55,10 +51,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
-                var message = new CreateDiscount() { discount = newDiscountDto };
+                var message = new CreateDiscount() { discount = newDiscount };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<DiscountDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -66,10 +61,10 @@ namespace ECom.Gateway.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [EnableCors]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateDiscount(string id, Discount newDiscount)
+        public async Task<IActionResult> UpdateDiscount(string id, DiscountDto newDiscount)
         {
             int discountID = Int32.Parse(id);
             if (newDiscount == null || discountID == 0)
@@ -78,10 +73,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                DiscountDto newDiscountDto = _mapper.Map<DiscountDto>(newDiscount);
-                var message = new UpdateDiscount() { discount = newDiscountDto, id = discountID };
+                var message = new UpdateDiscount() { discount = newDiscount, id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<DiscountDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -103,7 +97,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteDiscount() { Id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
-                return ReturnWithStatus<DiscountDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {

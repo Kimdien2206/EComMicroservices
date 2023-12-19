@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Dto.AuthDto;
-using ECom.Gateway.Models;
+﻿using Dto.AuthDto;
 using Messages;
 using Messages.AuthMessages;
 using Microsoft.AspNetCore.Cors;
@@ -15,11 +13,9 @@ namespace ECom.Gateway.Controllers
     {
         private readonly IMessageSession messageSession;
         private readonly ILog log = LogManager.GetLogger(typeof(CollectionController));
-        private readonly IMapper _mapper;
-        public AuthController(IMessageSession messageSession, IMapper mapper)
+        public AuthController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
-            this._mapper = mapper;
         }
 
         [HttpPost]

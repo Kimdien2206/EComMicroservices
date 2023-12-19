@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Dto.ProductDto;
-using ECom.Gateway.Models;
+﻿using Dto.ProductDto;
 using Messages;
 using Messages.CollectionMessages;
 using Microsoft.AspNetCore.Cors;
@@ -16,11 +14,9 @@ namespace ECom.Gateway.Controllers
     {
         private readonly IMessageSession messageSession;
         private readonly ILog log = LogManager.GetLogger(typeof(CollectionController));
-        private readonly IMapper _mapper;
-        public CollectionController(IMessageSession messageSession, IMapper mapper)
+        public CollectionController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
-            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -35,7 +31,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<CollectionDto>(response);
+                return ReturnWithStatus(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -47,7 +43,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
-        public async Task<IActionResult> CreateCollection(Collection newCollection)
+        public async Task<IActionResult> CreateCollection(CollectionDto newCollection)
         {
             if (newCollection == null)
             {
@@ -55,10 +51,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                CollectionDto newCollectionDto = _mapper.Map<CollectionDto>(newCollection);
-                var message = new CreateCollection() { newCollection = newCollectionDto };
+                var message = new CreateCollection() { newCollection = newCollection };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<CollectionDto>(response);
+                return ReturnWithStatus<Collection, CollectionDto>(response);
             }
             catch
             {
@@ -66,10 +61,10 @@ namespace ECom.Gateway.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [EnableCors]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateCollection(string id, Collection newCollection)
+        public async Task<IActionResult> UpdateCollection(string id, CollectionDto newCollection)
         {
             int collectionID = Int32.Parse(id);
 
@@ -79,10 +74,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                CollectionDto newCollectionDto = _mapper.Map<CollectionDto>(newCollection);
-                var message = new UpdateCollection() { collection = newCollectionDto, id = collectionID };
+                var message = new UpdateCollection() { collection = newCollection, id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<CollectionDto>(response);
+                return ReturnWithStatus<Collection, CollectionDto>(response);
             }
             catch
             {
@@ -104,7 +98,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteCollection() { Id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus<CollectionDto>(response);
+                return ReturnWithStatus<Collection, CollectionDto>(response);
             }
             catch
             {

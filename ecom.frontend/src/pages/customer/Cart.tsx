@@ -19,6 +19,7 @@ import ICart from '../../interface/Cart'
 import { getVietQR } from '../../api/paymentAPI'
 import { CheckoutContext, CheckoutProvider } from '../../context/CheckoutContext'
 import { formatNumberWithComma } from '../../helper/utils'
+import dayjs from 'dayjs'
 
 const COD = "cod";
 const BANK = "bank";
@@ -68,22 +69,21 @@ const Cart = () => {
         setSubmitLoading(true)
         form.validateFields().then((data) => {
             const newOrder = {
+                id: 0,
+                date: dayjs(Date.now()),
+                status: "0",
                 firstname: data.firstname,
                 lastname: data.lastname,
-                phone_number: data.phoneNumber,
+                phoneNumber: data.phoneNumber,
                 address: data.address,
-                total_cost: discountPrice,
-                // buyer: LocalStorage.getItem('user') ? {
-                //     connect: {
-                //         id: LocalStorage.getItem('user').id
-                //     }
-                // } : undefined,
-                Order_detail: [
-                    cartProducts.map((item: ICart) => { return { 
-                        item_id: item.itemID,
+                totalCost: 0,
+                orderDetails: cartProducts.map((item: ICart) => { return { 
+                        id: 0,
+                        orderId: 0,
+                        itemId: item.itemID,
                         quantity: item.quantity
                     }})
-                ]
+                
             }
             createOrder(newOrder)
                 .then((response) => {

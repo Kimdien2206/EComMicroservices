@@ -1,11 +1,12 @@
-using AutoMapper;
-using ECom.Gateway.Utility;
-using Messages.AuthMessages;
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
 using Messages.OrderMessages;
 using Messages.ProductMessages;
 using Messages.TagMessages;
+using Messages.AuthMessages;
+using Messages.OrderMessages;
+using Messages.ReceiptMessages;
+using Messages.ReportMessages;
 using Messages.VoucherMessage;
 
 Console.Title = "Gateway";
@@ -48,8 +49,10 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetOrderByStatus), "Sales");
     route.RouteToEndpoint(typeof(UpdateOrderStatus), "Sales");
     route.RouteToEndpoint(typeof(CreateOrder), "Sales");
-    //route.RouteToEndpoint(typeof(DeleteOrder), "Sales");
-    //route.RouteToEndpoint(typeof(UpdateOrder), "Sales");
+    route.RouteToEndpoint(typeof(GetYearlyReport), "Reports");
+    route.RouteToEndpoint(typeof(GetReceiptByStatus), "Billing");
+    route.RouteToEndpoint(typeof(CreateReceipt), "Billing");
+    route.RouteToEndpoint(typeof(PaidReceipt), "Billing");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
     route.RouteToEndpoint(typeof(ResetCodeCommand), "Auth");
     route.RouteToEndpoint(typeof(ResetPasswordCommand), "Auth");
@@ -69,15 +72,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var config = new MapperConfiguration(cfg =>
-{
-    cfg.AddProfile(new MappingProfile());
-});
-IMapper mapper = config.CreateMapper();
-
-builder.Services.AddSingleton(mapper);
-
 
 var app = builder.Build();
 

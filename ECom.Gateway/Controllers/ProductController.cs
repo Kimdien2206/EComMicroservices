@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
 using System.Collections;
 using System.Net;
-using ECom.Gateway.Models;
-using AutoMapper;
 using Messages.ProductMessages;
 
 namespace ECom.Gateway.Controllers
@@ -17,12 +15,10 @@ namespace ECom.Gateway.Controllers
     {
         private readonly IMessageSession messageSession;
         private readonly ILog log = LogManager.GetLogger(typeof(ProductController));
-        private readonly IMapper _mapper;
 
-        public ProductController(IMessageSession messageSession, IMapper mapper)
+        public ProductController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
-            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -37,7 +33,7 @@ namespace ECom.Gateway.Controllers
             {
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch (OperationCanceledException ex)
             {
@@ -61,7 +57,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetProductBySlug() { productSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -78,7 +74,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetBestSellers();
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -95,7 +91,7 @@ namespace ECom.Gateway.Controllers
                 var message = new GetMostViewed();
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus (response);
             }
             catch
             {
@@ -104,19 +100,19 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpPatch]
-        [Route("viewed")]
+        [Route("viewed/{id}")]
         [EnableCors]
-        public async Task<IActionResult> ViewProduct(int productID)
+        public async Task<IActionResult> ViewProduct(int id)
         {
-            if(productID == 0)
+            if(id == 0)
             {
                 return BadRequest();
             }
             try
             {
-                var message = new ViewProduct() { productID = productID };
+                var message = new ViewProduct() { productID = id };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -126,7 +122,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
-        public async Task<IActionResult> CreateProduct(Product newProduct)
+        public async Task<IActionResult> CreateProduct(ProductDto newProduct)
         {
             if (newProduct == null)
             {
@@ -134,10 +130,9 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                ProductDto newProductDto = _mapper.Map<ProductDto>(newProduct);
-                var message = new CreateProduct() { newProduct = newProductDto };
+                var message = new CreateProduct() { newProduct = newProduct };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -145,21 +140,21 @@ namespace ECom.Gateway.Controllers
             }
         }
         
-        [HttpPatch]
+        [HttpPut]
         [EnableCors]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateProduct(Product newProduct)
+        public async Task<IActionResult> UpdateProduct(ProductDto newProduct, string id)
         {
-            if (newProduct == null)
+            if (newProduct == null || id == null)
             {
                 return BadRequest();
             }
+            int productId = Int32.Parse(id);
             try
             {
-                ProductDto newProductDto = _mapper.Map<ProductDto>(newProduct);
-                var message = new UpdateProduct() { product = newProductDto, Id = newProductDto.Id };
+                var message = new UpdateProduct() { product = newProduct, Id = productId };
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus<ProductDto>(response);
+                return ReturnWithStatus(response);
             }
             catch
             {

@@ -21,6 +21,7 @@ namespace ECom.Services.Products
                     endpointConfiguration.UseTransport<LearningTransport>();
                     endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
+
                     return endpointConfiguration;
                 })
                 .RunConsoleAsync();
