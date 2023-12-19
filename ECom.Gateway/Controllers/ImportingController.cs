@@ -16,11 +16,11 @@ namespace ECom.Gateway.Controllers
             this.messageSession = messageSession;
         }
 
-        [HttpGet]
-        [EnableCors]
-        public async Task<IActionResult> GetAllImporting()
-        {
+        //[HttpGet]
+        //[EnableCors]
+        //public async Task<IActionResult> GetAllImporting()
+        //{
 
-        }
+        //}
     }
 }
