@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECom.Services.Products.Data;
-using Messages;
-using NServiceBus.Logging;
-using ECom.Services.Products.Models;
+﻿using AutoMapper;
 using Dto.ProductDto;
-using AutoMapper;
+using ECom.Services.Products.Data;
+using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
-using Microsoft.EntityFrameworkCore;
+using Messages;
 using Messages.ProductMessages;
+using Microsoft.EntityFrameworkCore;
+using NServiceBus.Logging;
 
 namespace ECom.Services.Products.Handler
 {
-    public class ProductHandler : 
+    public class ProductHandler :
         IHandleMessages<GetAllProduct>,
         IHandleMessages<ViewProduct>,
         IHandleMessages<CreateProduct>,
@@ -40,20 +35,21 @@ namespace ECom.Services.Products.Handler
 
         public async Task Handle(GetAllProduct message, IMessageHandlerContext context)
         {
-            log.Info("Received message");
+            log.Info("Received message GetAllProduct");
             var responseMessage = new Response<ProductDto>();
             try
             {
                 List<Product> products = DataAccess.Ins.DB.Products.OrderBy(u => u.Id).ToList();
+                log.Info(products.Count.ToString());
                 responseMessage.responseData = products.Select(
                     emp => mapper.Map<ProductDto>(emp)
                     );
                 responseMessage.ErrorCode = 200;
                 log.Info("Response sent");
             }
-            catch
+            catch (Exception e)
             {
-                log.Info("Something went wrong");
+                log.Error(e.Message);
                 responseMessage.ErrorCode = 500;
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
@@ -89,7 +85,7 @@ namespace ECom.Services.Products.Handler
         public async Task Handle(CreateProduct message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
-            if(message.newProduct == null)
+            if (message.newProduct == null)
             {
                 log.Error("BadRequest, missing product info");
                 responseMessage.ErrorCode = 403;
@@ -105,13 +101,13 @@ namespace ECom.Services.Products.Handler
                     log.Info("Product added");
                     responseMessage.ErrorCode = 200;
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
                     log.Error($"Error: {ex}");
                     responseMessage.ErrorCode = 500;
                 }
             }
-            await context.Reply(responseMessage).ConfigureAwait(false);   
+            await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
         public async Task Handle(GetBestSellers message, IMessageHandlerContext context)
@@ -259,7 +255,7 @@ namespace ECom.Services.Products.Handler
                 {
                     ProductItem productItem = DataAccess.Ins.DB.ProductItems.Where(u => u.Id == itemId).First();
 
-                    if(productItem != null)
+                    if (productItem != null)
                     {
                         List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Id == productItem.ProductId).ToList();
                         responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));

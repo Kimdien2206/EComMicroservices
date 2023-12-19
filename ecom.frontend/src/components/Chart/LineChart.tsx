@@ -30,16 +30,16 @@ const LineChart = () => {
   //     });
   // };
   const mapData = () => {
-    const mapIncome = data.map((item : IMonthly_report) => {      
-      return {month: dayjs(item.month).format("MM/YYYY"), value: Number(item.income), category: "Doanh thu"};       
+    const mapIncome = data.map((item: IMonthly_report) => {
+      return { month: dayjs(item.month).format("MM/YYYY"), value: Number(item.income), category: "Doanh thu" };
     });
-    const mapOutcome = data.map((item : IMonthly_report) => {
-      return {month: dayjs(item.month).format("MM/YYYY"), value: Number(item.outcome), category: "Chi phí"};
-    }); 
-    const mapProfit = data.map((item : IMonthly_report) => {
-      return {month: dayjs(item.month).format("MM/YYYY"), value: Number(item.profit), category: "Lợi nhuận"};
+    const mapOutcome = data.map((item: IMonthly_report) => {
+      return { month: dayjs(item.month).format("MM/YYYY"), value: Number(item.outcome), category: "Chi phí" };
     });
-    return [...mapIncome,...mapOutcome,...mapProfit];
+    const mapProfit = data.map((item: IMonthly_report) => {
+      return { month: dayjs(item.month).format("MM/YYYY"), value: Number(item.profit), category: "Lợi nhuận" };
+    });
+    return [...mapIncome, ...mapOutcome, ...mapProfit];
   }
   const config = {
     data: mapData(),
