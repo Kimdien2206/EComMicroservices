@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECom.Services.Reports.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDB : Migration
+    public partial class initialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,15 +80,14 @@ namespace ECom.Services.Reports.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     product_id = table.Column<int>(type: "int", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateOnly>(type: "Date", nullable: false),
-                    DateNavigationDate = table.Column<DateOnly>(type: "Date", nullable: false)
+                    date = table.Column<DateOnly>(type: "Date", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DailyReportDetail", x => x.id);
                     table.ForeignKey(
-                        name: "FK_DailyReportDetail_DailyReports_DateNavigationDate",
-                        column: x => x.DateNavigationDate,
+                        name: "FK_DailyReportDetail_DailyReports_date",
+                        column: x => x.date,
                         principalTable: "DailyReports",
                         principalColumn: "date",
                         onDelete: ReferentialAction.Cascade);
@@ -156,9 +155,9 @@ namespace ECom.Services.Reports.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DailyReportDetail_DateNavigationDate",
+                name: "IX_DailyReportDetail_date",
                 table: "DailyReportDetail",
-                column: "DateNavigationDate");
+                column: "date");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DailyReports_month",

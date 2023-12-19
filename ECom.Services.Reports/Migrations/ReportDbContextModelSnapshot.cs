@@ -340,9 +340,6 @@ namespace ECom.Services.Reports.Migrations
                         .HasColumnType("Date")
                         .HasColumnName("date");
 
-                    b.Property<DateOnly>("DateNavigationDate")
-                        .HasColumnType("Date");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
@@ -353,7 +350,7 @@ namespace ECom.Services.Reports.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DateNavigationDate");
+                    b.HasIndex("Date");
 
                     b.ToTable("DailyReportDetail");
                 });
@@ -551,13 +548,13 @@ namespace ECom.Services.Reports.Migrations
 
             modelBuilder.Entity("ECom.Services.Reports.Models.DailyReportDetail", b =>
                 {
-                    b.HasOne("ECom.Services.Reports.Models.DailyReport", "DateNavigation")
+                    b.HasOne("ECom.Services.Reports.Models.DailyReport", "DailyReport")
                         .WithMany("Details")
-                        .HasForeignKey("DateNavigationDate")
+                        .HasForeignKey("Date")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DateNavigation");
+                    b.Navigation("DailyReport");
                 });
 
             modelBuilder.Entity("ECom.Services.Reports.Models.MonthlyReport", b =>

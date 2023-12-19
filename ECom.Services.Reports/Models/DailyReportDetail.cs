@@ -28,6 +28,6 @@ namespace ECom.Services.Reports.Models
         [ForeignKey("DailyReport")]
         public DateOnly Date { get; set; }
 
-        public virtual DailyReport DateNavigation { get; set; } = null!;
+        public virtual DailyReport DailyReport { get; set; } = null!;
     }
 }

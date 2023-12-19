@@ -14,6 +14,8 @@ namespace ECom.Services.Products.Data
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Importing> Importings { get; set; }
+        public DbSet<ImportDetail> ImportDetails { get; set; }
 
 
         //private string connectionString { get; set; }
@@ -22,6 +24,7 @@ namespace ECom.Services.Products.Data
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             var builder =
@@ -65,8 +68,8 @@ namespace ECom.Services.Products.Data
                 new Tag { Id = 13, Name = "Áo tay dài", DiscountId = null },
                 new Tag { Id = 14, Name = "Quần dài", DiscountId = null }
                 );
-            modelBuilder.Entity<Models.Product>().HasData(
-                new Models.Product
+            modelBuilder.Entity<Product>().HasData(
+                new Product
                 {
                     Id = 1,
                     Name = "Áo Phông Nam Cotton Dáng Suông BCI In Gấu",
@@ -85,7 +88,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Phong-Nam-Cotton-Dang-Suong-BCI-In-Gau"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 2,
                     Name = "Áo Sơ Mi Nam Tay Dài In Connect",
@@ -104,7 +107,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-So-Mi-Nam-Tay-Dai-In-Connect"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 3,
                     Name = "Áo Sơ Mi Nam Vải Nhung Thêu Gấu",
@@ -122,7 +125,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-So-Mi-Nam-Vai-Nhung-Theu-Gau"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 4,
                     Name = "Áo Polo Nam Cafe Phối Nẹp",
@@ -141,7 +144,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Polo-Nam-Cafe-Phoi-Nep"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 5,
                     Name = "Áo Polo Nam Mắt Chim In Trước Ngực 3d",
@@ -159,7 +162,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Polo-Nam-Mat-Chim-In-Truoc-Nguc-3d"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 6,
                     Name = "Quần Jean Nam Cafe Thân Thiện Với Môi Trường",
@@ -178,7 +181,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Jean-Nam-Cafe-Than-Thien-Voi-Moi-Truong"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 7,
                     Name = "Quần Jeans Nam Cotton Chỉ Phối Màu",
@@ -192,7 +195,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Jeans-Nam-Cotton-Chi-Phoi-Mau"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 8,
                     Name = "Quần Kaki Nam Slim",
@@ -206,7 +209,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Kaki-Nam-Slim"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 9,
                     Name = "Quần Kaki Nam Regular Thêu Cạnh Túi",
@@ -224,7 +227,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Kaki-Nam-Regular-Theu-Canh-Tui"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 10,
                     Name = "Áo Thun Thể Thao Nam Siệu Nhẹ In Limitless",
@@ -242,7 +245,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Thun-The-Thao-Nam-Sieu-Nhe-In-Limitless"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 11,
                     Name = "T-Shirt Thể Thao Nam Siêu Nhẹ In Run",
@@ -261,7 +264,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "T-Shirt-The-Thao-Nam-Sieu-Nhe-In-Run"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 12,
                     Name = "Áo Vest Nam 1 Túi Cơi",
@@ -280,7 +283,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Vest-Nam-1-Tui-Coi"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 13,
                     Name = "Áo Vest Nam Nano Công Sở Trẻ Trung",
@@ -299,7 +302,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Vest-Nam-Nano-Cong-So-Tre-Trung"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 14,
                     Name = "Áo Phao Nam Có Mũ Siêu Nhẹ Siêu Ấm",
@@ -318,7 +321,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Phao-Nam-Co-Mu-Sieu-Nhe-Sieu-Am"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 15,
                     Name = "Áo Khoác Nam Bomber Bổ Ngực",
@@ -337,7 +340,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Khoac-Nam-Bomber-Bo-Nguc"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 16,
                     Name = "Áo Khoác Nam Chun Bo Gấu Cản Gió Cản Bụi",
@@ -356,7 +359,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Khoac-Nam-Chun-Bo-Gau-Can-Gio-Can-Bui"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 17,
                     Name = "Áo Phao Nam Siêu Nhẹ Có Mũ Siêu Ấm",
@@ -375,7 +378,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Phao-Nam-Sieu-Nhe-Co-Mu-Sieu-Am"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 18,
                     Name = "Quần Short Nam Ống Rộng Thoáng Mát",
@@ -394,7 +397,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Short-Nam-Ong-Rong-Thoang-Mat"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 19,
                     Name = "Quần Short Thể Thao Nam Phối Cạp",
@@ -413,7 +416,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Short-The-Thao-Nam-Phoi-Cap"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 20,
                     Name = "Quần Short Nam Kaki Ống Đứng Lịch Lãm",
@@ -432,7 +435,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Quan-Short-Nam-Kaki-Ong-DJung-Lich-Lam"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 21,
                     Name = "Áo Len Nam Tay Dài Cổ V Kẻ Sọc Form Regular",
@@ -452,7 +455,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Len-Nam-Tay-Dai-Co-V-Ke-Soc-Form-Regular"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 22,
                     Name = "Áo Len Dệt Kim Tay Dài Cổ Tròn Phối Sọc Hiện Đại",
@@ -471,7 +474,7 @@ namespace ECom.Services.Products.Data
                     CollectionId = null,
                     Slug = "Ao-Len-Det-Kim-Tay-Dai-Co-Tron-Phoi-Soc-Hien-DJai"
                 },
-                new Models.Product
+                new Product
                 {
                     Id = 23,
                     Name = "T-Shirt Nam Dáng Rộng In Chữ Ngực",
@@ -656,6 +659,8 @@ namespace ECom.Services.Products.Data
                 new Voucher { Code = "ABCDEF", Name = "Khuyến mãi 1", Discount = 20, Description = "", Due = new DateOnly(2023, 12, 31), IsActive = true },
                 new Voucher { Code = "ABC123", Name = "Khuyến mãi 2", Discount = 5, Description = "", Due = new DateOnly(2023, 12, 31), IsActive = false }
                 );
+
+
         }
     }
 }
