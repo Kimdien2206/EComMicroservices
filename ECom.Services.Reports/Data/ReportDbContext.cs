@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECom.Services.Reports.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ECom.Services.Reports.Models;
 
 namespace ECom.Services.Reports.Data
 {
@@ -9,6 +9,8 @@ namespace ECom.Services.Reports.Data
         public DbSet<DailyReport> DailyReports { get; set; }
         public DbSet<MonthlyReport> MonthlyReports { get; set; }
         public DbSet<YearlyReport> YearlyReports { get; set; }
+
+        public DbSet<DailyReportDetail> DailyReportDetails { get; set; }
 
         public ReportDbContext()
         {
@@ -424,6 +426,37 @@ namespace ECom.Services.Reports.Data
                     Month = DateOnly.Parse("2023/12/1")
                 }
                 );
+
+            modelBuilder.Entity<DailyReportDetail>().HasData(
+                GenerateMockData()
+                );
         }
-    } 
+
+        static List<DailyReportDetail> GenerateMockData()
+        {
+            var startDate = DateOnly.Parse("2023/12/1");
+            var endDate = startDate.AddDays(30); // assuming one year of data
+
+            var random = new Random();
+            var mockData = new List<DailyReportDetail>();
+
+            var idCounter = 1;
+
+            for (var currentDate = startDate; currentDate < endDate; currentDate = currentDate.AddDays(1))
+            {
+                // Replace the logic below with your own data generation logic
+                var quantitySold = random.Next(1, 20); // adjust range as needed
+
+                mockData.Add(new DailyReportDetail
+                {
+                    Id = idCounter++,
+                    Date = currentDate,
+                    ProductId = 1,  // Replace with your actual product ID
+                    Quantity = quantitySold
+                });
+            }
+
+            return mockData;
+        }
+    }
 }

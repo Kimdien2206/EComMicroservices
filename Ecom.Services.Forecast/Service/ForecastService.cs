@@ -55,8 +55,8 @@ namespace Ecom.Services.Forecast.Service
                 inputColumnName: "TotalSold",
                 windowSize: 7,
                 seriesLength: 30,
-                trainSize: 365,
-                horizon: 7,
+                trainSize: 30,
+                horizon: 30,
                 confidenceLevel: 0.90f,
                 confidenceLowerBoundColumn: "LowerBoundSold",
                 confidenceUpperBoundColumn: "UpperBoundSold");
