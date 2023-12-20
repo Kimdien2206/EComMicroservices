@@ -24,6 +24,10 @@ namespace ECom.Services.Products.Utility
             CreateMap<TagDto, Tag>();
             CreateMap<HaveTag, HaveTagDto>();
             CreateMap<HaveTagDto, HaveTag>();
+            CreateMap<Importing, ImportingDto>();
+            CreateMap<ImportingDto, Importing>();
+            CreateMap<ImportDetail, ImportDetailDto>();
+            CreateMap<ImportDetailDto, ImportDetail>();
 
         }
     }
