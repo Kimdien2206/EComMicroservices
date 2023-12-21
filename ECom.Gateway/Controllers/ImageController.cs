@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NServiceBus.Logging;
 using Supabase.Interfaces;
 using System.IO;
 
@@ -9,7 +10,7 @@ namespace ECom.Gateway.Controllers
     public class ImageController : BaseController
     {
         private readonly Supabase.Client supabase;
-
+        private readonly ILog log = LogManager.GetLogger(typeof(ImageController));
 
         public ImageController()
         {
@@ -66,6 +67,31 @@ namespace ECom.Gateway.Controllers
             }
             catch (Exception ex)
             {
+                log.Error(ex.ToString());
+                return StatusCode(500);
+            }
+
+        }
+        
+        [HttpDelete]
+        [Route("{link}")]
+        public IActionResult RemoveImage(string link)
+        {
+            if(link == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                supabase.Storage
+                    .From("product")
+                    .Remove(link);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
                 return StatusCode(500);
             }
 
