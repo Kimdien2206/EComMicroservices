@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ML.Data;
 
-namespace Ecom.Services.Forecast.Models
+namespace Ecom.Services.Forecasts.Models
 {
     public class ModelInput
     {

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Formats.Asn1;
+﻿using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CsvHelper;
-using Ecom.Services.Forecast.Models;
+using Ecom.Services.Forecasts.Models;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
 
-namespace Ecom.Services.Forecast.Service
+namespace Ecom.Services.Forecasts.Service
 {
     public class ForecastService
     {
@@ -23,7 +17,7 @@ namespace Ecom.Services.Forecast.Service
             mlContext = new MLContext();
         }
 
-        public IDataView LoadData(List<string> sources, int year)
+        public IDataView LoadDataFromCsv(List<string> sources, int year)
         {
             IDataView trainingDataView;
             List<ModelInput> trainingInputs = new List<ModelInput>();
@@ -44,9 +38,10 @@ namespace Ecom.Services.Forecast.Service
                 }
             }
 
-            trainingDataView  = mlContext.Data.LoadFromEnumerable<ModelInput>(trainingInputs);
+            trainingDataView = mlContext.Data.LoadFromEnumerable<ModelInput>(trainingInputs);
             return trainingDataView;
         }
+
 
         public ITransformer BuildAndTrainModel(IDataView trainingDataView)
         {
@@ -60,7 +55,6 @@ namespace Ecom.Services.Forecast.Service
                 confidenceLevel: 0.90f,
                 confidenceLowerBoundColumn: "LowerBoundSold",
                 confidenceUpperBoundColumn: "UpperBoundSold");
-
 
             SsaForecastingTransformer forecaster = forecastingPipeline.Fit(trainingDataView);
 
@@ -78,7 +72,7 @@ namespace Ecom.Services.Forecast.Service
 
             IEnumerable<float> forecast =
     mlContext.Data.CreateEnumerable<ModelOutput>(predictions, true)
-        .Select(prediction => 
+        .Select(prediction =>
              prediction.ForecastedSold[0]
             );
 
@@ -93,26 +87,26 @@ namespace Ecom.Services.Forecast.Service
             Console.WriteLine($"Root Mean Squared Error: {RMSE:F3}\n");
         }
 
-        public void Forecast(IDataView testData, int horizon, TimeSeriesPredictionEngine<ModelInput, ModelOutput> forecaster, MLContext mlContext)
+        public void ForecastWithTestData(IDataView testData, int horizon, TimeSeriesPredictionEngine<ModelInput, ModelOutput> forecaster, MLContext mlContext)
         {
             ModelOutput forecast = forecaster.Predict();
 
             IEnumerable<string> forecastOutput =
-    mlContext.Data.CreateEnumerable<ModelInput>(testData, reuseRowObject: false)
-        .Take(horizon)
-        .Select((ModelInput rental, int index) =>
-        {
-            string rentalDate = rental.SoldDate.ToShortDateString();
-            float actualRentals = rental.TotalSold;
-            float lowerEstimate = Math.Max(0, forecast.LowerBoundSold[index]);
-            float estimate = forecast.ForecastedSold[index];
-            float upperEstimate = forecast.UpperBoundSold[index];
-            return $"Date: {rentalDate}\n" +
-            $"Actual Sold: {actualRentals}\n" +
-            $"Lower Estimate: {lowerEstimate}\n" +
-            $"Forecast: {estimate}\n" +
-            $"Upper Estimate: {upperEstimate}\n";
-        });
+                mlContext.Data.CreateEnumerable<ModelInput>(testData, reuseRowObject: false)
+                    .Take(horizon)
+                    .Select((ModelInput rental, int index) =>
+                    {
+                        string rentalDate = rental.SoldDate.ToShortDateString();
+                        float actualRentals = rental.TotalSold;
+                        float lowerEstimate = Math.Max(0, forecast.LowerBoundSold[index]);
+                        float estimate = forecast.ForecastedSold[index];
+                        float upperEstimate = forecast.UpperBoundSold[index];
+                        return $"Date: {rentalDate}\n" +
+                        $"Actual Sold: {actualRentals}\n" +
+                        $"Lower Estimate: {lowerEstimate}\n" +
+                        $"Forecast: {estimate}\n" +
+                        $"Upper Estimate: {upperEstimate}\n";
+                    });
             Console.WriteLine("Rental Forecast");
             Console.WriteLine("---------------------");
             foreach (var prediction in forecastOutput)

@@ -26,6 +26,7 @@ namespace ECom.Services.Products.Handler
 
         public ProductHandler()
         {
+            log.Info("new instance");
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());

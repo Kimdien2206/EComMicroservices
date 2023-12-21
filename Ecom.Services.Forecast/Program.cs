@@ -1,39 +1,31 @@
 ﻿
 
-using Ecom.Services.Forecast.Models;
-using Ecom.Services.Forecast.Service;
+using Ecom.Services.Forecasts.Models;
+using Ecom.Services.Forecasts.Service;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
-using static Microsoft.ML.ForecastingCatalog;
 
-namespace ECom.Services.Forecast
+namespace ECom.Services.Forecasts
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.Title = "Forecast System";
 
             ForecastService service = new ForecastService();
 
-            //var trainingData2018Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2018.csv");
-            //var trainingData2019Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2019.csv");
-            //var trainingData2020Path = Path.Combine(Environment.CurrentDirectory, "Data", "data_2020.csv");
-            var trainingData2021Path = Path.Combine(Environment.CurrentDirectory, "Data", "day.csv");
-            var testData2022Path = Path.Combine(Environment.CurrentDirectory, "Data", "day.csv");
+            var trainingData2021Path = Path.Combine(Environment.CurrentDirectory, "StaticData", "day.csv");
+            var testData2022Path = Path.Combine(Environment.CurrentDirectory, "StaticData", "day.csv");
 
             var traningDataPaths = new List<string>();
-            //traningDataPaths.Add(trainingData2018Path);
-            //traningDataPaths.Add(trainingData2019Path);
-            //traningDataPaths.Add(trainingData2020Path);
             traningDataPaths.Add(trainingData2021Path);
 
             var testDataPaths = new List<string>();
             testDataPaths.Add(testData2022Path);
 
-            IDataView trainingData = service.LoadData(traningDataPaths, 0);
-            IDataView testData = service.LoadData(testDataPaths, 1);
-
+            IDataView trainingData = service.LoadDataFromCsv(traningDataPaths, 0);
+            IDataView testData = service.LoadDataFromCsv(testDataPaths, 1);
 
 
             ITransformer model = service.BuildAndTrainModel(trainingData);
@@ -41,9 +33,26 @@ namespace ECom.Services.Forecast
 
             var forecastEngine = model.CreateTimeSeriesEngine<ModelInput, ModelOutput>(service.MLContext);
 
-            //forecastEngine.CheckPoint(service.MLContext, modelPath);
+            var modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ForecastModel.zip");
+            if (!File.Exists(modelPath))
+                forecastEngine.CheckPoint(service.MLContext, modelPath);
 
-            service.Forecast(testData, 7, forecastEngine, service.MLContext);
+            //string projectName = "YourProjectName"; // Replace with your actual project name
+            //string relativePath = "TrainedModel";
+            //string fileName = "yourfile.txt";
+
+            //string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", projectName);
+            //string fullPath = Path.Combine(projectDirectory, relativePath, fileName);
+
+            //// Check if the directory exists, if not, create it
+            //if (!Directory.Exists(Path.Combine(projectDirectory, relativePath)))
+            //{
+            //    Directory.CreateDirectory(Path.Combine(projectDirectory, relativePath));
+            //}
+
+            Console.WriteLine("Finished!");
+
+
         }
     }
 }
