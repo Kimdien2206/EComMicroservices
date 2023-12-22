@@ -9,6 +9,7 @@ using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Messages.ImportingMessages;
 using Messages.VoucherMessage;
+using Messages.UserMessages;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
@@ -59,7 +60,9 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
     route.RouteToEndpoint(typeof(ResetCodeCommand), "Auth");
     route.RouteToEndpoint(typeof(ResetPasswordCommand), "Auth");
-
+    route.RouteToEndpoint(typeof(GetAllUser), "Auth");
+    route.RouteToEndpoint(typeof(UserLoggedIn), "Auth");
+    route.RouteToEndpoint(typeof(UpdateUser), "Auth");
     route.RouteToEndpoint(typeof(GetAllVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(CreateVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(UpdateVoucherCommand), "Product");
