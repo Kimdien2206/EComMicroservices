@@ -24,7 +24,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [EnableCors]
-        [Route("{year}")]
+        [Route("yearly/{year}")]
         public async Task<IActionResult> GetYearlyReport(string year)
         {
             log.Info("Received request");
