@@ -1,14 +1,15 @@
 import { UserOutlined, LockOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons'
-import { Form, Input, Button, Divider, Image, Space, Spin } from 'antd'
+import { Form, Input, Button, Divider, Image, Space, Spin, DatePicker } from 'antd'
 import Title from 'antd/es/typography/Title'
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { createAccount } from '../../api/accountAPI'
 import ErrorAlert from '../../components/Alert/ErrorAlert'
 import SuccessAlert from '../../components/Alert/SuccessAlert'
-import { EMAIL_FORMAT_RULE, PHONENUMBER_FORMAT_RULE, REQUIRED_RULE } from '../../constant/formRules'
+import { DATE_GREATER_THAN_CURRENT_DATE_RULE, EMAIL_FORMAT_RULE, PHONENUMBER_FORMAT_RULE, REQUIRED_RULE } from '../../constant/formRules'
 import { AppContext } from '../../context/AppContext'
 import LocalStorage from '../../helper/localStorage'
+import { DATE_FORMAT } from '../../constant/constant'
 
 
 const SignUp = () => {
@@ -18,6 +19,7 @@ const SignUp = () => {
 
   const onFinish = async (values: any) => {
     setLoading(true);
+    console.log(values)
     try {
       const { email, password, ...userData } = values;
       console.log("🚀 ~ file: SignUp.tsx:23 ~ onFinish ~ { email, password, ...userData }:", { email, password, ...userData })
@@ -83,6 +85,12 @@ const SignUp = () => {
                 type='password'
                 placeholder="Mật khẩu"
               />
+            </Form.Item>
+            <Form.Item
+              name="date_of_birth"
+              rules={[REQUIRED_RULE, DATE_GREATER_THAN_CURRENT_DATE_RULE]}
+            >
+              <DatePicker format={DATE_FORMAT} placeholder='Ngày sinh' />
             </Form.Item>
             <Form.Item
               name="address"

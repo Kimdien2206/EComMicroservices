@@ -18,6 +18,7 @@ namespace ECom.Services.Sales
                     var endpointConfiguration = new EndpointConfiguration("Sales");
 
                     endpointConfiguration.UseTransport<LearningTransport>();
+                    endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     return endpointConfiguration;
                 })

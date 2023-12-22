@@ -1,10 +1,10 @@
-﻿using Dto.ProductDto;
+﻿using System.Net;
+using Dto.ProductDto;
 using Messages;
 using Messages.CollectionMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Net;
 
 namespace ECom.Gateway.Controllers
 {
@@ -53,7 +53,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new CreateCollection() { newCollection = newCollection };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {
@@ -76,7 +76,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new UpdateCollection() { collection = newCollection, id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {
@@ -98,7 +98,7 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new DeleteCollection() { Id = collectionID };
                 var response = await this.messageSession.Request<Response<CollectionDto>>(message);
-                return ReturnWithStatus(response);
+                return ReturnWithStatus<CollectionDto>(response);
             }
             catch
             {

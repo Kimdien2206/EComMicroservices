@@ -1,11 +1,13 @@
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
+using Messages.OrderMessages;
 using Messages.ProductMessages;
 using Messages.TagMessages;
 using Messages.AuthMessages;
 using Messages.OrderMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
+using Messages.VoucherMessage;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
@@ -34,15 +36,15 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
     route.RouteToEndpoint(typeof(CreateDiscount), "Product");
     route.RouteToEndpoint(typeof(DeleteDiscount), "Product");
-    route.RouteToEndpoint(typeof(UpdateDiscount), "Product"); 
+    route.RouteToEndpoint(typeof(UpdateDiscount), "Product");
     route.RouteToEndpoint(typeof(GetAllCollection), "Product");
     route.RouteToEndpoint(typeof(CreateCollection), "Product");
     route.RouteToEndpoint(typeof(DeleteCollection), "Product");
-    route.RouteToEndpoint(typeof(UpdateCollection), "Product"); 
+    route.RouteToEndpoint(typeof(UpdateCollection), "Product");
     route.RouteToEndpoint(typeof(GetAllTag), "Product");
     route.RouteToEndpoint(typeof(CreateTag), "Product");
     route.RouteToEndpoint(typeof(DeleteTag), "Product");
-    route.RouteToEndpoint(typeof(UpdateTag), "Product"); 
+    route.RouteToEndpoint(typeof(UpdateTag), "Product");
     route.RouteToEndpoint(typeof(GetAllOrder), "Sales");
     route.RouteToEndpoint(typeof(GetOrderByStatus), "Sales");
     route.RouteToEndpoint(typeof(UpdateOrderStatus), "Sales");
@@ -52,7 +54,13 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateReceipt), "Billing");
     route.RouteToEndpoint(typeof(PaidReceipt), "Billing");
     route.RouteToEndpoint(typeof(LoginMessage), "Auth");
+    route.RouteToEndpoint(typeof(ResetCodeCommand), "Auth");
+    route.RouteToEndpoint(typeof(ResetPasswordCommand), "Auth");
 
+    route.RouteToEndpoint(typeof(GetAllVoucherCommand), "Product");
+    route.RouteToEndpoint(typeof(CreateVoucherCommand), "Product");
+    route.RouteToEndpoint(typeof(UpdateVoucherCommand), "Product");
+    route.RouteToEndpoint(typeof(DeleteVoucherCommand), "Product");
 
     return endpointConfiguration;
 });

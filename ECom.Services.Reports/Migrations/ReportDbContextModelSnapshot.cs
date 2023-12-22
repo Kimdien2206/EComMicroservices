@@ -352,7 +352,219 @@ namespace ECom.Services.Reports.Migrations
 
                     b.HasIndex("Date");
 
-                    b.ToTable("DailyReportDetail");
+                    b.ToTable("DailyReportDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateOnly(2023, 12, 1),
+                            ProductId = 1,
+                            Quantity = 18
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateOnly(2023, 12, 2),
+                            ProductId = 1,
+                            Quantity = 5
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateOnly(2023, 12, 3),
+                            ProductId = 1,
+                            Quantity = 16
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateOnly(2023, 12, 4),
+                            ProductId = 1,
+                            Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Date = new DateOnly(2023, 12, 5),
+                            ProductId = 1,
+                            Quantity = 17
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Date = new DateOnly(2023, 12, 6),
+                            ProductId = 1,
+                            Quantity = 5
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Date = new DateOnly(2023, 12, 7),
+                            ProductId = 1,
+                            Quantity = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Date = new DateOnly(2023, 12, 8),
+                            ProductId = 1,
+                            Quantity = 7
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Date = new DateOnly(2023, 12, 9),
+                            ProductId = 1,
+                            Quantity = 17
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Date = new DateOnly(2023, 12, 10),
+                            ProductId = 1,
+                            Quantity = 7
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Date = new DateOnly(2023, 12, 11),
+                            ProductId = 1,
+                            Quantity = 15
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Date = new DateOnly(2023, 12, 12),
+                            ProductId = 1,
+                            Quantity = 18
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Date = new DateOnly(2023, 12, 13),
+                            ProductId = 1,
+                            Quantity = 7
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Date = new DateOnly(2023, 12, 14),
+                            ProductId = 1,
+                            Quantity = 17
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Date = new DateOnly(2023, 12, 15),
+                            ProductId = 1,
+                            Quantity = 11
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Date = new DateOnly(2023, 12, 16),
+                            ProductId = 1,
+                            Quantity = 12
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Date = new DateOnly(2023, 12, 17),
+                            ProductId = 1,
+                            Quantity = 11
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Date = new DateOnly(2023, 12, 18),
+                            ProductId = 1,
+                            Quantity = 9
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Date = new DateOnly(2023, 12, 19),
+                            ProductId = 1,
+                            Quantity = 5
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Date = new DateOnly(2023, 12, 20),
+                            ProductId = 1,
+                            Quantity = 5
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Date = new DateOnly(2023, 12, 21),
+                            ProductId = 1,
+                            Quantity = 8
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Date = new DateOnly(2023, 12, 22),
+                            ProductId = 1,
+                            Quantity = 8
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Date = new DateOnly(2023, 12, 23),
+                            ProductId = 1,
+                            Quantity = 7
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Date = new DateOnly(2023, 12, 24),
+                            ProductId = 1,
+                            Quantity = 5
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Date = new DateOnly(2023, 12, 25),
+                            ProductId = 1,
+                            Quantity = 10
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Date = new DateOnly(2023, 12, 26),
+                            ProductId = 1,
+                            Quantity = 8
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Date = new DateOnly(2023, 12, 27),
+                            ProductId = 1,
+                            Quantity = 13
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Date = new DateOnly(2023, 12, 28),
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Date = new DateOnly(2023, 12, 29),
+                            ProductId = 1,
+                            Quantity = 18
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Date = new DateOnly(2023, 12, 30),
+                            ProductId = 1,
+                            Quantity = 8
+                        });
                 });
 
             modelBuilder.Entity("ECom.Services.Reports.Models.MonthlyReport", b =>
