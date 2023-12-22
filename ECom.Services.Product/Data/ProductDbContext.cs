@@ -1,13 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECom.Services.Products.Models;
+﻿using ECom.Services.Products.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using E_commerce_shop_2.Models;
 
 namespace ECom.Services.Products.Data
 {
@@ -669,5 +662,5 @@ namespace ECom.Services.Products.Data
 
 
         }
-    } 
+    }
 }

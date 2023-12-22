@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecom.Services.Forecast.Models
+namespace Ecom.Services.Forecasts.Models
 {
     public class ModelOutput
     {

@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Messages.ReportMessages;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using NServiceBus;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 
 namespace ECom.Services.Reports
 {
@@ -16,9 +12,13 @@ namespace ECom.Services.Reports
                 .UseNServiceBus(context =>
                 {
                     var endpointConfiguration = new EndpointConfiguration("Reports");
-
-                    endpointConfiguration.UseTransport<LearningTransport>();
                     endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
+                    var transport = endpointConfiguration.UseTransport<LearningTransport>();
+
+                    var route = transport.Routing();
+
+                    route.RouteToEndpoint(typeof(GetForecastByProductId), "Forecast");
 
 
                     return endpointConfiguration;

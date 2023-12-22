@@ -33,7 +33,57 @@ namespace ECom.Gateway.Controllers
                 {
                     var message = new LoginMessage() { loginUser = loginUser };
                     var response = await messageSession.Request<Response<AuthDto>>(message);
-                    return ReturnWithStatus(response);
+                    return ReturnWithStatus<AuthDto>(response);
+                }
+                catch (Exception ex)
+                {
+                    log.Info($"Error occurred: {ex}");
+                    return StatusCode(500);
+                }
+            }
+        }
+
+        [HttpPost]
+        [EnableCors]
+        [Route("reset-code")]
+        public async Task<IActionResult> SendResetCode(ResetCodeDto forgotPassworDto)
+        {
+            if (forgotPassworDto.email == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    var message = new ResetCodeCommand() { Email = forgotPassworDto.email };
+                    var respond = await messageSession.Request<Response<string>>(message);
+                    return ReturnWithStatus<string>(respond);
+                }
+                catch (Exception ex)
+                {
+                    log.Info($"Error occurred: {ex}");
+                    return StatusCode(500);
+                }
+            }
+        }
+
+        [HttpPost]
+        [EnableCors]
+        [Route("reset-password")]
+        public async Task<IActionResult> verifyCodeAndResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            if (resetPasswordDto.Email == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    var message = new ResetPasswordCommand() { Email = resetPasswordDto.Email, Code = resetPasswordDto.Code, NewPassword =  resetPasswordDto.Password};
+                    var respond = await messageSession.Request<Response<string>>(message);
+                    return ReturnWithStatus<string>(respond);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,4 @@
-import { Tag, Descriptions, Modal, Image as AntdImage, InputNumber, Button, Space, Divider, UploadFile } from 'antd'
+import { Tag, Descriptions, Modal, Image as AntdImage, InputNumber, Button, Space, Divider, UploadFile, Tabs, TabsProps } from 'antd'
 import { FormInstance, useForm } from 'antd/es/form/Form'
 import { FC, useEffect, useState } from 'react'
 import { ModalProps } from '../../interface/ModalProps'
@@ -19,11 +19,14 @@ import SuccessAlert from '../Alert/SuccessAlert'
 import { formatNumberWithComma } from '../../helper/utils'
 import IProduct_item from '../../interface/ProductItem'
 import { createImport } from '../../api/admin/importAPI'
+import ForecastChart from '../Chart/ForecastChart'
 
 interface ProductModalProps extends ModalProps {
   action: string,
   selectedItem?: IProduct
 }
+
+
 
 const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, selectedItem, setDataState }) => {
   const [form] = useForm();
@@ -32,6 +35,24 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
   const [collection, setCollection] = useState([]);
   const [discount, setDiscount] = useState([]);
   const [imageList, setImageList] = useState([]);
+  const [forecastData, setForeCastData] = useState([]);
+
+  const tabItems: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'Tồn kho',
+      children: <ProductInventoryTable data={selectedItem?.productItem} />,
+    },
+    {
+      key: '2',
+      label: 'Dự báo',
+      children: <ForecastChart />,
+    },
+  ];
+
+  const tabsOnchange = (key: string) => {
+    console.log(key);
+  }
 
   useEffect(() => {
     console.log(selectedItem)
@@ -155,6 +176,54 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
         Hủy bỏ
       </Button>
     ] : null
+  }
+
+  function renderModalContent(action: string, form: FormInstance<any>, tags: ITag[], collections: ICollection[], discounts: IDiscount[], selectedItem?: IProduct, setImageList?: any) {
+    switch (action) {
+      case ACTION_CREATE:
+        return <ProductCreateForm form={form} tagInit={tags} collectionInit={collections} discountInit={discounts} setImageList={setImageList} />
+      case ACTION_EDIT:
+        return selectedItem ? <ProductEditForm form={form} tagInit={tags} collectionInit={collections} discountInit={discounts} selectedItem={selectedItem} setImageList={setImageList} /> : null
+      case ACTION_READ:
+        return <Space direction='vertical' style={{ width: '100%' }}>
+          <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }} >
+            <Descriptions.Item label="ID" span={1}>{selectedItem?.id}</Descriptions.Item>
+            <Descriptions.Item label="Bộ siêu tập" span={2}>{selectedItem?.collection?.name ? selectedItem?.collection?.name : 'Không thuộc bộ sưu tập'}</Descriptions.Item>
+            <Descriptions.Item label="Tên sản phẩm" span={3} style={{ minWidth: 150 }}><p>{selectedItem?.name}</p></Descriptions.Item>
+            <Descriptions.Item label="Nhãn" span={3}>
+              {selectedItem?.HaveTag?.map((item: IHaveTag) => <Tag>{item.tag.name}</Tag>)}
+            </Descriptions.Item>
+
+            <Descriptions.Item label="Lượt xem" span={1}>{formatNumberWithComma(selectedItem?.view)}</Descriptions.Item>
+            <Descriptions.Item label="Lượt mua" span={1}>
+              {formatNumberWithComma(selectedItem?.sold)}
+            </Descriptions.Item>
+            <Descriptions.Item label="Trạng thái" span={1}>
+              {selectedItem?.isActive ? <Tag>Đang bán</Tag> : <Tag>Đã tạm ngừng</Tag>}
+            </Descriptions.Item>
+            <Descriptions.Item label="Hỉnh ảnh" span={3}>
+              <AntdImage.PreviewGroup
+              >
+                {selectedItem?.image.map((source) =>
+                  <AntdImage width={200} src={source} />
+                )}
+              </AntdImage.PreviewGroup>
+            </Descriptions.Item>
+            <Descriptions.Item label="Ghi chú" span={3}>
+              {selectedItem?.description}
+            </Descriptions.Item>
+            <Descriptions.Item label="Giảm giá" span={3}>{selectedItem?.discount?.name ? selectedItem?.discount?.name : 'Chưa áp dụng giảm giá'}</Descriptions.Item>
+            <Descriptions.Item label="Giá bán (đ)" span={3}>
+              {formatNumberWithComma(selectedItem?.price)}
+            </Descriptions.Item>
+          </Descriptions>
+          <Divider />
+          <Tabs defaultActiveKey="1" items={tabItems} onChange={tabsOnchange} />
+
+        </Space>
+      default:
+        break;
+    }
   }
 }
 async function clearHaveTag(selectedItem: IProduct): Promise<any> {
@@ -293,52 +362,7 @@ function getProductItem(inventory: any) {
   return result;
 }
 
-function renderModalContent(action: string, form: FormInstance<any>, tags: ITag[], collections: ICollection[], discounts: IDiscount[], selectedItem?: IProduct, setImageList?: any) {
-  switch (action) {
-    case ACTION_CREATE:
-      return <ProductCreateForm form={form} tagInit={tags} collectionInit={collections} discountInit={discounts} setImageList={setImageList} />
-    case ACTION_EDIT:
-      return selectedItem ? <ProductEditForm form={form} tagInit={tags} collectionInit={collections} discountInit={discounts} selectedItem={selectedItem} setImageList={setImageList} /> : null
-    case ACTION_READ:
-      return <Space direction='vertical' style={{ width: '100%' }}>
-        <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }} >
-          <Descriptions.Item label="ID" span={1}>{selectedItem?.id}</Descriptions.Item>
-          <Descriptions.Item label="Bộ siêu tập" span={2}>{selectedItem?.collection?.name ? selectedItem?.collection?.name : 'Không thuộc bộ sưu tập'}</Descriptions.Item>
-          <Descriptions.Item label="Tên sản phẩm" span={3} style={{ minWidth: 150 }}><p>{selectedItem?.name}</p></Descriptions.Item>
-          <Descriptions.Item label="Nhãn" span={3}>
-            {selectedItem?.HaveTag?.map((item: IHaveTag) => <Tag>{item.tag.name}</Tag>)}
-          </Descriptions.Item>
 
-          <Descriptions.Item label="Lượt xem" span={1}>{formatNumberWithComma(selectedItem?.view)}</Descriptions.Item>
-          <Descriptions.Item label="Lượt mua" span={1}>
-            {formatNumberWithComma(selectedItem?.sold)}
-          </Descriptions.Item>
-          <Descriptions.Item label="Trạng thái" span={1}>
-            {selectedItem?.isActive ? <Tag>Đang bán</Tag> : <Tag>Đã tạm ngừng</Tag>}
-          </Descriptions.Item>
-          <Descriptions.Item label="Hỉnh ảnh" span={3}>
-            <AntdImage.PreviewGroup
-            >
-              {selectedItem?.image.map((source) =>
-                <AntdImage width={200} src={source} />
-              )}
-            </AntdImage.PreviewGroup>
-          </Descriptions.Item>
-          <Descriptions.Item label="Ghi chú" span={3}>
-            {selectedItem?.description}
-          </Descriptions.Item>
-          <Descriptions.Item label="Giảm giá" span={3}>{selectedItem?.discount?.name ? selectedItem?.discount?.name : 'Chưa áp dụng giảm giá'}</Descriptions.Item>
-          <Descriptions.Item label="Giá bán (đ)" span={3}>
-            {formatNumberWithComma(selectedItem?.price)}
-          </Descriptions.Item>
-        </Descriptions>
-        <Divider />
-        <ProductInventoryTable data={selectedItem?.productItem} />
-      </Space>
-    default:
-      break;
-  }
-}
 
 
 
