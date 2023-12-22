@@ -69,8 +69,8 @@ const ProductCreateForm: FC<ProductCreateProps> = ({ form, tagInit, collectionIn
           </Descriptions.Item>
 
           <Descriptions.Item label="Trạng thái" span={3}>
-            <Form.Item name={'collection'} style={FORM_NO_BOTTOM_MARGIN}>
-              <Switch defaultChecked />
+            <Form.Item name={'isActive'} valuePropName="checked" initialValue={true} style={FORM_NO_BOTTOM_MARGIN}>
+              <Switch defaultChecked/>
             </Form.Item>
           </Descriptions.Item>
           <Descriptions.Item label="Hỉnh ảnh" span={3}>
