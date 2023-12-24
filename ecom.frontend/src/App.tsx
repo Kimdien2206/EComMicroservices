@@ -27,7 +27,7 @@ import { useContext } from 'react';
 import { AppContext } from './context/AppContext.js';
 import BankPayment from './pages/customer/payment/BankPayment.js';
 import LocalStorage from './helper/localStorage.js';
-import { updateUser } from './api/CustomerAPI.js';
+import { updateUser, userLoggedIn } from './api/CustomerAPI.js';
 import dayjs from 'dayjs';
 import ReturnPolicy from './pages/customer/ReturnPolicy.js';
 import ImportingList from './pages/admin/ImportingList.js';
@@ -43,13 +43,13 @@ function App() {
   const currentUser = LocalStorage.getItem('user');
   console.log(currentUser);
   if (currentUser) {
-    updateUser({ logged_date: dayjs(Date.now()) }, currentUser.id)
+    userLoggedIn(currentUser.phoneNumber)
   }
   return (
     <BrowserRouter>
       <Routes>
-              {/*{appCtx?.user?.is_admin ?*/}
-                  <Route key={'admin'} path='/admin' element={<Admin />}>
+        {appCtx?.user?.is_admin ?
+        <Route key={'admin'} path='/admin' element={<Admin />}>
           <Route key={'dashboard'} path='dashboard' index element={<Dashboard />} />
           <Route key={'order'} path='order'>
             <Route key={'order_waiting'} path='waiting' element={<OrderManagement state={ORDER_WAITING_STATE} />} />
@@ -76,8 +76,8 @@ function App() {
             <Route key={'import'} path='import' element={<Importing />} />
             <Route key={'list'} path='list' element={<ImportingList />} />
           </Route>
-                  </Route>
-                  {/*: null}*/}
+        </Route>
+        : null }
 
         <Route key={'customer'} path='/' element={<Customer />}>
           <Route key={'home'} index element={<Home />}></Route>
