@@ -1,6 +1,4 @@
-﻿using NServiceBus;
-
-namespace Messages.ProductMessages
+﻿namespace Messages.ProductMessages
 {
     public class GetAllProduct : ICommand
     {

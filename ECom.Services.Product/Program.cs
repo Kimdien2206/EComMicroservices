@@ -1,10 +1,5 @@
-﻿using System;
+﻿using Messages.ProductMessages;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using NServiceBus;
-using Microsoft.Extensions.DependencyInjection;
-using ECom.Services.Products.Data;
-using Microsoft.Extensions.Configuration;
 
 namespace ECom.Services.Products
 {
@@ -18,9 +13,12 @@ namespace ECom.Services.Products
                 {
                     var endpointConfiguration = new EndpointConfiguration("Product");
 
-                    endpointConfiguration.UseTransport<LearningTransport>();
+                    var transpot = endpointConfiguration.UseTransport<LearningTransport>();
                     endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
+                    var route = transpot.Routing();
+
+                    route.RouteToEndpoint(typeof(GetAllProductIdResponse), "Forecast");
 
                     return endpointConfiguration;
                 })

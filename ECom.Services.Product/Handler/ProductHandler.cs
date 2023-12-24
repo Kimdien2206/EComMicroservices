@@ -19,14 +19,14 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetMostViewed>,
         IHandleMessages<UpdateProduct>,
         IHandleMessages<ProductSold>,
-        IHandleMessages<GetProductByItemID>
+        IHandleMessages<GetProductByItemID>,
+        IHandleMessages<GetAllProductId>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
 
         public ProductHandler()
         {
-            log.Info("new instance");
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());
@@ -56,6 +56,8 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
+
+
         public async Task Handle(ViewProduct message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
@@ -68,6 +70,7 @@ namespace ECom.Services.Products.Handler
             {
                 try
                 {
+
                     int productID = message.productID;
                     Product product = DataAccess.Ins.DB.Products.First(x => x.Id == productID);
                     product.View++;
@@ -277,5 +280,28 @@ namespace ECom.Services.Products.Handler
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
+
+        public Task Handle(GetAllProductId message, IMessageHandlerContext context)
+        {
+            var respondMessage = new GetAllProductIdResponse();
+            respondMessage.SagaId = message.SagaId;
+            try
+            {
+                List<Product> products = DataAccess.Ins.DB.Products.ToList();
+                respondMessage.ProductIds = products.Select(
+                    emp => emp.Id).ToList();
+
+                context.Send(respondMessage).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error: {ex.Message}");
+                log.Error(ex.StackTrace);
+            }
+
+            return Task.CompletedTask;
+        }
+
+
     }
 }

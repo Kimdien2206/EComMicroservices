@@ -1,4 +1,4 @@
-﻿namespace Messages.ReportMessages
+﻿namespace Messages.ForecastMessage
 {
     public class GetForecastByProductId : ICommand
     {

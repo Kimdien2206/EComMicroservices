@@ -1,12 +1,12 @@
+using Messages.AuthMessages;
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
+using Messages.ForecastMessage;
 using Messages.OrderMessages;
 using Messages.ProductMessages;
-using Messages.TagMessages;
-using Messages.AuthMessages;
-using Messages.OrderMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
+using Messages.TagMessages;
 using Messages.VoucherMessage;
 
 Console.Title = "Gateway";
@@ -61,6 +61,9 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(UpdateVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(DeleteVoucherCommand), "Product");
+
+    route.RouteToEndpoint(typeof(GetForecastByProductId), "Forecast");
+    route.RouteToEndpoint(typeof(TrainForecastCommand), "Forecast");
 
     return endpointConfiguration;
 });
