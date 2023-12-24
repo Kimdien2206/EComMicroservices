@@ -8,6 +8,7 @@ namespace ECom.Services.Forecasts.Data
     {
         public DbSet<Forecast> Forecasts { get; set; }
         public DbSet<ForecastDetail> ForecastDetails { get; set; }
+        
         public ForecastDbContext()
         {
         }
