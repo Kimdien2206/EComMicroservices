@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ML.Data;
+﻿using Microsoft.ML.Data;
 
 namespace Ecom.Services.Forecasts.Models
 {
     public class ModelInput
     {
-        
+
         [LoadColumn(0)]
         public DateTime SoldDate { get; set; }
         [LoadColumn(1)]

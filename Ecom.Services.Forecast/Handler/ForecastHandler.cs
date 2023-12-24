@@ -31,6 +31,8 @@ namespace Ecom.Services.Forecast.Handler
                 var forecasts = DataAccess.Ins.DB.Forecasts.Where(forecast => forecast.ProductId == message.Id).ToList();
 
                 respond.responseData = forecasts.Select(forecast => mapper.Map<ForecastDto>(forecast));
+                Console.WriteLine($"Get data count: {respond.responseData.Count()}");
+                respond.ErrorCode = 200;
             }
             catch (Exception ex)
             {

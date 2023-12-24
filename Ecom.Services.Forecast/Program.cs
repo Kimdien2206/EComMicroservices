@@ -22,7 +22,7 @@ namespace ECom.Services.Forecasts
                     var route = transport.Routing();
 
                     route.RouteToEndpoint(typeof(GetAllProductId), "Product");
-                    route.RouteToEndpoint(typeof(GetAllDailyDetailReport), "Report");
+                    route.RouteToEndpoint(typeof(GetAllDailyDetailReport), "Reports");
 
                     return endpointConfiguration;
                 })
