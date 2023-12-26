@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ECom.Services.Cart.Models;
+using ECom.Services.Carts.Models;
 
-namespace ECom.Services.Cart.Data
+namespace ECom.Services.Carts.Data
 {
     public class CartDbContext : DbContext
     {
@@ -31,12 +31,30 @@ namespace ECom.Services.Cart.Data
                 new Cart
                 {
                     Id = 1,
-                    Date = DateTime.Now,
-                    Cost = 500000,
-                    Status = '0',
-                    VoucherCode = "ABCDEF",
-                    OrderId = 1,
-                    PaymentMethod = "cod"
+                    ItemId = 1,
+                    Quantity = 1,
+                    PhoneNumber = "0703391661"
+                },
+                new Cart
+                {
+                    Id = 2,
+                    ItemId = 14,
+                    Quantity = 1,
+                    PhoneNumber = "0703391661"
+                },
+                new Cart
+                {
+                    Id = 3,
+                    ItemId = 3,
+                    Quantity = 5,
+                    PhoneNumber = "0703391661"
+                },
+                new Cart
+                {
+                    Id = 4,
+                    ItemId = 5,
+                    Quantity = 2,
+                    PhoneNumber = "0703391661"
                 }
                 );
         }

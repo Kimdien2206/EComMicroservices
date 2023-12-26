@@ -5,7 +5,7 @@ using NServiceBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace ECom.Services.Cart
+namespace ECom.Services.Carts
 {
     class Program
     {

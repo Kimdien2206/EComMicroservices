@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECom.Services.Cart.Data
+namespace ECom.Services.Carts.Data
 {
     public class DataAccess
     {

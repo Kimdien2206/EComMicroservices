@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECom.Services.Reports", "EC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecom.Services.Mailer", "Ecom.Services.Mailer\Ecom.Services.Mailer.csproj", "{1B78754D-83A9-4EAB-A509-96559436CB9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECom.Services.Cart", "ECom.Services.Cart\ECom.Services.Cart.csproj", "{ECD7F02A-D043-4CA0-94A4-4723857A5E45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECom.Services.Carts", "ECom.Services.Cart\ECom.Services.Carts.csproj", "{ECD7F02A-D043-4CA0-94A4-4723857A5E45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

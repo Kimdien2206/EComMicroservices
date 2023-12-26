@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECom.Services.Cart.Utility
+namespace ECom.Services.Carts.Utility
 {
     public class MappingProfile : Profile
     {
         public MappingProfile() {
-            CreateMap<Receipt, ReceiptDto>();
-            CreateMap<ReceiptDto, Receipt>();
+            
         }
     }
 }
