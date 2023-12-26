@@ -1,50 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Line } from '@ant-design/plots';
+import { Card, Divider } from 'antd';
+import Forecast from '../../interface/Forecast';
 
-const ForecastChart = () => {
-  const data = [
-    {
-      year: '1991',
-      value: 3,
-    },
-    {
-      year: '1992',
-      value: 4,
-    },
-    {
-      year: '1993',
-      value: 3.5,
-    },
-    {
-      year: '1994',
-      value: 5,
-    },
-    {
-      year: '1995',
-      value: 4.9,
-    },
-    {
-      year: '1996',
-      value: 6,
-    },
-    {
-      year: '1997',
-      value: 7,
-    },
-    {
-      year: '1998',
-      value: 9,
-    },
-    {
-      year: '1999',
-      value: 13,
-    },
-  ];
+const ForecastChart = ({ data }: { data: Forecast }) => {
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    setChartData(data.details.map(detail => ({ day: new Date(detail.date).getDate(), sold: detail.totalSold })));
+  }, [])
+
   const config = {
-    data,
-    xField: 'year',
-    yField: 'value',
+    data: chartData,
+    xField: 'day',
+    yField: 'sold',
+
     label: {},
     point: {
       size: 5,
@@ -73,7 +44,15 @@ const ForecastChart = () => {
       },
     ],
   };
-  return <Line {...config} />;
+  return <>
+    <div style={{ width: "25%" }}>
+      <Card title="Cập nhật vào ngày">
+        {data.lastUpdated.toString()}
+      </Card>
+    </div>
+    <Divider />
+    <Line {...config} />
+  </>;
 };
 
 export default ForecastChart;

@@ -10,6 +10,9 @@ namespace ECom.Services.Forecasts.Utility
         {
             CreateMap<Forecast, ForecastDto>();
             CreateMap<ForecastDto, Forecast>();
+
+            CreateMap<ForecastDetail, ForecastDetailDto>();
+            CreateMap<ForecastDetailDto, ForecastDetail>();
         }
     }
 }

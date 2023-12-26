@@ -7,6 +7,8 @@ import { fetchAllProducts } from '../../api/admin/productAPI';
 import { ACTION_READ, SET_ACTION, ACTION_CREATE, ACTION_EDIT } from '../../constant/constant';
 import { searchDatabyPropertyName } from '../../helper/tableSorter';
 import ErrorAlert from '../../components/Alert/ErrorAlert';
+import { updateForecastData } from '../../api/admin/forecastAPI';
+import SuccessAlert from '../../components/Alert/SuccessAlert';
 
 const initValue = {
   action: ACTION_READ,
@@ -58,6 +60,12 @@ const ProductManagement = () => {
                 dispatch({ type: SET_ACTION, payload: ACTION_CREATE })
               }}>Thêm mới</Button>
             <Input.Search value={searchText} size="middle" placeholder="Nhập tên sản phẩm" enterButton style={{ width: '100%' }} onChange={onChange} />
+            <Button
+              type="primary"
+              onClick={() => {
+                setLoading(true);
+                updateForecastData().then(() => SuccessAlert("Đã gửi yêu cầu cập nhật dự liệu. Vui lòng kiểm tra lại sau vài phút.")).catch(err => console.log(err)).finally(() => setLoading(false));
+              }}>Cập nhật dự báo</Button>
           </Space>
 
           {renderModal(isModalOpen, setIsModalOpen, state.action, setSearchData, selectedItem)}

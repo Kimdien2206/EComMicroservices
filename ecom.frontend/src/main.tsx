@@ -18,15 +18,13 @@ dayjs.locale('vi'); // Set the locale to Vietnamese
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ErrorBoundary fallback={<ErrorResult />}>
-      <AppProvider>
-        <ConfigProvider locale={locale}>
-          <CheckoutProvider>
 
-            <App />
-          </CheckoutProvider>
-        </ConfigProvider>
-      </AppProvider>
-    </ErrorBoundary>
+    <AppProvider>
+      <ConfigProvider locale={locale}>
+        <CheckoutProvider>
+          <App />
+        </CheckoutProvider>
+      </ConfigProvider>
+    </AppProvider>
   </React.StrictMode>,
 )

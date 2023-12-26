@@ -121,7 +121,7 @@ namespace ECom.Services.Products.Handler
             {
                 List<Product> products = DataAccess.Ins.DB.Products.OrderByDescending(u => u.Sold).Take(10).ToList();
                 responseMessage.responseData = products.Select(
-                emp => mapper.Map<ProductDto>(emp)
+                    emp => mapper.Map<ProductDto>(emp)
                 );
                 responseMessage.ErrorCode = 200;
                 log.Info("Response sent");

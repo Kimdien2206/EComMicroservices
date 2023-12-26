@@ -96,7 +96,7 @@ namespace Ecom.Services.Forecast.Handler
             {
                 var trainData = dailyReportDetailDtos.Where(dailyRp => dailyRp.ProductId == productId).ToList();
                 // if dont have any data so training is meaningless
-                if (trainData.Count > 0)
+                if (trainData.Count > 30)
                 {
                     var trainDataView = ForecastService.ConvertData(trainData);
                     ITransformer model = ForecastService.BuildAndTrainModel(trainDataView);

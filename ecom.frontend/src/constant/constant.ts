@@ -19,6 +19,7 @@ export const ACTION_READ = 'ACTION_READ'
 export const ACTION_CREATE = 'ACTION_CREATE'
 export const ACTION_EDIT = 'ACTION_EDIT'
 export const SET_ACTION = 'SET_ACTION'
+export const ACTION_UPDATE_FORECAST = "ACTION_UPDATE_FORECAST"
 
 export const BUCKET_URL = 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/product/'
 

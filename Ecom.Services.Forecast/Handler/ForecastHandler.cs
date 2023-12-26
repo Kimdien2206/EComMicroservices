@@ -28,11 +28,35 @@ namespace Ecom.Services.Forecast.Handler
 
             try
             {
-                var forecasts = DataAccess.Ins.DB.Forecasts.Where(forecast => forecast.ProductId == message.Id).ToList();
+                var forecast = DataAccess.Ins.DB.Forecasts.FirstOrDefault(forecastTemp => forecastTemp.ProductId == message.Id);
 
-                respond.responseData = forecasts.Select(forecast => mapper.Map<ForecastDto>(forecast));
-                Console.WriteLine($"Get data count: {respond.responseData.Count()}");
-                respond.ErrorCode = 200;
+                if (forecast != null)
+                {
+                    var forecastDetails = DataAccess.Ins.DB.ForecastDetails.Where(ele => ele.ForecastId == forecast.Id).OrderByDescending(ele => ele.date).Take(31).ToList();
+                    log.Info($"forecast detail count: {forecastDetails.Count}");
+                    if (forecastDetails.Count > 0)
+                    {
+                        var forecastRes = new ForecastDto()
+                        {
+                            Id = forecast.Id,
+                            LastUpdated = forecast.LastUpdated,
+                            ProductId = forecast.ProductId,
+                            Details = forecastDetails.Select((ele) => mapper.Map<ForecastDetailDto>(ele)).ToList()
+                        };
+                        respond.responseData = new List<ForecastDto>() { forecastRes };
+                        Console.WriteLine($"Get data count: {respond.responseData.Count()}");
+                        respond.ErrorCode = 200;
+                    }
+                    else
+                    {
+                        respond.ErrorCode = 404;
+                    }
+
+                }
+                else
+                {
+                    respond.ErrorCode = 404;
+                }
             }
             catch (Exception ex)
             {
