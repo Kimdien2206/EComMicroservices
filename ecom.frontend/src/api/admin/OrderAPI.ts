@@ -17,13 +17,13 @@ export function fetchDeliveryOrders(){
 };
 
 export function finishOrder(id: number){
-  return http.patch(`/order/${id}`, {status: '2'});
+  return http.patch(`/order/complete/${id}`);
 };
 export function deliveryOrder(id: number){
-  return http.patch(`/order/${id}`, {status: '1'});
+  return http.patch(`/order/deliver/${id}`);
 };
 export function cancelOrder(id: number){
-  return http.patch(`/order/${id}`, {status: '3'});
+  return http.patch(`/order/cancel/${id}`);
 };
 
 export function fetchAllOrders(){

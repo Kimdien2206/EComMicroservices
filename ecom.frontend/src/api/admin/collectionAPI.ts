@@ -6,7 +6,7 @@ export function deleteCollection({id} : ICollection) {
 }
 
 export function updateCollection({ id, name, discountID }: ICollection) {
-  return http.patch(`/collection/${id}`, {
+  return http.put(`/collection/${id}`, {
     name,
     discount: discountID ? {
       connect: {

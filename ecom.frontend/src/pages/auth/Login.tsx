@@ -7,7 +7,7 @@ import { login } from '../../api/authAPI'
 import { REQUIRED_RULE } from '../../constant/formRules'
 import { AppContext } from '../../context/AppContext'
 import LocalStorage from '../../helper/localStorage'
-import { getCart, updateUser } from '../../api/CustomerAPI'
+import { getCart, updateUser, userLoggedIn } from '../../api/CustomerAPI'
 import dayjs from 'dayjs'
 import ErrorAlert from '../../components/Alert/ErrorAlert'
 
@@ -24,8 +24,8 @@ const Login = () => {
       console.log(data)
       // LocalStorage.setItem('access_token', data.data.access_token)
       LocalStorage.setItem('user', data.data[0].userInfo)
-      // const updateData = await updateUser({ logged_date: dayjs(Date.now()) }, data.data.user.id);
-      // getCart(data.data.user.id).then((res) => {
+      const updateData = await userLoggedIn(data.data[0].userInfo.phoneNumber);
+      // getCart(data.data.user.phoneNumber).then((res) => {
       //   LocalStorage.setItem('cart', res.data);
       // });
       appCtx?.setUser(data.data[0].userInfo)

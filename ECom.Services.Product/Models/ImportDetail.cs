@@ -16,6 +16,7 @@ public partial class ImportDetail
 
     [Required]
     [Column("item")]
+    [ForeignKey("ProductItem")]
     public int Item { get; set; }
 
     [Required]
@@ -28,13 +29,14 @@ public partial class ImportDetail
 
     [Required]
     [Column("import_id")]
+    [ForeignKey("Importing")]
     public int ImportId { get; set; }
 
     [Required]
     [Column("total_cost")]
     public int TotalCost { get; set; }
 
-    public virtual Importing Import { get; set; } = null!;
+    public virtual Importing Importing { get; set; } = null!;
 
-    public virtual ProductItem ItemNavigation { get; set; } = null!;
+    public virtual ProductItem ProductItem { get; set; } = null!;
 }

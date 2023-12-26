@@ -27,7 +27,7 @@ import { useContext } from 'react';
 import { AppContext } from './context/AppContext.js';
 import BankPayment from './pages/customer/payment/BankPayment.js';
 import LocalStorage from './helper/localStorage.js';
-import { updateUser } from './api/CustomerAPI.js';
+import { updateUser, userLoggedIn } from './api/CustomerAPI.js';
 import dayjs from 'dayjs';
 import ReturnPolicy from './pages/customer/ReturnPolicy.js';
 import ImportingList from './pages/admin/ImportingList.js';
@@ -45,7 +45,7 @@ function App() {
   const currentUser = LocalStorage.getItem('user');
   console.log(currentUser);
   if (currentUser) {
-    updateUser({ logged_date: dayjs(Date.now()) }, currentUser.id)
+    userLoggedIn(currentUser.phoneNumber)
   }
   return (
     <BrowserRouter>

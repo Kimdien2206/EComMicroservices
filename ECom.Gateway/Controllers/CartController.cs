@@ -1,41 +1,35 @@
-﻿using System.Net;
-using Dto.ReportDto;
+﻿using Dto.ProductDto;
+using Messages.CollectionMessages;
 using Messages;
-using Messages.ReportMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
+using System.Net;
 
 namespace ECom.Gateway.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReportController : BaseController
+    public class CartController : BaseController
     {
         private readonly IMessageSession messageSession;
-        private readonly ILog log = LogManager.GetLogger(typeof(ReportController));
-
-        public ReportController(IMessageSession messageSession)
+        private readonly ILog log = LogManager.GetLogger(typeof(CartController));
+        public CartController(IMessageSession messageSession)
         {
             this.messageSession = messageSession;
         }
 
         [HttpGet]
         [EnableCors]
-        [Route("yearly/{year}")]
-        public async Task<IActionResult> GetYearlyReport(string year)
+        public async Task<IActionResult> GetAllCart()
         {
+            //var cancellationTokenSource = new CancellationTokenSource();
+            //cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
             log.Info("Received request");
-            if (year == null)
-            {
-                return BadRequest();
-            }
+            var message = new GetAllCart();
             try
             {
-                DateOnly requestYear = DateOnly.Parse(year);
-                var message = new GetYearlyReport() { Year = requestYear };
-
-                var response = await this.messageSession.Request<Response<YearlyReportDto>>(message);
+                var response = await this.messageSession.Request<Response<CartDto>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
                 return ReturnWithStatus(response);
             }

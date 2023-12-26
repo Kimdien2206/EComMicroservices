@@ -9,8 +9,12 @@ const LineChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchReport()
-      .then(data => setData(data.data[0].Monthly_report))
+    console.log(dayjs(new Date(new Date().getFullYear(),0,1)).format('DD-MM-YYYY').toString())
+    fetchReport(dayjs(new Date(new Date().getFullYear(),0,1)).format('DD-MM-YYYY').toString())
+      .then(data => {
+        console.log(data.data[0])
+        setData(data.data[0].monthlyReports)
+      })
       .then(() => {
         console.log(mapData())
         config.data = mapData();

@@ -1,7 +1,7 @@
 import { http } from "..";
 
-export function fetchReport() {
-    return http.get(`/report/yearly`);
+export function fetchReport(year: string) {
+    return http.get(`/report/yearly/${year}`);
 }
 
 export function fetchTopTenBestSellers() {

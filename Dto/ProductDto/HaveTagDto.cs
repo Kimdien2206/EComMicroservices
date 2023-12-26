@@ -11,9 +11,5 @@ namespace Dto.ProductDto
         public int TagId { get; set; }
 
         public int ProductId { get; set; }
-
-        public virtual ProductDto Product { get; set; }
-
-        public virtual TagDto Tag { get; set; }
     }
 }

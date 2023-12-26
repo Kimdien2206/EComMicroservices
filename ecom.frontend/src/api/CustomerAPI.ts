@@ -29,8 +29,12 @@ export function createReceipt(newReceipt: any){
   return http.post(`/receipt`, newReceipt);
 }
 
-export function updateUser(newUser: any, userID: number){
-  return http.patch(`/user/${userID}`, newUser)
+export function updateUser(newUser: any, phoneNumber: string){
+  return http.patch(`/user/${phoneNumber}`, newUser)
+}
+
+export function userLoggedIn(phoneNumber: string){
+  return http.patch(`/user/logged-in/${phoneNumber}`)
 }
 
 export function getOrdersByUserID(userID: any){

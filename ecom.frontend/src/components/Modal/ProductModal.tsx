@@ -101,33 +101,21 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
           slug: slugString,
           price: data.price,
           description: data.note,
-          discount: data.discount ? {
-            connect: {
-              id: data.discount
-            }
-          } : undefined,
+          isActive: data.isActive,
+          discountId: data.discount ? data.discount : undefined,
           image: createImageName(imageList, slugString),
-          //HaveTag: {
-          //  createMany: {
-          //    data: data.tags.map((item: number) => {
-          //      return { tagID: item }
-          //    }),
-          //    skipDuplicates: true
-          //  }
-          //},
-          collection: data.collection ? {
-            connect: {
-              id: data.collection
-            }
-          } : undefined,
-          product_item: {
-            createMany: {
-              data: getProductItemCreate(data.inventory),
-              skipDuplicates: true
-            }
-          }
-        }
+          haveTags: data.tags.map((item: number) => {
+               return { 
+                id: 0,
+                tagId: item,
+                productId: 0
+              }
+             }),
+          collectionId: data.collection ? data.collection : undefined,
+          productItems: getProductItemCreate(data.inventory)
+        };
         console.log("Clicked");
+        console.log(newProduct);
         postProduct(newProduct).then(async (response) => {
           await uploadImageFunc(imageList, slugString);
           importProduct(response.data, data);
@@ -148,14 +136,9 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
           description: data.note,
           discountID: data.discount ? data.discount : null,
           image: createImageName(imageList, slugString),
-          HaveTag: {
-            createMany: {
-              data: data.tags.map((item: number) => {
+          HaveTag: data.tags.map((item: number) => {
                 return { tagID: item.value ? item.value : item }
               }),
-              skipDuplicates: true
-            }
-          },
           collectionID: data.collection ? data.collection : null,
         };
         console.log(newProduct);
@@ -353,13 +336,18 @@ function updateImageFunc(imageList: UploadFile[], slugString: string) {
 function getProductItemCreate(inventory: any) {
   const productItemValue = inventory
     .map((item: any) => {
+      console.log(item)
+      console.log(inventory)
       let result: any = [];
       for (var property in item.amount) {
         result = [
           ...result, {
+            id: 0,
             color: item.color,
             size: property,
-            quantity: 0,
+            quantity: item.amount[property],
+            image: [],
+            productId: 0
           }]
       }
       return [...result];

@@ -68,14 +68,13 @@ namespace ECom.Services.Auth.Handler
                     Dto.userInfo.IsAdmin = userInfo.Account.IsAdmin;
                     
                     List<AuthDto> responseData = new List<AuthDto>() { Dto };
-                    response.responseData = responseData;
 
+                    response.responseData = responseData;
                     DataAccess.Ins.DB.SaveChanges();
                 }
                 else
                 {
                     response.ErrorCode = 403;
-
                 }
             }
 
