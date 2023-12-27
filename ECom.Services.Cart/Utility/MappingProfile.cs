@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dto.CartDto;
+using ECom.Services.Carts.Models;
 
 namespace ECom.Services.Carts.Utility
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile() {
-            
+        public MappingProfile()
+        {
+            CreateMap<Cart, CartDto>();
+            CreateMap<CartDto, Cart>();
         }
     }
 }

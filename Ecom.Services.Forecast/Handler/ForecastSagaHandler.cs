@@ -43,7 +43,7 @@ namespace Ecom.Services.Forecast.Handler
 
         public async Task Handle(TrainForecastCommand message, IMessageHandlerContext context)
         {
-            var response = new Response<string>() { ErrorCode = 200 };
+            var response = new Response<string>() { ErrorCode = 202 };
             try
             {
                 // get all product

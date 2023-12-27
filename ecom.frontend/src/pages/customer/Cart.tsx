@@ -77,13 +77,14 @@ const Cart = () => {
                 phoneNumber: data.phoneNumber,
                 address: data.address,
                 totalCost: 0,
-                orderDetails: cartProducts.map((item: ICart) => { return { 
+                orderDetails: cartProducts.map((item: ICart) => {
+                    return {
                         id: 0,
                         orderId: 0,
                         itemId: item.itemID,
                         quantity: item.quantity
-                    }})
-                
+                    }
+                })
             }
             createOrder(newOrder)
                 .then((response) => {
@@ -148,7 +149,7 @@ const Cart = () => {
         <Helmet title="Giỏ hàng">
             <Row style={{ marginTop: 20 }}>
                 <Col span={14} offset={1}>
-                    <CartTable cartList={cartProducts} setCartList={setCartProducts}/>
+                    <CartTable cartList={cartProducts} setCartList={setCartProducts} />
                 </Col>
                 <Col span={8} offset={1}>
                     <Space direction='vertical' style={{ width: '90%' }}>

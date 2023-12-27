@@ -1,8 +1,6 @@
-﻿using Dto.CartDto;
-
-namespace Messages.CartMessages
+﻿namespace Dto.CartDto
 {
-    public class UpdateQuantity : ICommand
+    public class CreateCartDto
     {
         public string PhoneNumber { get; set; }
 
