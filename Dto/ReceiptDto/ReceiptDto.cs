@@ -24,5 +24,7 @@ namespace Dto.ReceiptDto
         public int OrderId { get; set; }
 
         public string PaymentMethod { get; set; } = null!;
+
+        public virtual OrderDto.OrderDto OrderInfo { get; set; }
     }
 }

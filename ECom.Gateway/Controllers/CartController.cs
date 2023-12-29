@@ -1,10 +1,11 @@
 ﻿using Dto.ProductDto;
-using Messages.CollectionMessages;
+using Messages.CartMessages;
 using Messages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
 using System.Net;
+using Dto.CartDto;
 
 namespace ECom.Gateway.Controllers
 {
@@ -26,7 +27,7 @@ namespace ECom.Gateway.Controllers
             //var cancellationTokenSource = new CancellationTokenSource();
             //cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
             log.Info("Received request");
-            var message = new GetAllCart();
+            var message = new GetCartByUser();
             try
             {
                 var response = await this.messageSession.Request<Response<CartDto>>(message);

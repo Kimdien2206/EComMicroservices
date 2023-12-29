@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
 using System.Net;
 using Messages.ReceiptMessages;
+using Dto.OrderDto;
 
 namespace ECom.Gateway.Controllers
 {
@@ -25,12 +26,20 @@ namespace ECom.Gateway.Controllers
         {
 
             log.Info("Received request");
-            var message = new GetReceiptByStatus() { Status = '0' };
+            var getReceiptMessage = new GetReceiptByStatus() { Status = '0' };
             try
             {
-                var response = await this.messageSession.Request<Response<ReceiptDto>>(message);
-                log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus(response);
+                var getReceiptResponse = await this.messageSession.Request<Response<ReceiptDto>>(getReceiptMessage);
+                log.Info($"Message sent, received: {getReceiptResponse.responseData}");
+
+
+                var getOrderMessage = new GetOrderById( ) { Id = getReceiptResponse.responseData.First().OrderId };
+                var getOrderResponse = await this.messageSession.Request<Response<OrderDto>>(getOrderMessage);
+                log.Info($"Message sent, received: {getOrderResponse.responseData}");
+
+                getReceiptResponse.responseData.First().OrderInfo = getOrderResponse.responseData.First();
+                
+                return ReturnWithStatus(getReceiptResponse);
             }
             catch (OperationCanceledException ex)
             {
@@ -46,12 +55,21 @@ namespace ECom.Gateway.Controllers
         {
 
             log.Info("Received request");
-            var message = new GetReceiptByStatus() { Status = '1' };
+            var getReceiptMessage = new GetReceiptByStatus() { Status = '1' };
             try
             {
-                var response = await this.messageSession.Request<Response<ReceiptDto>>(message);
-                log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus(response);
+                var getReceiptResponse = await this.messageSession.Request<Response<ReceiptDto>>(getReceiptMessage);
+                log.Info($"Message sent, received: {getReceiptResponse.responseData}");
+
+                foreach(ReceiptDto item in getReceiptResponse.responseData)
+                {
+                    var getOrderMessage = new GetOrderById() { Id = item.OrderId };
+                    var getOrderResponse = await this.messageSession.Request<Response<OrderDto>>(getOrderMessage);
+                    log.Info($"Message sent, received: {getOrderResponse.responseData}");
+
+                    item.OrderInfo = getOrderResponse.responseData.First();
+                }
+                return ReturnWithStatus(getReceiptResponse);
             }
             catch (OperationCanceledException ex)
             {

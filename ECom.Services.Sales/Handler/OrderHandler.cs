@@ -19,7 +19,8 @@ namespace ECom.Services.Sales.Handler
         IHandleMessages<GetAllOrder>,
         IHandleMessages<GetOrderByStatus>,
         IHandleMessages<UpdateOrderStatus>,
-        IHandleMessages<CreateOrder>
+        IHandleMessages<CreateOrder>,
+        IHandleMessages<GetOrderById>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<OrderHandler>();
@@ -141,6 +142,27 @@ namespace ECom.Services.Sales.Handler
                     log.Error($"Error: {ex}");
                     responseMessage.ErrorCode = 500;
                 }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(GetOrderById message, IMessageHandlerContext context)
+        {
+            log.Info("Received message");
+            var responseMessage = new Response<OrderDto>();
+            try
+            {
+                List<Order> orders = DataAccess.Ins.DB.Orders.Where(u => u.Id == message.Id).ToList();
+                responseMessage.responseData = orders.Select(
+                    emp => mapper.Map<OrderDto>(emp)
+                    );
+                responseMessage.ErrorCode = 200;
+                log.Info("Response sent");
+            }
+            catch
+            {
+                log.Info("Something went wrong");
+                responseMessage.ErrorCode = 500;
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
         }

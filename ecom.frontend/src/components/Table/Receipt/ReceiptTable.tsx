@@ -33,7 +33,7 @@ const ReceiptTable = (props: ReceiptTableProps) => {
       title: 'Tên khách hàng',
       dataIndex: 'customer_name',
       key: 'customer_name',
-      render: (_, record) => <p>{`${record.order.lastname} ${record.order.firstname}`}</p>,
+      render: (_, record) => <p>{`${record.orderInfo.lastname} ${record.orderInfo.firstname}`}</p>,
     },
     {
       title: 'Ngày',
@@ -76,7 +76,7 @@ const ReceiptTable = (props: ReceiptTableProps) => {
 
   useEffect(() => {
     if (props.state === 'paid')
-      fetchPaidReceipt().then(data => { setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
+      fetchPaidReceipt().then(data => { console.log(data); setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
     else
       fetchUnpaidReceipt().then(data => { setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
   }, [props.state])
@@ -86,7 +86,7 @@ const ReceiptTable = (props: ReceiptTableProps) => {
       const text = e.target.value;
       setSearchText(text);
       if (text.length > 0)
-        data && setSearchData(combineAndRemoveDuplicates(searchDatabyPropertyName(data, text, 'order.firstname'), searchDatabyPropertyName(data, text, 'order.lastname')))
+        data && setSearchData(combineAndRemoveDuplicates(searchDatabyPropertyName(data, text, 'orderInfo.firstname'), searchDatabyPropertyName(data, text, 'orderInfo.lastname')))
       else
         data && setSearchData(data);
     } catch (error) {

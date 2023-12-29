@@ -48,7 +48,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {appCtx?.user?.is_admin ?
+        {appCtx?.user?.isAdmin ?
         <Route key={'admin'} path='/admin' element={<Admin />}>
           <Route key={'dashboard'} path='dashboard' index element={<Dashboard />} />
           <Route key={'order'} path='order'>

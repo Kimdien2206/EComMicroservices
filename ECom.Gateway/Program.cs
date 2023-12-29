@@ -53,6 +53,7 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetOrderByStatus), "Sales");
     route.RouteToEndpoint(typeof(UpdateOrderStatus), "Sales");
     route.RouteToEndpoint(typeof(CreateOrder), "Sales");
+    route.RouteToEndpoint(typeof(GetOrderById), "Sales");
     route.RouteToEndpoint(typeof(GetYearlyReport), "Reports");
     route.RouteToEndpoint(typeof(GetReceiptByStatus), "Billing");
     route.RouteToEndpoint(typeof(CreateReceipt), "Billing");
