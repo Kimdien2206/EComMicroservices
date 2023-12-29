@@ -1,6 +1,9 @@
-﻿using ECom.Services.Billing.Services;
+﻿using ECom.Services.Billing.Constant;
+using ECom.Services.Billing.Data;
+using ECom.Services.Billing.Services;
 using Messages;
 using Messages.ReceiptMessages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 
@@ -59,8 +62,10 @@ namespace ECom.Services.Billing.Handler
             await context.Reply(response);
         }
 
-        public Task Handle(ValidateReceiptPayment message, IMessageHandlerContext context)
+        public async Task Handle(ValidateReceiptPayment message, IMessageHandlerContext context)
         {
+            var response = new Response<string>();
+
             payService.AddResponseData("vnp_Amount", message.vnp_Amount.ToString());
             payService.AddResponseData("vnp_BankCode", message.vnp_BankCode);
             payService.AddResponseData("vnp_BankTranNo", message.vnp_BankTranNo);
@@ -78,7 +83,17 @@ namespace ECom.Services.Billing.Handler
             bool isValid = payService.ValidateSignature(message.vnp_SecureHash, hashSecret);
             log.Info("is Valid: " + isValid);
 
-            return Task.CompletedTask;
+            if (isValid)
+            {
+                DataAccess.Ins.DB.Receipts.Where(ele => message.vnp_TxnRef == ele.Id).ExecuteUpdate(setter => setter.SetProperty(receipt => receipt.Status, ReceiptStatus.PAID));
+                response.ErrorCode = 200;
+            }
+            else
+            {
+                response.ErrorCode = 400;
+            }
+
+            await context.Reply(response);
         }
     }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dto.AuthDto
+﻿namespace Dto.AuthDto
 {
     public class AuthDto
     {
         public UserDto userInfo { get; set; }
+        public string AccessToken { get; set; }
     }
 }

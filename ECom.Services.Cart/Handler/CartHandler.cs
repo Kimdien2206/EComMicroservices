@@ -5,6 +5,7 @@ using ECom.Services.Carts.Models;
 using ECom.Services.Carts.Utility;
 using Messages;
 using Messages.CartMessages;
+using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
 
 namespace ECom.Services.Carts.Handler
@@ -57,21 +58,20 @@ namespace ECom.Services.Carts.Handler
 
             try
             {
-                var carts = message.newCart.Details.Select(detail => new Cart() { ItemId = detail.ItemId, PhoneNumber = message.newCart.PhoneNumber, Quantity = detail.Quantity });
-                var cart = DataAccess.Ins.DB.Carts.Where(cart => cart.PhoneNumber == message.newCart.PhoneNumber).ToList();
+                var cartToUpsert = mapper.Map<Cart>(message.newCart);
+                var cart = DataAccess.Ins.DB.Carts.FirstOrDefault(cart => cart.PhoneNumber == message.newCart.PhoneNumber && cart.ItemId == message.newCart.ItemId);
 
-                if (cart.Count > 0)
+                if (cart == null)
                 {
-                    response.responseData = new List<string>() { "Cart is already existed." };
-                    response.ErrorCode = 400;
+                    DataAccess.Ins.DB.Carts.Add(cartToUpsert);
                 }
                 else
                 {
-                    DataAccess.Ins.DB.Carts.AddRange(carts);
-                    DataAccess.Ins.DB.SaveChanges();
-
-                    response.ErrorCode = 201;
+                    DataAccess.Ins.DB.Carts.Update(cartToUpsert);
                 }
+
+                DataAccess.Ins.DB.SaveChanges();
+                response.ErrorCode = 201;
             }
             catch (Exception e)
             {
@@ -89,18 +89,11 @@ namespace ECom.Services.Carts.Handler
 
             try
             {
-                var carts = DataAccess.Ins.DB.Carts.Where(cart => cart.Id == message.PhoneNumber).ToList();
+                var cartToUpdate = DataAccess.Ins.DB.Carts.FirstOrDefault(cart => cart.PhoneNumber == message.CartDto.PhoneNumber && cart.ItemId == message.CartDto.ItemId);
 
-                if (carts.Count > 0)
+                if (cartToUpdate != null)
                 {
-                    foreach (var cart in carts)
-                    {
-                        var cartTemp = message.Details.FirstOrDefault(ele => ele.ItemId == cart.ItemId);
-                        if (cartTemp != null)
-                        {
-                            cart.Quantity = cartTemp.Quantity;
-                        }
-                    }
+                    //cartToUpdate.Quantity = message.CartDto.Quantity;
 
                     DataAccess.Ins.DB.SaveChanges();
 
@@ -127,27 +120,17 @@ namespace ECom.Services.Carts.Handler
 
             try
             {
-                var carts = DataAccess.Ins.DB.Carts.Where(cart => cart.Id == message.CartId).ToList();
-
-                if (carts.Count > 0)
+                if (message.IsDeleteAll)
                 {
-                    foreach (var cart in carts)
-                    {
-                        var cartTemp = message.Details.FirstOrDefault(ele => ele.ItemId == cart.ItemId);
-                        if (cartTemp != null)
-                        {
-                            cart.Quantity = cartTemp.Quantity;
-                        }
-                    }
-
-                    DataAccess.Ins.DB.SaveChanges();
-
-                    response.ErrorCode = 200;
+                    DataAccess.Ins.DB.Carts.Where(ele => ele.PhoneNumber == message.PhoneNumber).ExecuteDelete();
                 }
                 else
                 {
-                    response.ErrorCode = 404;
+                    var idItemToDelete = message.RemoveDetail.ItemId;
+                    DataAccess.Ins.DB.Carts.Where(ele => ele.PhoneNumber == message.PhoneNumber && idItemToDelete == ele.ItemId).ExecuteDelete();
                 }
+
+                response.ErrorCode = 204;
             }
             catch (Exception e)
             {

@@ -2,7 +2,8 @@
 {
     public class UpdateCartDto
     {
-
-        public List<CartDetailDto> Details { get; set; }
+        public string PhoneNumber { get; set; }
+        public int ItemId { get; set; }
+        public uint Quantity { get; set; }
     }
 }

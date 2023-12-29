@@ -38,7 +38,7 @@ const Home = () => {
         }
 
         fetchTopProducts();
-    })
+    }, []);
 
     return (
         <Helmet title="Trang chủ">

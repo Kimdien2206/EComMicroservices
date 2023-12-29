@@ -3,7 +3,7 @@
     public class CreateCartDto
     {
         public string PhoneNumber { get; set; }
-
-        public List<CartDetailDto> Details { get; set; }
+        public int ItemId { get; set; }
+        public uint Quantity { get; set; }
     }
 }

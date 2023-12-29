@@ -4,6 +4,6 @@
     {
 
         public bool IsDeleteAll { get; set; } = false;
-        public List<CartDetailDto> Details { get; set; }
+        public CartDto? Detail { get; set; }
     }
 }

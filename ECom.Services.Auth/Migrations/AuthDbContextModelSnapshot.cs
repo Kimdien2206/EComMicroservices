@@ -47,13 +47,13 @@ namespace ECom.Services.Auth.Migrations
                         {
                             Email = "20520442@gmail.com",
                             IsAdmin = true,
-                            Password = "123456"
+                            Password = "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S"
                         },
                         new
                         {
                             Email = "nguyenduc147862@gmail.com",
                             IsAdmin = false,
-                            Password = "123456"
+                            Password = "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S"
                         });
                 });
 
@@ -97,9 +97,12 @@ namespace ECom.Services.Auth.Migrations
                         .HasColumnName("address");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("avatar");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("date_of_birth");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -131,20 +134,22 @@ namespace ECom.Services.Auth.Migrations
                             PhoneNumber = "0703391661",
                             Address = "Ba Đình, TP. HCM",
                             Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
+                            DateOfBirth = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "20520442@gmail.com",
                             Firstname = "Điền",
                             Lastname = "Trương Kim",
-                            LoggedDate = new DateTime(2023, 12, 7, 11, 19, 59, 913, DateTimeKind.Local).AddTicks(1109)
+                            LoggedDate = new DateTime(2023, 12, 28, 21, 41, 16, 397, DateTimeKind.Local).AddTicks(2799)
                         },
                         new
                         {
                             PhoneNumber = "0944124232",
                             Address = "Kiến Tường, Long An",
                             Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
+                            DateOfBirth = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "nguyenduc147862@gmail.com",
                             Firstname = "Đức",
                             Lastname = "Nguyễn Trí",
-                            LoggedDate = new DateTime(2023, 12, 7, 11, 19, 59, 913, DateTimeKind.Local).AddTicks(1123)
+                            LoggedDate = new DateTime(2023, 12, 28, 21, 41, 16, 397, DateTimeKind.Local).AddTicks(2902)
                         });
                 });
 

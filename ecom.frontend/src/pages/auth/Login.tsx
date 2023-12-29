@@ -20,19 +20,19 @@ const Login = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const data = await login(values.email, values.password);
-      console.log(data)
-      // LocalStorage.setItem('access_token', data.data.access_token)
-      LocalStorage.setItem('user', data.data[0].userInfo)
-      const updateData = await userLoggedIn(data.data[0].userInfo.phoneNumber);
-      // getCart(data.data.user.phoneNumber).then((res) => {
-      //   LocalStorage.setItem('cart', res.data);
-      // });
-      appCtx?.setUser(data.data[0].userInfo)
-      if (data.data[0].userInfo.isAdmin) {
+      const { data } = await login(values.email, values.password);
+      console.log(data[0])
+      LocalStorage.setItem('access_token', data[0].accessToken)
+      LocalStorage.setItem('user', data[0].userInfo)
+      await userLoggedIn(data[0].userInfo.phoneNumber);
+      getCart(data[0].userInfo.phoneNumber).then((res) => {
+        LocalStorage.setItem('cart', res.data);
+      });
+      appCtx?.setUser(data[0].userInfo);
+      if (data[0].userInfo.isAdmin) {
         nav('/admin')
       }
-      else{
+      else {
         nav('/')
       }
     } catch (error) {

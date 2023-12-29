@@ -21,6 +21,6 @@ public partial class Cart
 
     [DefaultValue(1)]
     [Column("quantity")]
-    public uint Quantity { get; set; }
+    public int Quantity { get; set; }
 
 }

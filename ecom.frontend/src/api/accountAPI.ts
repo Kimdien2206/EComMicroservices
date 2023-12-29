@@ -2,17 +2,13 @@ import IAccount from '../interface/Account';
 import IUser from '../interface/User';
 import { http } from './index';
 
-export const createAccount = async (email: string, password: string, user: IUser) => {
-  console.log(user)
-  const response = await http.post('/accounts', {
+export const createAccount = (email: string, password: string, user: IUser) => {
+  return http.post('/Auth/register', {
     email, password,
-    User: {
-      create: {
-        ...user
-      }
+    user: {
+      ...user
     }
   });
-  return response.data;
 };
 
 export const resetPassword = (email: string) => {

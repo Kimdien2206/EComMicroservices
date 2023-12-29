@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECom.Services.Auth.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDB : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,12 +30,15 @@ namespace ECom.Services.Auth.Migrations
                 name: "Authenticators",
                 columns: table => new
                 {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     code = table.Column<int>(type: "int", nullable: false),
                     expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Authenticators", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,8 +48,9 @@ namespace ECom.Services.Auth.Migrations
                     phone_number = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     lastname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    date_of_birth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     email = table.Column<string>(type: "nvarchar(200)", nullable: false),
                     logged_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -66,17 +70,17 @@ namespace ECom.Services.Auth.Migrations
                 columns: new[] { "email", "is_admin", "password" },
                 values: new object[,]
                 {
-                    { "20520442@gmail.com", true, "123456" },
-                    { "nguyenduc147862@gmail.com", false, "123456" }
+                    { "20520442@gmail.com", true, "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S" },
+                    { "nguyenduc147862@gmail.com", false, "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "phone_number", "address", "avatar", "email", "firstname", "lastname", "logged_date" },
+                columns: new[] { "phone_number", "address", "avatar", "date_of_birth", "email", "firstname", "lastname", "logged_date" },
                 values: new object[,]
                 {
-                    { "0703391661", "Ba Đình, TP. HCM", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "20520442@gmail.com", "Điền", "Trương Kim", new DateTime(2023, 12, 7, 9, 5, 55, 728, DateTimeKind.Local).AddTicks(6453) },
-                    { "0944124232", "Kiến Tường, Long An", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", "nguyenduc147862@gmail.com", "Đức", "Nguyễn Trí", new DateTime(2023, 12, 7, 9, 5, 55, 728, DateTimeKind.Local).AddTicks(6466) }
+                    { "0703391661", "Ba Đình, TP. HCM", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "20520442@gmail.com", "Điền", "Trương Kim", new DateTime(2023, 12, 28, 21, 41, 16, 397, DateTimeKind.Local).AddTicks(2799) },
+                    { "0944124232", "Kiến Tường, Long An", "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "nguyenduc147862@gmail.com", "Đức", "Nguyễn Trí", new DateTime(2023, 12, 28, 21, 41, 16, 397, DateTimeKind.Local).AddTicks(2902) }
                 });
 
             migrationBuilder.CreateIndex(

@@ -76,9 +76,7 @@ namespace ECom.Services.Billing.Services
         public bool ValidateSignature(string inputHash, string secretKey)
         {
             string rspRaw = GetResponseData();
-            Console.WriteLine("rspRaw " + rspRaw);
             string myChecksum = Utils.HmacSHA512(secretKey, rspRaw);
-            Console.WriteLine("mychecksum " + myChecksum);
             return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
         }
         private string GetResponseData()

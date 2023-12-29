@@ -26,7 +26,7 @@ const BANK = "bank";
 
 const paymentMethods = [
     { value: COD, label: 'Thanh toán khi nhận hàng' },
-    { value: BANK, label: 'Chuyển tiền qua ngân hàng' },
+    { value: BANK, label: 'Thanh toán qua VnPay' },
 ]
 
 const Cart = () => {

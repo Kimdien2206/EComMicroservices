@@ -1,4 +1,5 @@
 ﻿using Dto.AuthDto;
+using ECom.Gateway.Utils;
 using Messages;
 using Messages.AuthMessages;
 using Microsoft.AspNetCore.Cors;
@@ -45,6 +46,33 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
+        [Route("register")]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            log.Info("Register Dto \n" + Converter.ConvertToJson(registerDto));
+            if (registerDto.email == null || registerDto.password == null || registerDto.email != registerDto.user.Email)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    var message = new RegisterCommand() { Register = registerDto };
+                    var response = await messageSession.Request<Response<string>>(message);
+                    return ReturnWithStatus<string>(response);
+                }
+                catch (Exception ex)
+                {
+                    log.Info($"Error occurred: {ex}");
+                    log.Error(ex.StackTrace);
+                    return StatusCode(500);
+                }
+            }
+        }
+
+        [HttpPost]
+        [EnableCors]
         [Route("reset-code")]
         public async Task<IActionResult> SendResetCode(ResetCodeDto forgotPassworDto)
         {
@@ -81,7 +109,7 @@ namespace ECom.Gateway.Controllers
             {
                 try
                 {
-                    var message = new ResetPasswordCommand() { Email = resetPasswordDto.Email, Code = resetPasswordDto.Code, NewPassword =  resetPasswordDto.Password};
+                    var message = new ResetPasswordCommand() { Email = resetPasswordDto.Email, Code = resetPasswordDto.Code, NewPassword = resetPasswordDto.Password };
                     var respond = await messageSession.Request<Response<string>>(message);
                     return ReturnWithStatus<string>(respond);
                 }

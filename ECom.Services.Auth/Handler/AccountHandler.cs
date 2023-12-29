@@ -8,19 +8,15 @@ using Messages.AuthMessages;
 using Messages.MailerMessage;
 using Messages.UserMessages;
 using NServiceBus.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECom.Services.Auth.Handler
 {
-    public class AccountHandler : 
+    public class AccountHandler :
         IHandleMessages<ResetCodeCommand>,
         IHandleMessages<GetAllUser>,
         IHandleMessages<UpdateUser>,
-        IHandleMessages<UserLoggedIn>
+        IHandleMessages<UserLoggedIn>,
+        IHandleMessages<RegisterCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<AccountHandler>();
@@ -47,7 +43,8 @@ namespace ECom.Services.Auth.Handler
                 var sendRespond = context.Send(sendMail);
                 log.Info($"Route destination {sendRespond.Status.ToString()}");
                 log.Info($"Route destination {sendRespond.IsCompletedSuccessfully}");
-            } else
+            }
+            else
             {
                 log.Warn("Reset password with user does not exist in system.");
             }
@@ -131,6 +128,42 @@ namespace ECom.Services.Auth.Handler
                 }
                 return Task.CompletedTask;
             }
+        }
+
+        public async Task Handle(RegisterCommand message, IMessageHandlerContext context)
+        {
+            var response = new Response<string>();
+
+            try
+            {
+                var account = DataAccess.Ins.DB.Accounts.FirstOrDefault(ele => ele.Email == message.Register.email);
+                var user = DataAccess.Ins.DB.Users.FirstOrDefault(ele => ele.PhoneNumber == message.Register.user.PhoneNumber);
+                if (account == null && user == null)
+                {
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(message.Register.password);
+                    account = new Account() { Email = message.Register.email, Password = hashedPassword, IsAdmin = false };
+
+                    DataAccess.Ins.DB.Accounts.Add(account);
+
+                    user = mapper.Map<User>(message.Register.user);
+                    DataAccess.Ins.DB.Users.Add(user);
+
+                    DataAccess.Ins.DB.SaveChanges();
+                    response.ErrorCode = 201;
+                }
+                else
+                {
+                    response.ErrorCode = 400;
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error($"Error message: {e.Message}");
+                log.Error(e.StackTrace);
+                response.ErrorCode = 500;
+            }
+
+            await context.Reply(response);
         }
     }
 }

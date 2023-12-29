@@ -62,13 +62,13 @@ namespace ECom.Gateway.Controllers
         [HttpPatch]
         [EnableCors]
         [Route("{phoneNumber}")]
-        public async Task<IActionResult> UpdateCart(string phoneNumber, UpdateCartDto updateCartDto)
+        public async Task<IActionResult> UpdateCart([FromBody] UpdateCartDto updateCartDto)
         {
             if (updateCartDto == null)
             {
                 return BadRequest();
             }
-            var message = new UpdateQuantity() { PhoneNumber = phoneNumber, Details = updateCartDto.Details };
+            var message = new UpdateQuantity() { CartDto = updateCartDto };
             try
             {
                 var response = await this.messageSession.Request<Response<string>>(message);
@@ -91,7 +91,7 @@ namespace ECom.Gateway.Controllers
             {
                 return BadRequest();
             }
-            var message = new RemoveCart() { CartId = phoneNumber, IsDeleteAll = deleteCartDto.IsDeleteAll, RemoveDetails = deleteCartDto.Details };
+            var message = new RemoveCart() { PhoneNumber = phoneNumber, IsDeleteAll = deleteCartDto.IsDeleteAll, RemoveDetail = deleteCartDto.Detail };
             try
             {
                 var response = await this.messageSession.Request<Response<string>>(message);

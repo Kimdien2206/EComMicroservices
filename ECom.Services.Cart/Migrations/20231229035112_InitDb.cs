@@ -7,7 +7,7 @@
 namespace ECom.Services.Carts.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,4 +1,6 @@
+using System.Text;
 using Messages.AuthMessages;
+using Messages.CartMessages;
 using Messages.CollectionMessages;
 using Messages.DiscountMessages;
 using Messages.ForecastMessage;
@@ -10,6 +12,8 @@ using Messages.ReportMessages;
 using Messages.TagMessages;
 using Messages.UserMessages;
 using Messages.VoucherMessage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 Console.Title = "Gateway";
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +69,8 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetAllUser), "Auth");
     route.RouteToEndpoint(typeof(UserLoggedIn), "Auth");
     route.RouteToEndpoint(typeof(UpdateUser), "Auth");
+    route.RouteToEndpoint(typeof(RegisterCommand), "Auth");
+
     route.RouteToEndpoint(typeof(GetAllVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(CreateVoucherCommand), "Product");
     route.RouteToEndpoint(typeof(UpdateVoucherCommand), "Product");
@@ -72,6 +78,11 @@ builder.Host.UseNServiceBus(context =>
 
     route.RouteToEndpoint(typeof(GetForecastByProductId), "Forecast");
     route.RouteToEndpoint(typeof(TrainForecastCommand), "Forecast");
+
+    route.RouteToEndpoint(typeof(GetCartByUser), "Cart");
+    route.RouteToEndpoint(typeof(CreateCart), "Cart");
+    route.RouteToEndpoint(typeof(UpdateQuantity), "Cart");
+    route.RouteToEndpoint(typeof(RemoveCart), "Cart");
 
     return endpointConfiguration;
 });
@@ -83,6 +94,21 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Issuer"],
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -99,6 +125,7 @@ app.UseCors(builder => builder
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
