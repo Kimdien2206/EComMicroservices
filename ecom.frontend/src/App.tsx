@@ -51,8 +51,6 @@ function App() {
     <BrowserRouter>
       <ErrorBoundary fallback={<ErrorResult />}>
         <Routes>
-
-
           {/*{appCtx?.user?.is_admin ?*/}
           <Route key={'admin'} path='/admin' element={<Admin />}>
             <Route key={'dashboard'} path='dashboard' index element={<Dashboard />} />

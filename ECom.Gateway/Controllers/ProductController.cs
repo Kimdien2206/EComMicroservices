@@ -9,7 +9,6 @@ using NServiceBus.Logging;
 
 namespace ECom.Gateway.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : BaseController
@@ -24,7 +23,6 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [EnableCors]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
             //var cancellationTokenSource = new CancellationTokenSource();
@@ -46,7 +44,7 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpGet]
-        [Route("{slug}")]
+        [Route("slug/{slug}")]
         [EnableCors]
         [AllowAnonymous]
         public async Task<IActionResult> GetProductsBySlug(string slug)
@@ -57,7 +55,7 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                var message = new GetProductBySlug() { productSlug = slug };
+                var message = new GetProductBySlug() { ProductSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus(response);
@@ -70,8 +68,6 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [Route("best-sellers")]
-        [AllowAnonymous]
-
         public async Task<IActionResult> GetBestSellersProducts()
         {
             try
@@ -89,8 +85,6 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [Route("most-viewed")]
-        [AllowAnonymous]
-
         public async Task<IActionResult> GetMostViewedProducts()
         {
             try
@@ -109,8 +103,6 @@ namespace ECom.Gateway.Controllers
         [HttpPatch]
         [Route("viewed/{id}")]
         [EnableCors]
-        [AllowAnonymous]
-
         public async Task<IActionResult> ViewProduct(int id)
         {
             if (id == 0)

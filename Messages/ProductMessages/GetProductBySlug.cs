@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Messages.ProductMessages
+﻿namespace Messages.ProductMessages
 {
     public class GetProductBySlug : ICommand
     {
-        public string productSlug;
+        public string ProductSlug { get; set; }
     }
 }

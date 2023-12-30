@@ -1,4 +1,3 @@
-import { notification } from 'antd';
 import axios, { AxiosResponse } from 'axios';
 export const http = axios.create({
   baseURL: 'https://localhost:1205/api',

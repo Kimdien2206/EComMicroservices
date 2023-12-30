@@ -2,19 +2,19 @@ import { http } from ".";
 import ICart from "../interface/Cart";
 
 export function fetchAllProducts(){
-  return http.get(`/product`);
+  return http.get(`/Product`);
 };
 
 export function fetchProductDetail(where: any){
-  return http.get(`/product`, {params: where})
+  return http.get(`/Product`, {params: where})
 }
 
 export function increaseViewForProduct(id: number) {
-  return http.patch(`/product/viewed/${id}`);
+  return http.patch(`/Product/viewed/${id}`);
 }
 
-export function fetchProduct(slug: string){
-  return http.get(`/product/${slug}`)
+export function fetchProductBySlug(slug: string){
+  return http.get(`/Product/slug/${slug}`)
 }
 
 export function createOrder(order: any){
@@ -46,18 +46,18 @@ export function getOrder(id: string){
 }
 
 export function getCart(userID: string){
-  return http.get(`/cart/?userID=${userID}`);
+  return http.get(`/Cart/?userID=${userID}`);
 }
 
 export function updateCart(cartID: number, updateFields: any){
-  return http.patch(`/cart/${cartID}`, updateFields);
+  return http.patch(`/Cart/${cartID}`, updateFields);
 }
 
 export function createCart(newCart: any){
-  return http.post(`/cart`, newCart);
+  return http.post(`/Cart`, newCart);
 }
 
 export function deleteCart(cartID: number){
   // console.log(cartID)
-  return http.delete(`/cart/${cartID}`);
+  return http.delete(`/Cart/${cartID}`);
 }

@@ -137,22 +137,26 @@ namespace ECom.Services.Products.Handler
         public async Task Handle(GetProductBySlug message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
-            if (message.productSlug == null)
+            if (message.ProductSlug == null)
             {
                 log.Error("BadRequest, missing product id");
-                responseMessage.ErrorCode = 403;
+                responseMessage.ErrorCode = 400;
             }
             else
             {
-                string slug = message.productSlug;
+                string slug = message.ProductSlug;
                 try
                 {
-                    List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Slug == slug)
-                        .Include(item => item.ProductItems)
-                        .ToList();
-
-                    responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
-                    responseMessage.ErrorCode = 200;
+                    var product = DataAccess.Ins.DB.Products.Where(ele => ele.Slug == slug).Include(ele => ele.ProductItems).FirstOrDefault();
+                    if (product != null)
+                    {
+                        responseMessage.responseData = new List<ProductDto>() { mapper.Map<ProductDto>(product) };
+                        responseMessage.ErrorCode = 200;
+                    }
+                    else
+                    {
+                        responseMessage.ErrorCode = 404;
+                    }
                 }
                 catch (Exception ex)
                 {

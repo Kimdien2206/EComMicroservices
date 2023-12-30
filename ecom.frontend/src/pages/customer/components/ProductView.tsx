@@ -1,6 +1,6 @@
 import { Button, Carousel, Col, Image, InputNumber, Radio, RadioChangeEvent, Row, Space, Spin, Tag, Typography } from 'antd'
 import { useState, useEffect } from 'react'
-import { createCart, fetchProduct, increaseViewForProduct } from '../../../api/CustomerAPI'
+import { createCart, fetchProductBySlug, increaseViewForProduct } from '../../../api/CustomerAPI'
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/scss/image-gallery.scss'
 import ReactImageGallery from 'react-image-gallery';
@@ -34,9 +34,7 @@ type OptionType = {
     disabled: boolean
 }
 
-const ProductView = (props: ProductViewProps) => {
-    const [product, setProduct] = useState<IProduct>();
-
+const ProductView = ({ product }: ProductViewProps) => {
     const [previewImg, setPreviewImg] = useState<ReactImageGalleryItem[]>();
 
     const [color, setColor] = useState<OptionType[]>();
@@ -49,18 +47,12 @@ const ProductView = (props: ProductViewProps) => {
 
     const [selectedColor, setSelectedColor] = useState();
 
-    const [loading, setLoading] = useState(true);
-
-    const [isViewedIncreasing, setIsViewedIncreasing] = useState(false)
-
     const nav = useNavigate();
 
     useEffect(() => {
-        fetchProduct(props.slug).then((data) => {
-            console.log(data.data)
-            setProduct(data.data[0]);
-            setPreviewImg(convertImageToFormatGallaryItem(data.data[0]?.image));
-            const colorSet = Array.from(new Set(data.data[0].productItems?.map((data: any) => data.color)));
+        if (product) {
+            setPreviewImg(convertImageToFormatGallaryItem(product.image));
+            const colorSet = Array.from(new Set(product.productItems?.map((data: any) => data.color)));
             setColor(colorSet.map((data) => {
                 return {
                     value: data,
@@ -68,18 +60,16 @@ const ProductView = (props: ProductViewProps) => {
                     disabled: false
                 }
             }))
-            const sizeSet = Array.from(new Set(data.data[0].productItems?.map((data: any) => data.size)));
+            const sizeSet = Array.from(new Set(product.productItems?.map((data: any) => data.size)));
             setSize(sizeSet.map((data) => {
                 return {
                     value: data,
                     label: data,
                     disabled: false
                 }
-            }))
-            if (!isViewedIncreasing)
-                increaseViewForProduct(data.data[0].id).then(() => { setIsViewedIncreasing(true) });
-        }).finally(() => setLoading(false))
-    }, [props.slug])
+            }));
+        }
+    }, [product?.id]);
 
     const handleColorOnClick = ({ target }: RadioChangeEvent) => {
         console.log(color)
@@ -236,83 +226,80 @@ const ProductView = (props: ProductViewProps) => {
     }
 
     return (
-        <Spin spinning={loading}>
-
-            <Row style={{ width: '100%' }}>
-                <Col span={13} style={{ marginTop: 20 }}>
-                    <ImageGallery items={previewImg ? previewImg : images} thumbnailPosition={'left'} showPlayButton={false} showFullscreenButton={false} />
-                </Col>
-                <Col offset={1} span={10}>
-                    <div className="product__info">
-                        <h1 className="product__info__title">{product?.name}</h1>
-                        <Space>
-                            <Typography.Text type='secondary'>Lượt mua: {product?.sold}</Typography.Text>
-                            <Typography.Text type='secondary'>Lượt xem: {product?.view}</Typography.Text>
-                        </Space>
-                        <div className="product__info__item">
-                            <span className="product__info__item__price">
-                                {formatNumberWithComma(product?.price)}
-                                {product?.discount?.discount && product.discount.discount > 0 ? <span className="product-card__price__old">
-                                    <del>{formatNumberWithComma(product?.price)}</del>
-                                </span> : null}
-                            </span>
-                        </div>
-                        <div className="product__info__item">
-                            <div className="product__info__item__title">
-                                Màu sắc
-                            </div>
-                            <div className="product__info__item__list">
-                                <Radio.Group
-                                    onChange={handleColorOnClick}
-                                    options={color}
-                                    // value={value4}
-                                    optionType="button"
-                                    buttonStyle="solid"
-                                />
-                            </div>
-                        </div>
-                        <div className="product__info__item">
-                            <div className="product__info__item__title">
-                                Kích cỡ
-                            </div>
-                            <div className="product__info__item__list">
-                                <Radio.Group
-                                    options={size}
-                                    onChange={handleSizeOnClick}
-                                    // value={value4}
-                                    optionType="button"
-                                    buttonStyle="solid"
-                                />
-                            </div>
-                        </div>
-                        <div className="product__info__item">
-                            <div className="product__info__item__title">
-                                Số lượng
-                            </div>
-                            <div>
-                                <InputNumber defaultValue={1} onChange={(value) => setQuantity(value)} />
-                            </div>
-                        </div>
-                        <div className="product__info__item">
-                            <Button
-                                onClick={handleAddToCart}
-                            >Thêm vào giỏ</Button>
-                            <Button onClick={handleBuyNow}>Mua ngay</Button>
-                        </div>
-                        <div className={`product-description expand`}>
-                            <div className="product-description__title">
-                                Chi tiết sản phẩm
-                            </div>
-                            <div className="product-description__content">{product?.description}</div>
-                        </div>
-                        <Space style={{ marginTop: 15 }}>
-                            <Typography.Text>Thẻ: </Typography.Text>
-                            {product?.HaveTag ? product?.HaveTag.map((tag) => <Tag>{tag.tag.name}</Tag>) : null}
-                        </Space>
+        <Row style={{ width: '100%' }}>
+            <Col span={13} style={{ marginTop: 20 }}>
+                <ImageGallery items={previewImg ? previewImg : images} thumbnailPosition={'left'} showPlayButton={false} showFullscreenButton={false} />
+            </Col>
+            <Col offset={1} span={10}>
+                <div className="product__info">
+                    <h1 className="product__info__title">{product?.name}</h1>
+                    <Space>
+                        <Typography.Text type='secondary'>Lượt mua: {product?.sold}</Typography.Text>
+                        <Typography.Text type='secondary'>Lượt xem: {product?.view}</Typography.Text>
+                    </Space>
+                    <div className="product__info__item">
+                        <span className="product__info__item__price">
+                            {formatNumberWithComma(product?.price)}
+                            {product?.discount?.discount && product.discount.discount > 0 ? <span className="product-card__price__old">
+                                <del>{formatNumberWithComma(product?.price)}</del>
+                            </span> : null}
+                        </span>
                     </div>
-                </Col>
-            </Row>
-        </Spin>
+                    <div className="product__info__item">
+                        <div className="product__info__item__title">
+                            Màu sắc
+                        </div>
+                        <div className="product__info__item__list">
+                            <Radio.Group
+                                onChange={handleColorOnClick}
+                                options={color}
+                                // value={value4}
+                                optionType="button"
+                                buttonStyle="solid"
+                            />
+                        </div>
+                    </div>
+                    <div className="product__info__item">
+                        <div className="product__info__item__title">
+                            Kích cỡ
+                        </div>
+                        <div className="product__info__item__list">
+                            <Radio.Group
+                                options={size}
+                                onChange={handleSizeOnClick}
+                                // value={value4}
+                                optionType="button"
+                                buttonStyle="solid"
+                            />
+                        </div>
+                    </div>
+                    <div className="product__info__item">
+                        <div className="product__info__item__title">
+                            Số lượng
+                        </div>
+                        <div>
+                            <InputNumber defaultValue={1} onChange={(value) => setQuantity(value)} />
+                        </div>
+                    </div>
+                    <div className="product__info__item">
+                        <Button
+                            onClick={handleAddToCart}
+                        >Thêm vào giỏ</Button>
+                        <Button onClick={handleBuyNow}>Mua ngay</Button>
+                    </div>
+                    <div className={`product-description expand`}>
+                        <div className="product-description__title">
+                            Chi tiết sản phẩm
+                        </div>
+                        <div className="product-description__content">{product?.description}</div>
+                    </div>
+                    <Space style={{ marginTop: 15 }}>
+                        <Typography.Text>Thẻ: </Typography.Text>
+                        {product?.HaveTag ? product?.HaveTag.map((tag) => <Tag>{tag.tag.name}</Tag>) : null}
+                    </Space>
+                </div>
+            </Col>
+        </Row>
     )
 }
 
@@ -330,6 +317,6 @@ function convertImageToFormatGallaryItem(images: string[]) {
 }
 
 type ProductViewProps = {
-    slug: string
+    product: IProduct | null
 }
 export default ProductView

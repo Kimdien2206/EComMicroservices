@@ -49,8 +49,10 @@ const Cart = () => {
     const [form] = useForm();
 
     useEffect(() => {
-        setTotalPrice(getTotalPrice());
-        setDiscountPrice(getTotalPrice());
+        if (cartProducts) {
+            setTotalPrice(getTotalPrice());
+            setDiscountPrice(getTotalPrice());
+        }
     }, [cartProducts])
 
     const getTotalPrice = () => {
@@ -69,7 +71,6 @@ const Cart = () => {
         setSubmitLoading(true)
         form.validateFields().then((data) => {
             const newOrder = {
-                id: 0,
                 date: dayjs(Date.now()),
                 status: "0",
                 firstname: data.firstname,
@@ -190,7 +191,7 @@ const Cart = () => {
                                 label="Số điện thoại"
                                 name="phoneNumber"
                                 rules={[REQUIRED_RULE, PHONENUMBER_FORMAT_RULE]}
-                                initialValue={currentUser?.phone_number}
+                                initialValue={currentUser?.phoneNumber}
                             >
                                 <Input />
                             </Form.Item>

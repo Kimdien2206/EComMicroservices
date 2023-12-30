@@ -134,6 +134,15 @@ const Catalog = () => {
                         <List
                             grid={{ gutter: 16, column: 3 }}
                             dataSource={productsFilter}
+                            pagination={{
+                                onChange: (_) => {
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth'
+                                    });
+                                },
+                                pageSize: 9,
+                            }}
                             renderItem={(item, index) => (
                                 <List.Item>
                                     <ProductCard
