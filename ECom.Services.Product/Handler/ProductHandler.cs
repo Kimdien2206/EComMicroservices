@@ -4,6 +4,7 @@ using ECom.Services.Products.Data;
 using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
 using Messages;
+using Messages.CollectionMessages;
 using Messages.ProductMessages;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
@@ -21,6 +22,7 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<ProductSold>,
         IHandleMessages<GetProductByItemID>,
         IHandleMessages<GetActiveProduct>,
+        IHandleMessages<GetProductOfCollection>,
         IHandleMessages<GetProductByTagId>
     {
         private IMapper mapper;
@@ -298,6 +300,7 @@ namespace ECom.Services.Products.Handler
 
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
+
         public async Task Handle(GetProductByTagId message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
@@ -313,6 +316,25 @@ namespace ECom.Services.Products.Handler
                     Product product = DataAccess.Ins.DB.Products.Where(i => i.Id == item.ProductId).FirstOrDefault();
                     products.Add(product);
                 }
+
+                responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
+                responseMessage.ErrorCode = 200;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                responseMessage.ErrorCode = 500;
+            }
+
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        } 
+        
+        public async Task Handle(GetProductOfCollection message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            try
+            {
+                List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.CollectionId == message.Id).ToList();
 
                 responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
                 responseMessage.ErrorCode = 200;

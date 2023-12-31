@@ -115,7 +115,9 @@ const CollectionTable: FC<CollectionTableProps> = ({ data, form, setData, discou
   const save = async (id: number) => {
     const collection = form?.getFieldsValue();
     setIsLoading(true)
-    console.log(collection)
+    console.log({ ...collection, id: id })
+
+    
     updateCollection({ ...collection, id: id }).then(({ data: dataRes }) => {
       const newData = data ? [...data] : [];
       const index = newData.findIndex((item) => id == item.id);

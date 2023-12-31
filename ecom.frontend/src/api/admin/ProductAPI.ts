@@ -9,7 +9,7 @@ export function fetchAllCollection(){
   return http.get(`/collection`);
 }
 
-export function fetchCollection(id: number){
+export function fetchProductOfCollection(id: number){
   return http.get(`/collection/${id}`);
 }
 

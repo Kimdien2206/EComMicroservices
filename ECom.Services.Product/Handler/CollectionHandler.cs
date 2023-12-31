@@ -38,7 +38,7 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<CollectionDto>();
             try
             {
-                List<Collection> products = DataAccess.Ins.DB.Collections.Include("Products").OrderBy(u => u.Id).ToList();
+                List<Collection> products = DataAccess.Ins.DB.Collections.OrderBy(u => u.Id).ToList();
                 responseMessage.responseData = products.Select(
                     emp => mapper.Map<CollectionDto>(emp)
                     );
@@ -97,6 +97,7 @@ namespace ECom.Services.Products.Handler
                     CollectionDto newCollection = message.collection;
                     Collection discount = DataAccess.Ins.DB.Collections.First(x => x.Id == message.id);
                     discount.Name = newCollection.Name;
+                    discount.DiscountId = newCollection.DiscountId;
                     DataAccess.Ins.DB.SaveChanges();
                     responseMessage.ErrorCode = 200;
                 }

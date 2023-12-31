@@ -41,6 +41,35 @@ namespace ECom.Gateway.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        [EnableCors]
+        public async Task<IActionResult> GetProductOfCollection(string id)
+        {
+            log.Info("Received request");
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                int collectionID = Int32.Parse(id);
+                var message = new GetProductOfCollection() { Id = collectionID };
+                try
+                {
+                    var response = await this.messageSession.Request<Response<ProductDto>>(message);
+                    log.Info($"Message sent, received: {response.responseData}");
+                    return ReturnWithStatus(response);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    log.Info($"Message sent, but {ex}");
+                    Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                    return StatusCode(500);
+                }
+            }
+        }
+
         [HttpPost]
         [EnableCors]
         public async Task<IActionResult> CreateCollection(CollectionDto newCollection)

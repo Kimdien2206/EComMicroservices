@@ -8,11 +8,8 @@ export function deleteCollection({id} : ICollection) {
 export function updateCollection({ id, name, discountID }: ICollection) {
   return http.put(`/collection/${id}`, {
     name,
-    discount: discountID ? {
-      connect: {
-        id: discountID
-      }
-    } : undefined,
+    discountID: discountID ? discountID : undefined,
+    // products: []
   })
 }
 

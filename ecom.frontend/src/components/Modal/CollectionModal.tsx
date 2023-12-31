@@ -4,7 +4,7 @@ import { ModalProps } from '../../interface/ModalProps';
 import ProductCollectionDetailTable from '../Table/Product/ProductDetailTable.Collection';
 import { ICollection } from '../../interface/Collection';
 import { IProduct } from '../../interface/Product';
-import { fetchCollection } from '../../api/admin/productAPI';
+import { fetchProductOfCollection } from '../../api/admin/productAPI';
 
 interface CollectionModalProps extends ModalProps {
   selectedItem?: ICollection
@@ -16,8 +16,8 @@ const CollectionModal = ({ isOpen, setIsModalOpen, selectedItem }: CollectionMod
 
   useEffect(()=>{
     if(selectedItem)
-      fetchCollection(selectedItem?.id).then((data) => {
-        setData(data.data.Product);
+      fetchProductOfCollection(selectedItem?.id).then((data) => {
+        setData(data.data);
       })
   },[selectedItem])
 
