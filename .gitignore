@@ -435,3 +435,5 @@ src/Chocolatey/Build/*
 installer/[F|f]iles
 installer/[C|c]ustom[A|a]ctions
 installer/ServiceControl-cache
+
+appsettings.json

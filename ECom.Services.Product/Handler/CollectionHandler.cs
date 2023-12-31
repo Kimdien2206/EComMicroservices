@@ -5,6 +5,7 @@ using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
 using Messages;
 using Messages.CollectionMessages;
+using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<CollectionDto>();
             try
             {
-                List<Collection> products = DataAccess.Ins.DB.Collections.OrderBy(u => u.Id).ToList();
+                List<Collection> products = DataAccess.Ins.DB.Collections.Include("Products").OrderBy(u => u.Id).ToList();
                 responseMessage.responseData = products.Select(
                     emp => mapper.Map<CollectionDto>(emp)
                     );
@@ -70,6 +71,7 @@ namespace ECom.Services.Products.Handler
                     DataAccess.Ins.DB.SaveChanges();
                     log.Info("Collection added");
                     responseMessage.ErrorCode = 200;
+                    responseMessage.responseData = new List<CollectionDto>() { mapper.Map<CollectionDto>(newCollection) };
                 }
                 catch (Exception ex)
                 {

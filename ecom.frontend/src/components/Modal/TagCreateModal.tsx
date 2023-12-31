@@ -25,12 +25,12 @@ const TagCreateModal: FC<TagCreateModalProps> = ({ isOpen, setIsModalOpen, setDa
       setDataState && setDataState((prev: ITag[]) => [...prev, data[0]]);
       SuccessAlert('Tạo thẻ thành công.')
       setIsModalOpen(false);
+      createForm.resetFields();
     }).catch((err) => {
       ErrorAlert('Tạo thẻ thất bại!!');
       console.log(err)
     });
 
-    createForm.resetFields();
   }
 
   return (

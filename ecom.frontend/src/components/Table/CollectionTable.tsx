@@ -45,15 +45,15 @@ const CollectionTable: FC<CollectionTableProps> = ({ data, form, setData, discou
     {
       title: 'Giảm giá',
       key: 'discount',
-      dataIndex: 'discount',
+      dataIndex: 'discountAmount',
       width: "30%",
       sorter: (a: ICollection, b: ICollection) => {
-        if (!a.discount?.discount)
-          return compareNumber(0, b?.discount?.discount)
-        if (!b?.discount?.discount)
-          return compareNumber(a.discount?.discount, 0)
+        if (!a.discount?.discountAmount)
+          return compareNumber(0, b?.discount?.discountAmount)
+        if (!b?.discount?.discountAmount)
+          return compareNumber(a.discount?.discountAmount, 0)
 
-        return compareNumber(a.discount?.discount, b?.discount?.discount)
+        return compareNumber(a.discount?.discountAmount, b?.discount?.discountAmount)
       },
       render: (_: any, record: ICollection) => {
         const editing = isEditing(record);
@@ -62,7 +62,7 @@ const CollectionTable: FC<CollectionTableProps> = ({ data, form, setData, discou
             <Select allowClear style={{ width: '100%' }} options={discounts} placeholder="Chọn mã giảm giá áp dụng cho nhãn" />
           </Form.Item>
         else
-          return record.discount ? <p>{`${record.discount?.name} - ${record.discount?.discount}%`}</p> : 'Không áp dụng khuyến mãi'
+          return record.discount ? <p>{`${record.discount?.name} - ${record.discount?.discountAmount}%`}</p> : 'Không áp dụng khuyến mãi'
       }
     },
     {

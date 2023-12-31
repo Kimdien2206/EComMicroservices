@@ -15,12 +15,15 @@ const CollectionCreateModal: FC<CollectionCreateModalProps> = ({ isOpen, setIsMo
   const [form] = Form.useForm();
 
   const onSubmit = () => {
-    const tag = form.getFieldsValue();
+    const collection = form.getFieldsValue();
 
-    createCollection(tag).then(({ data }) => {
-      setDataState && setDataState((prev: ICollection[]) => [...prev, data]);
+console.log(collection)
+
+    createCollection(collection).then(({ data }) => {
+      setDataState && setDataState((prev: ICollection[]) => [...prev, data[0]]);
       SuccessAlert('Tạo bộ sưu tập thành công.')
       setIsModalOpen(false);
+      form.resetFields();
     }).catch((err) => {
       ErrorAlert('Tạo bộ sưu tập thất bại!!');
       console.log(err)
@@ -43,8 +46,8 @@ const CollectionCreateModal: FC<CollectionCreateModalProps> = ({ isOpen, setIsMo
         <Form.Item name={'name'} label={'Name'} rules={[REQUIRED_RULE]}>
           <Input />
         </Form.Item>
-        <Form.Item name={'discount'} label={'Giảm giá'}>
-          <Select />
+        <Form.Item name={'discountID'} label={'Giảm giá'}>
+          <Select options={discounts}/>
         </Form.Item>
       </Form>
     </Modal>
