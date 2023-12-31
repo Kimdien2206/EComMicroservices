@@ -26,7 +26,7 @@ const Dashboard = () => {
   const [mostViewed, setMostViewed] = useState<IProduct>();
   const [order, setOrder] = useState<IOrder[]>();
   const [customer, setCustomer] = useState<IUser[]>();
-  const [product, setProduct] = useState<IProduct[]>();
+  const [product, setProduct] = useState<number>();
 
   useEffect(() => {
     fetchTopTenBestSellers().then((data) => {
@@ -39,7 +39,8 @@ const Dashboard = () => {
       setCustomer(data.data);
     })
     fetchActiveProduct().then((data) => {
-      setProduct(data.data);
+      console.log(data.data[0])
+      setProduct(data.data[0]);
     })
     fetchAllOrders().then((data) => {
       setOrder(data.data)
@@ -59,7 +60,7 @@ const Dashboard = () => {
           <NumberCard title='Đánh giá tốt' icon={FavoriteIcon} description={'100,100'} />
         </Col> */}
         <Col lg={8} md={12}>
-          <NumberCard title='Sản phẩm đang bày bán' icon={ShirtIcon} description={product?.length.toString()} />
+          <NumberCard title='Sản phẩm đang bày bán' icon={ShirtIcon} description={product?.toString()} />
         </Col>
       </Row>
       <Row gutter={24} style={{ marginBottom: 20 }}>

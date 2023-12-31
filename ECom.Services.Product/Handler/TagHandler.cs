@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ECom.Services.Products.Models;
 using Messages.TagMessages;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECom.Services.Products.Handler
 {
@@ -37,7 +38,7 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<TagDto>();
             try
             {
-                List<Tag> tags = DataAccess.Ins.DB.Tags.OrderBy(u => u.Id).ToList();
+                List<Tag> tags = DataAccess.Ins.DB.Tags.Include("Discount").OrderBy(u => u.Id).ToList();
                 responseMessage.responseData = tags.Select(
                     emp => mapper.Map<TagDto>(emp)
                     );
@@ -70,6 +71,7 @@ namespace ECom.Services.Products.Handler
                     DataAccess.Ins.DB.SaveChanges();
                     log.Info("Tag added");
                     responseMessage.ErrorCode = 200;
+                    responseMessage.responseData = new List<TagDto>() { mapper.Map<TagDto>(newTag) };
                 }
                 catch (Exception ex)
                 {
@@ -95,6 +97,7 @@ namespace ECom.Services.Products.Handler
                     TagDto newTag = message.newTag;
                     Tag discount = DataAccess.Ins.DB.Tags.First(x => x.Id == message.Id);
                     discount.Name = newTag.Name;
+                    discount.DiscountId = newTag.DiscountId;
                     DataAccess.Ins.DB.SaveChanges();
                     responseMessage.ErrorCode = 200;
                 }

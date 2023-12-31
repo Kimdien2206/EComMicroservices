@@ -26,7 +26,7 @@ const Tag = () => {
       setSearchData(data.data)
       fetchAllDiscounts().then((data) => {
         setDiscounts(data.data.map((item: IDiscount) => {
-          return { value: item.id, label: `${item.name} - ${item.discount}%` };
+          return { value: item.id, label: `${item.name} - ${item.discountAmount}%` };
         }));
       });
     }).finally(() => setIsLoading(false));

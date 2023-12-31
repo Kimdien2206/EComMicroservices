@@ -58,7 +58,7 @@ const TagTable: FC<TagTableProps> = ({ form, data, setData, discounts }) => {
             <Select allowClear style={{ width: '100%' }} options={discounts} placeholder="Chọn mã giảm giá áp dụng cho nhãn" />
           </Form.Item>
         else
-          return record.discount ? <p>{`${record.discount?.name} - ${record.discount?.discount}%`}</p> : 'Không áp dụng khuyến mãi'
+          return record.discount ? <p>{`${record.discount?.name} - ${record.discount?.discountAmount}%`}</p> : 'Không áp dụng khuyến mãi'
       }
     },
     {

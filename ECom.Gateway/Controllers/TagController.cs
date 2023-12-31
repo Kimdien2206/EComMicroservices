@@ -1,5 +1,6 @@
 ﻿using Dto.ProductDto;
 using Messages;
+using Messages.ProductMessages;
 using Messages.TagMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,34 @@ namespace ECom.Gateway.Controllers
                 log.Info($"Message sent, but {ex}");
                 Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
                 return StatusCode(500);
+            }
+        }
+        
+        [HttpGet]
+        [Route("product/{tagId}")]
+        [EnableCors]
+        public async Task<IActionResult> GetProductByTagID(string tagId)
+        {
+            if(tagId == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                int id = Int32.Parse(tagId);
+                var message = new GetProductByTagId() { TagID = id };
+                try
+                {
+                    var response = await this.messageSession.Request<Response<ProductDto>>(message);
+                    log.Info($"Message sent, received: {response.responseData}");
+                    return ReturnWithStatus(response);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    log.Info($"Message sent, but {ex}");
+                    Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                    return StatusCode(500);
+                }
             }
         }
 

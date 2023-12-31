@@ -35,8 +35,8 @@ const OrderTable = (props: OrderProps) => {
     },
     {
       title: 'Tổng tiền (đ)',
-      key: 'total_cost',
-      dataIndex: 'total_cost',
+      key: 'totalCost',
+      dataIndex: 'totalCost',
       sorter: (a, b) => compareNumber(a.total_cost, b.total_cost),
       render: (text) => (
         formatNumberWithComma(text)

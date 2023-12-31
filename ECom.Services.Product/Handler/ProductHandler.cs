@@ -19,7 +19,9 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetMostViewed>,
         IHandleMessages<UpdateProduct>,
         IHandleMessages<ProductSold>,
-        IHandleMessages<GetProductByItemID>
+        IHandleMessages<GetProductByItemID>,
+        IHandleMessages<GetActiveProduct>,
+        IHandleMessages<GetProductByTagId>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -275,6 +277,52 @@ namespace ECom.Services.Products.Handler
                     responseMessage.ErrorCode = 500;
                 }
             }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public async Task Handle(GetActiveProduct message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<int>();
+            try
+            {
+
+                int activeProductCount = DataAccess.Ins.DB.Products.Where(u => u.IsActive == true).Count();
+                responseMessage.responseData = new List<int> { activeProductCount };
+                responseMessage.ErrorCode = 200;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                responseMessage.ErrorCode = 500;
+            }
+
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+        public async Task Handle(GetProductByTagId message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            try
+            {
+
+                List<HaveTag> tags = DataAccess.Ins.DB.HasTags.Where(u => u.TagId == message.TagID).ToList();
+
+                List<Product> products = new List<Product>();
+
+                foreach(HaveTag item in tags)
+                {
+                    Product product = DataAccess.Ins.DB.Products.Where(i => i.Id == item.ProductId).FirstOrDefault();
+                    products.Add(product);
+                }
+
+                responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
+                responseMessage.ErrorCode = 200;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                responseMessage.ErrorCode = 500;
+            }
+
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
     }

@@ -28,8 +28,8 @@ const columns: ColumnsType<IHaveTag> = [
     key: 'name_image',
     render: (text, record) => {
       return <Space direction='horizontal'>
-        <Image width={100} height={150} alt="example" src={record.product.image[0]} />
-        <Text>{record.product.name}</Text>
+        <Image width={100} height={150} alt="example" src={record.image[0]} />
+        <Text>{record.name}</Text>
       </Space>
     },
   },
@@ -55,7 +55,7 @@ const ProductTagDetailTable = (props: TagDetailProps) => {
     if (props.selectedTag)
       fetchTag(props.selectedTag.id).then((data) => {
         console.log(data.data)
-        setData(data.data.HaveTag);
+        setData(data.data);
       })
   }, [props])
 

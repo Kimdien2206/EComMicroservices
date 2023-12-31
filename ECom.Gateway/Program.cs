@@ -4,7 +4,6 @@ using Messages.OrderMessages;
 using Messages.ProductMessages;
 using Messages.TagMessages;
 using Messages.AuthMessages;
-using Messages.OrderMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Messages.ImportingMessages;
@@ -34,6 +33,8 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetMostViewed), "Product");
     route.RouteToEndpoint(typeof(GetProductBySlug), "Product");
     route.RouteToEndpoint(typeof(GetProductByItemID), "Product");
+    route.RouteToEndpoint(typeof(GetActiveProduct), "Product");
+    route.RouteToEndpoint(typeof(GetProductByTagId), "Product");
     route.RouteToEndpoint(typeof(UpdateProduct), "Product");
     route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
     route.RouteToEndpoint(typeof(CreateDiscount), "Product");

@@ -8,7 +8,7 @@ export function fetchAllTag(){
 }
 
 export function fetchTag(id: number){
-  return http.get(`/tag/${id}`);
+  return http.get(`/tag/product/${id}`);
 }
 
 export function createTag({ name, discountID }: ITag) {
@@ -18,11 +18,7 @@ export function createTag({ name, discountID }: ITag) {
 export function updateTag({ id, name, discountID }: ITag) {
   return http.patch(`/tag/${id}`, {
     name,
-    discount: discountID ? {
-      connect: {
-        id: discountID
-      }
-    } : undefined,
+    discountID: discountID ?  discountID: undefined,
   })
 }
 

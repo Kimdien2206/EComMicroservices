@@ -19,14 +19,18 @@ const TagCreateModal: FC<TagCreateModalProps> = ({ isOpen, setIsModalOpen, setDa
   const onSubmit = () => {
     const tag = createForm.getFieldsValue();
 
+    // console.log(tag)
     createTag(tag).then(({ data }) => {
-      setDataState && setDataState((prev: ITag[]) => [...prev, data]);
+      // console.log(data)
+      setDataState && setDataState((prev: ITag[]) => [...prev, data[0]]);
       SuccessAlert('Tạo thẻ thành công.')
       setIsModalOpen(false);
     }).catch((err) => {
       ErrorAlert('Tạo thẻ thất bại!!');
       console.log(err)
     });
+
+    createForm.resetFields();
   }
 
   return (

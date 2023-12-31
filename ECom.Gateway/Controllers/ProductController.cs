@@ -64,6 +64,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
+       
         
         [HttpGet]
         [Route("best-sellers")]
@@ -82,6 +83,23 @@ namespace ECom.Gateway.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("active")]
+        public async Task<IActionResult> GetActiveProducts()
+        {
+            try
+            {
+                var message = new GetActiveProduct();
+                log.Info("Message sent, waiting for response");
+                var response = await this.messageSession.Request<Response<int>>(message);
+                return ReturnWithStatus (response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+        
         [HttpGet]
         [Route("most-viewed")]
         public async Task<IActionResult> GetMostViewedProducts()
@@ -140,7 +158,7 @@ namespace ECom.Gateway.Controllers
             }
         }
         
-        [HttpPut]
+        [HttpPatch]
         [EnableCors]
         [Route("{id}")]
         public async Task<IActionResult> UpdateProduct(ProductDto newProduct, string id)
