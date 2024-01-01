@@ -60,7 +60,7 @@ namespace ECom.Gateway.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
-            var message = new GetOrderById() { ID = id };
+            var message = new GetOrderById() { Id = id };
             try
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);

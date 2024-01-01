@@ -33,8 +33,8 @@ const columns: ColumnsType<IOrder_detail> = [
     key: 'name_image',
     render: (text, record) => {
       return <Space direction='horizontal'>
-        <Image width={100} height={150} alt="example" src={record.product.image[0]} style={{ borderRadius: 10 }} />
-        <Text>{record.product.name}</Text>
+        <Image width={100} height={150} alt="example" src={record.product?.image[0]} style={{ borderRadius: 10 }} />
+        <Text>{record.product?.name}</Text>
       </Space>
     },
   },
@@ -42,25 +42,25 @@ const columns: ColumnsType<IOrder_detail> = [
     title: 'Màu',
     dataIndex: 'color',
     key: 'color',
-    render: (text, record) => <p>{record.product.productItems.find((ele) => ele.id == record.itemId)?.color}</p>,
+    render: (text, record) => <p>{record.product?.productItems?.find((ele) => ele.id == record.itemId)?.color}</p>,
   },
   {
     title: 'Kích cỡ',
     dataIndex: 'size',
     key: 'size',
-    render: (text, record) => <p>{record.product.productItems.find((ele) => ele.id == record.itemId)?.size}</p>,
+    render: (text, record) => <p>{record.product?.productItems?.find((ele) => ele.id == record.itemId)?.size}</p>,
   },
   {
     title: 'Số lượng',
     dataIndex: 'quantity',
     key: 'quantity',
-    render: (text, record) => <p>{record.quantity}</p>,
+    render: (text, record) => <p>{record?.quantity}</p>,
   },
   {
     title: 'Giá',
     dataIndex: 'price',
     key: 'price',
-    render: (text, record) => <p>{formatNumberWithComma(record.product.price)}</p>,
+    render: (text, record) => <p>{formatNumberWithComma(record.product?.price)}</p>,
   },
 ];
 
@@ -71,21 +71,21 @@ type OrderDetailTableProps = {
 
 const ProductOrderDetailTable = ({ data }: OrderDetailTableProps) => {
 
-  const [products, setProducts] = useState<IProduct>();
+  const [orders, setOrders] = useState<IOrder_detail>();
 
   useEffect(() => {
-    const listID = data && data.map(item => {
-      return item.itemID;
+    data && data.forEach(item => {
+      fetchDetailOrder(item.itemId).then((res) => {
+        item.product = res.data[0];
+      });
     })
+    data && setOrders(data);
 
-
-
-    listID && fetchDetailOrder(listID).then((data) => {
-      setProducts(data.data);
-    });
+    console.log(data)
 
   }, [data])
-  console.log(["product", data])
+
+  console.log(orders);
   return (
     <Table columns={columns} dataSource={data} pagination={{ pageSize: 4 }} />
   )

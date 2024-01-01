@@ -23,6 +23,7 @@ const DiscountTable: FC<DiscountTableProps> = ({ data, setData }) => {
   const [editingKey, setEditingKey] = useState<string | undefined>('');
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<IDiscount>();
 
   const isEditing = (record: IDiscount) => record.id.toString() === editingKey;
 
@@ -30,6 +31,7 @@ const DiscountTable: FC<DiscountTableProps> = ({ data, setData }) => {
     deleteDiscount(id).then(({ data }) => {
       setData && setData((prev: IDiscount[]) => prev.filter((value) => value.id != id))
       SuccessAlert('Xoá khuyến mãi thành công.')
+
     }).catch((err) => console.log(err))
   };
 
@@ -49,10 +51,10 @@ const DiscountTable: FC<DiscountTableProps> = ({ data, setData }) => {
     },
     {
       title: 'Giảm giá (%)',
-      dataIndex: 'discount',
-      key: 'discount',
+      dataIndex: 'discountAmount',
+      key: 'discountAmount',
       editable: true,
-      sorter: (a: IDiscount, b: IDiscount) => compareNumber(a.discount, b.discount),
+      sorter: (a: IDiscount, b: IDiscount) => compareNumber(a.discountAmount, b.discountAmount),
       rules: [REQUIRED_RULE, VALUE_MUST_BETWEEN_0_100]
     },
     {
@@ -138,7 +140,7 @@ const DiscountTable: FC<DiscountTableProps> = ({ data, setData }) => {
   return (
     <>
       <Spin spinning={isLoading}>
-        <DiscountModal isOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        <DiscountModal isOpen={isModalOpen} setIsModalOpen={setIsModalOpen} data={selectedItem} />
         <Form form={form} onFinish={save}>
           <Table
             rowKey={record => record.id}
@@ -147,8 +149,10 @@ const DiscountTable: FC<DiscountTableProps> = ({ data, setData }) => {
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event: React.MouseEvent) => {
-                  if (isClickOnATableCell(event))
-                    setIsModalOpen(prev => !prev)
+                  if (isClickOnATableCell(event)){
+                    setIsModalOpen(prev => !prev);
+                    setSelectedItem(record);
+                  }
                 }, // click row
               };
             }}

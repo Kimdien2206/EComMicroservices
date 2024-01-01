@@ -6,7 +6,10 @@ export function fetchAllDiscounts(){
 };
 
 export function createDiscount(name: string, discount: number) {
-  return http.post('/discount', { name, discount })
+  return http.post('/discount', { 
+    name : name, 
+    discountAmount: discount 
+  })
 }
 
 export function deleteDiscount(id: number) {
@@ -15,4 +18,8 @@ export function deleteDiscount(id: number) {
 
 export function updateDiscount({ id, discount, name }: IDiscount) {
   return http.patch(`/discount/${id}`, { discount, name})
+}
+
+export function fetchProductOfDiscount(id: number) {
+  return http.get(`/discount/${id}`)
 }

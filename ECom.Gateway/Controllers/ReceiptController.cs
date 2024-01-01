@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using Dto.OrderDto;
 using Dto.ReceiptDto;
 using Messages;
+using Messages.OrderMessages;
 using Messages.ReceiptMessages;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;

@@ -12,6 +12,6 @@ export function paidReceipt(id: number){
     return http.patch(`/receipt/${id}`, {status: '1'});
 };
 
-export function fetchDetailOrder(id: number[]){
-    return http.patch(`/product-detail`, id);
+export function fetchDetailOrder(id: number){
+    return http.get(`/product/product-detail/${id}`);
 };

@@ -32,16 +32,16 @@ const OrderModal = ({ isOpen, setIsModalOpen, selectedOrder }: OrderModalProps) 
         <Descriptions.Item label="Địa chỉ" span={3}>{selectedOrder?.address}</Descriptions.Item>
         <Descriptions.Item label="Ngày đặt hàng">{formatToFullDate(selectedOrder?.date)}</Descriptions.Item>
         <Descriptions.Item label="Số điện thoại" span={2}>
-          {selectedOrder?.phone_number}
+          {selectedOrder?.phoneNumber}
         </Descriptions.Item>
         <Descriptions.Item label="Trạng thái" span={3}>
           {renderTag(selectedOrder?.status)}
         </Descriptions.Item>
         {/* <Descriptions.Item label="Giảm giá" span={3}>{selectedOrder.}</Descriptions.Item> */}
-        <Descriptions.Item label="Tổng giá (đ)" span={3}>{formatNumberWithComma(selectedOrder?.total_cost)}</Descriptions.Item>
+        <Descriptions.Item label="Tổng giá (đ)" span={3}>{formatNumberWithComma(selectedOrder?.totalCost)}</Descriptions.Item>
       </Descriptions>
       <Divider />
-      <ProductOrderDetailTable data={selectedOrder?.Order_detail} />
+      <ProductOrderDetailTable data={selectedOrder?.orderDetails} />
     </Modal>
   )
 }

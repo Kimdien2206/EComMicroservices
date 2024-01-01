@@ -16,8 +16,10 @@ public partial class User
 
     [Column("lastname")]
     public string? Lastname { get; set; }
+
     [Column("date_of_birth")]
     public DateTime DateOfBirth { get; set; }
+
     [Column("address")]
     [Required]
     public string Address { get; set; }

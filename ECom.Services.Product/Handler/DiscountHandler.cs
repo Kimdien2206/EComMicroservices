@@ -68,7 +68,9 @@ namespace ECom.Services.Products.Handler
                 {
                     log.Info("Adding new Discount");
                     DataAccess.Ins.DB.Discounts.Add(newDiscount);
+                    DataAccess.Ins.DB.SaveChanges();
                     log.Info("Discount added");
+                    responseMessage.responseData = new List<DiscountDto>() { mapper.Map<DiscountDto>(newDiscount) };
                     responseMessage.ErrorCode = 200;
                 }
                 catch (Exception ex)

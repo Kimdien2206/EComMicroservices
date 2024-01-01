@@ -41,6 +41,8 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetActiveProduct), "Product");
     route.RouteToEndpoint(typeof(GetProductByTagId), "Product");
     route.RouteToEndpoint(typeof(GetProductOfCollection), "Product");
+    route.RouteToEndpoint(typeof(GetProductDetail), "Product");
+    route.RouteToEndpoint(typeof(GetProductOfDiscount), "Product");
     route.RouteToEndpoint(typeof(UpdateProduct), "Product");
     route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
     route.RouteToEndpoint(typeof(CreateDiscount), "Product");

@@ -5,6 +5,7 @@ using ECom.Services.Products.Models;
 using ECom.Services.Products.Utility;
 using Messages;
 using Messages.CollectionMessages;
+using Messages.DiscountMessages;
 using Messages.ProductMessages;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
@@ -24,7 +25,8 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetActiveProduct>,
         IHandleMessages<GetProductOfCollection>,
         IHandleMessages<GetProductByTagId>,
-        IHandleMessages<GetProductDetail>
+        IHandleMessages<GetProductDetail>,
+        IHandleMessages<GetProductOfDiscount>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -59,8 +61,6 @@ namespace ECom.Services.Products.Handler
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
-
-
 
         public async Task Handle(ViewProduct message, IMessageHandlerContext context)
         {
@@ -336,24 +336,40 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         } 
         
+        public async Task Handle(GetProductOfDiscount message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            try
+            {
+
+                List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.DiscountId == message.Id).ToList();
+
+                responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
+                responseMessage.ErrorCode = 200;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                responseMessage.ErrorCode = 500;
+            }
+
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        } 
+        
         public async Task Handle(GetProductDetail message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
             try
             {
-                List<Product> products = new List<Product>();
-                foreach(int id in message.ProductDetailIds)
-                {
-                    ProductItem item = DataAccess.Ins.DB.ProductItems.Where(u => u.Id == id).First();
+                ProductItem item = DataAccess.Ins.DB.ProductItems.Where(u => u.Id == message.ProductDetailId).First();
 
                     Product product = DataAccess.Ins.DB.Products
                         .Include("ProductItems")
                         .Where(i => i.Id == item.Id)
                         .First();
 
-                    products.Add(product);
-
-                }
+                List<Product> products = new List<Product>() { product };
+             
 
                 responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
                 responseMessage.ErrorCode = 200;

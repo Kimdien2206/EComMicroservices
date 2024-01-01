@@ -15,10 +15,12 @@ const DiscountCreateModal: FC<ModalProps> = ({ isOpen, setIsModalOpen, setDataSt
     setIsLoading(true)
     createDiscount(value.name, value.discount)
       .then(({ data }) => {
-        setDataState && setDataState((prev: IDiscount[]) => [...prev, data]);
-        createForm.resetFields();
+        console.log(data);
+        setDataState && setDataState((prev: IDiscount[]) => [...prev, data[0]]);
         setIsModalOpen(false)
         SuccessAlert('Tạo khuyến mãi thành công.')
+        createForm.resetFields();
+        
       })
       .catch((error) => console.log(error))
       .finally(() => setIsLoading(false));

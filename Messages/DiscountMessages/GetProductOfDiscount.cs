@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messages.ProductMessages
+namespace Messages.DiscountMessages
 {
-    public class GetProductDetail : ICommand
+    public class GetProductOfDiscount : ICommand
     {
-        public int ProductDetailId { get; set; }
+        public int Id { get; set; }
     }
 }

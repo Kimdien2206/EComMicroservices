@@ -147,7 +147,7 @@ namespace ECom.Services.Sales.Handler
             {
                 IQueryable<Order> query = DataAccess.Ins.DB.Orders.Include(order => order.OrderDetails);
 
-                Order order = query.FirstOrDefault(u => u.Id == message.ID);
+                Order order = query.FirstOrDefault(u => u.Id == message.Id);
 
                 if (order != null)
                 {

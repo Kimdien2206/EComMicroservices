@@ -61,7 +61,7 @@ namespace ECom.Gateway.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPatch]
         [EnableCors]
         [Route("{id}")]
         public async Task<IActionResult> UpdateDiscount(string id, DiscountDto newDiscount)
@@ -75,6 +75,28 @@ namespace ECom.Gateway.Controllers
             {
                 var message = new UpdateDiscount() { discount = newDiscount, id = discountID };
                 var response = await this.messageSession.Request<Response<DiscountDto>>(message);
+                return ReturnWithStatus(response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+        
+        [HttpGet]
+        [EnableCors]
+        [Route("{id}")]
+        public async Task<IActionResult> GetProductOfDiscount(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                int discountID = Int32.Parse(id);
+                var message = new GetProductOfDiscount() { Id = discountID };
+                var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus(response);
             }
             catch
