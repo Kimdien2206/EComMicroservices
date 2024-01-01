@@ -42,6 +42,7 @@ namespace ECom.Services.Products.Handler
             else
             {
                 Importing newImporting = mapper.Map<Importing>(message.newImporting);
+                newImporting.Date = DateTime.Now;
                 try
                 {
                     log.Info("Adding new Importing");

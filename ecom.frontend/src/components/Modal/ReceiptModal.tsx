@@ -16,11 +16,11 @@ const ReceiptModal = ({ isOpen, setIsModalOpen, selectedReceipt }: ReceiptModalP
     <Modal title={'Thông tin đơn hàng'} open={isOpen} width={'70vw'} footer={null} onCancel={() => setIsModalOpen((prev: boolean) => !prev)}>
       <Descriptions title="Thông tin người dùng" bordered>
         <Descriptions.Item label="ID" span={1}>{selectedReceipt?.id}</Descriptions.Item>
-        <Descriptions.Item label="Họ tên" span={2}>{`${selectedReceipt?.order.lastname} ${selectedReceipt?.order.firstname}`}</Descriptions.Item>
-        <Descriptions.Item label="Địa chỉ" span={3}>{selectedReceipt?.order.address}</Descriptions.Item>
+        <Descriptions.Item label="Họ tên" span={2}>{`${selectedReceipt?.orderInfo.lastname} ${selectedReceipt?.orderInfo.firstname}`}</Descriptions.Item>
+        <Descriptions.Item label="Địa chỉ" span={3}>{selectedReceipt?.orderInfo.address}</Descriptions.Item>
         <Descriptions.Item label="Ngày đặt hàng">{dayjs(selectedReceipt?.date).format("HH:mm:ss DD/MM/YYYY")}</Descriptions.Item>
         <Descriptions.Item label="Số điện thoại" span={2}>
-          {selectedReceipt?.order.phone_number}
+          {selectedReceipt?.orderInfo.phoneNumber}
         </Descriptions.Item>
         <Descriptions.Item label="Trạng thái" span={3}>
           <Tag color={'green'} title={'Hoàn thành'}>{selectedReceipt?.status === '0' ? "Chưa thanh toán" : "Đã thanh toán"}</Tag>
@@ -31,7 +31,7 @@ const ReceiptModal = ({ isOpen, setIsModalOpen, selectedReceipt }: ReceiptModalP
         <Descriptions.Item label="Tổng giá" span={3}>{formatNumberWithComma(selectedReceipt?.cost)}</Descriptions.Item>
       </Descriptions>
       <Divider />
-      <ProductOrderDetailTable data={selectedReceipt?.order.Order_detail}/>
+      <ProductOrderDetailTable data={selectedReceipt?.orderInfo.orderDetails}/>
     </Modal>
   )
 }

@@ -10,6 +10,4 @@ export default interface IProduct_item {
   image: string[];
   product: IProduct;
   productID: number;
-  Cart_detail: ICart_detail[];
-  Order_detail: IOrder_detail[];
 }

@@ -24,18 +24,15 @@ const ImportingModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, selec
     form.validateFields().then((data) => {
       console.log(data);
       const newImport = {
-        total_cost: price,
-        total_amount: totalAmount,
-        ImportDetail: {
-          createMany: {
-            data: createImportDetail(data)
-          }
-        }
+        totalCost: price,
+        totalAmount: totalAmount,
+        importDetails: createImportDetail(data)
       }
       createImport(newImport).then((data) => {
         console.log(data.data);
         SuccessAlert("Nhập hàng thành công");
         setIsModalOpen((prev : boolean) => !prev)
+        form.resetFields();
       })
     })
   }
@@ -46,14 +43,14 @@ const ImportingModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, selec
         if(item.amount[property] > 0){
           console.log(property);
           
-          const productItem = selectedItem?.productItem.filter((product) => product.color === item.color && product.size.trim() === property);
+          const productItem = selectedItem?.productItems.filter((product) => product.color === item.color && product.size.trim() === property);
           result = [
             ...result,
             { 
               item: productItem[0]?.id,
               quantity: item.amount[property],
               price: data.price,
-              total_cost: data.price * item.amount[property],
+              totalCost: data.price * item.amount[property],
             }
           ]
         } 

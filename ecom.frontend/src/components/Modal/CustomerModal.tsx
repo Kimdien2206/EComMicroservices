@@ -29,7 +29,7 @@ const CustomerModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, data }) 
         <Descriptions.Item label="Họ tên" span={2}>{`${data?.lastname} ${data?.firstname}`}</Descriptions.Item>
         <Descriptions.Item label="Địa chỉ" span={3}>{data?.address}</Descriptions.Item>
         <Descriptions.Item label="Số điện thoại" span={2}>
-          {data?.phone_number}
+          {data?.phoneNumber}
         </Descriptions.Item>
         <Descriptions.Item label="Email" span={2}>
           {data?.email}

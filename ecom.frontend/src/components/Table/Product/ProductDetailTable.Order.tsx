@@ -2,6 +2,10 @@ import { Card, Table, Image, Space, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { formatNumberWithComma } from '../../../helper/utils';
 import IOrder_detail from '../../../interface/OrderDetail';
+import { useEffect, useState } from 'react';
+import { fetchProductDetail } from '../../../api/CustomerAPI';
+import { fetchDetailOrder } from '../../../api/admin/receiptAPI';
+import IProduct from '../../../interface/Product';
 
 const { Text } = Typography;
 
@@ -17,44 +21,44 @@ interface DataType {
   price: number;
 }
 
-const data = [
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-]
+// const data = [
+//   {
+//     id: 1,
+//     name: 'Ao vang khe',
+//     image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
+//     color: 'Vang',
+//     size: 'XL',
+//     quantity: 10,
+//     price: 1000000000,
+//   },
+//   {
+//     id: 1,
+//     name: 'Ao vang khe',
+//     image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
+//     color: 'Vang',
+//     size: 'XL',
+//     quantity: 10,
+//     price: 1000000000,
+//   },
+//   {
+//     id: 1,
+//     name: 'Ao vang khe',
+//     image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
+//     color: 'Vang',
+//     size: 'XL',
+//     quantity: 10,
+//     price: 1000000000,
+//   },
+//   {
+//     id: 1,
+//     name: 'Ao vang khe',
+//     image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
+//     color: 'Vang',
+//     size: 'XL',
+//     quantity: 10,
+//     price: 1000000000,
+//   },
+// ]
 
 const columns: ColumnsType<IOrder_detail> = [
   {
@@ -103,7 +107,23 @@ type OrderDetailTableProps = {
   data?: IOrder_detail[]
 }
 
+
 const ProductOrderDetailTable = ({ data }: OrderDetailTableProps) => {
+
+  const [products, setProducts] = useState<IProduct>();
+
+  useEffect(() => {
+    const listID = data && data.map(item => {
+      return item.itemID;
+    })
+
+
+
+    listID && fetchDetailOrder(listID).then((data) => {
+      setProducts(data.data);
+    });
+
+  }, [data])
   return (
     <Table columns={columns} dataSource={data} pagination={{ pageSize: 4 }} />
   )

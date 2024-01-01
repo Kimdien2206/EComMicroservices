@@ -13,21 +13,15 @@ interface CustomerManagementTable extends TableProps {
 
 const columns = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-    sorter: (a: IUser, b: IUser) => compareNumber(a.id, b.id),
+    title: 'Số điện thoại',
+    dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
   },
   {
     title: 'Họ tên',
     key: 'name',
     render: (_: any, record: IUser) =>
       <p>{`${record.lastname} ${record.firstname}`}</p>
-  },
-  {
-    title: 'Số điện thoại',
-    dataIndex: 'phone_number',
-    key: 'phonenumber',
   },
   {
     title: 'Email',

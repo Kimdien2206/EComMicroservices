@@ -23,7 +23,8 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetProductByItemID>,
         IHandleMessages<GetActiveProduct>,
         IHandleMessages<GetProductOfCollection>,
-        IHandleMessages<GetProductByTagId>
+        IHandleMessages<GetProductByTagId>,
+        IHandleMessages<GetProductDetail>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -44,7 +45,7 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<ProductDto>();
             try
             {
-                List<Product> products = DataAccess.Ins.DB.Products.OrderBy(u => u.Id).ToList();
+                List<Product> products = DataAccess.Ins.DB.Products.Include("ProductItems").OrderBy(u => u.Id).ToList();
                 log.Info(products.Count.ToString());
                 responseMessage.responseData = products.Select(
                     emp => mapper.Map<ProductDto>(emp)
@@ -315,6 +316,37 @@ namespace ECom.Services.Products.Handler
                 {
                     Product product = DataAccess.Ins.DB.Products.Where(i => i.Id == item.ProductId).FirstOrDefault();
                     products.Add(product);
+                }
+
+                responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
+                responseMessage.ErrorCode = 200;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                responseMessage.ErrorCode = 500;
+            }
+
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        } 
+        
+        public async Task Handle(GetProductDetail message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            try
+            {
+                List<Product> products = new List<Product>();
+                foreach(int id in message.ProductDetailIds)
+                {
+                    ProductItem item = DataAccess.Ins.DB.ProductItems.Where(u => u.Id == id).First();
+
+                    Product product = DataAccess.Ins.DB.Products
+                        .Include("ProductItems")
+                        .Where(i => i.Id == item.Id)
+                        .First();
+
+                    products.Add(product);
+
                 }
 
                 responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));

@@ -10,7 +10,7 @@ export default interface IReceipt {
   status: string;
   voucher?: IVoucher | null;
   voucherCode?: string | null;
-  order: IOrder;
+  orderInfo: IOrder;
   orderID: number;
   paymentMethod: string;
 }

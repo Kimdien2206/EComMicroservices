@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import ProductCollectionDetailTable from '../Table/Product/ProductDetailTable.Collection';
 import ReceiptTable from '../Table/Receipt/ReceiptTable';
+import OrderTable from '../Table/Order/OrderTable';
 
 const onChange = (key: string) => {
   console.log(key);
@@ -13,7 +14,7 @@ const tabItems = new Array(2).fill(null).map((_, i) => {
     label: i === 0 ? `Sản phẩm đã xem` : 'Đơn hàng đã mua',
     key: id,
     children: i === 0 ? <ProductCollectionDetailTable /> :
-      <ReceiptTable />
+      <OrderTable />
   };
 });
 

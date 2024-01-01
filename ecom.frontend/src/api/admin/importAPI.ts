@@ -1,9 +1,9 @@
 import { http } from "..";
 
 export function getAllImport(){
-    return http.get(`/import`);
+    return http.get(`/importing`);
 }
 
 export function createImport(newImport: any){
-    return http.post(`/import`, newImport)
+    return http.post(`/importing`, newImport)
 }

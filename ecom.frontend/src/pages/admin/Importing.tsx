@@ -20,6 +20,7 @@ const Importing = () => {
 
   useEffect(() => {
     fetchAllProducts().then((data) => {
+      // console.log(data.data)
       setData(data.data);
       setSearchData(data.data);
     }).finally(() => setLoading(false))
@@ -46,7 +47,7 @@ const Importing = () => {
         <Input.Search value={searchText} size="middle" placeholder="Nhập tên sản phẩm" enterButton style={{ width: '20%' }} onChange={onChange} />
         <ImportingTable data={searchData} setIsModalOpen={setIsImportModalOpen} setIsReadOnly={setIsReadModalOpen} setSelectedItem={setSelectedItem} />
         <ImportingModal isOpen={isImportModalOpen} setIsModalOpen={setIsImportModalOpen} selectedItem={selectedItem} />
-        <ImportingQuantityModal isOpen={isReadModalOpen} setIsModalOpen={setIsReadModalOpen} data={selectedItem?.productItem} />
+        <ImportingQuantityModal isOpen={isReadModalOpen} setIsModalOpen={setIsReadModalOpen} data={selectedItem?.productItems} />
       </Space>
     </Spin>
   )

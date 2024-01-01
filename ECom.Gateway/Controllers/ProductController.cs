@@ -64,6 +64,28 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
+        
+        [HttpGet]
+        [Route("product-detail")]
+        [EnableCors]
+        public async Task<IActionResult> GetProductD(int[] detailIDs)
+        {
+            if (detailIDs == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var message = new GetProductDetail() { ProductDetailIds = detailIDs };
+                log.Info("Message sent, waiting for response");
+                var response = await this.messageSession.Request<Response<ProductDto>>(message);
+                return ReturnWithStatus(response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
        
         
         [HttpGet]

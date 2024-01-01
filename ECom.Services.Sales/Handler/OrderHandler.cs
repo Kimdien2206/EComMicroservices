@@ -6,6 +6,7 @@ using ECom.Services.Sales.Utility;
 using Messages;
 using Messages.OrderMessages;
 using Messages.ProductMessages;
+using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
 using System;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace ECom.Services.Sales.Handler
             var responseMessage = new Response<OrderDto>();
             try
             {
-                List<Order> orders = DataAccess.Ins.DB.Orders.Where(u => u.Id == message.Id).ToList();
+                List<Order> orders = DataAccess.Ins.DB.Orders.Include("OrderDetails").Where(u => u.Id == message.Id).ToList();
                 responseMessage.responseData = orders.Select(
                     emp => mapper.Map<OrderDto>(emp)
                     );
