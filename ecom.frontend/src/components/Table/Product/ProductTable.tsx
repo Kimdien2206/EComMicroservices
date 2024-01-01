@@ -74,7 +74,7 @@ const ProductTable: FC<ProductTableProps> = ({ data, setSelectedItem, dispatch, 
 
   return (
     <>
-      <Table columns={columns} dataSource={data} onRow={(record, rowIndex) => {
+      <Table rowKey={data => data.id} columns={columns} dataSource={data} onRow={(record, rowIndex) => {
         return {
           onClick: (event) => {
             if (isClickValidToOpenDetail(event)) {

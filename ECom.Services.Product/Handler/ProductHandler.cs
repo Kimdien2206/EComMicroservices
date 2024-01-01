@@ -31,7 +31,6 @@ namespace ECom.Services.Products.Handler
 
         public ProductHandler()
         {
-            log.Info("new instance");
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());
@@ -61,6 +60,8 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
+
+
         public async Task Handle(ViewProduct message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
@@ -73,6 +74,7 @@ namespace ECom.Services.Products.Handler
             {
                 try
                 {
+
                     int productID = message.productID;
                     Product product = DataAccess.Ins.DB.Products.First(x => x.Id == productID);
                     product.View++;
@@ -123,7 +125,7 @@ namespace ECom.Services.Products.Handler
             {
                 List<Product> products = DataAccess.Ins.DB.Products.OrderByDescending(u => u.Sold).Take(10).ToList();
                 responseMessage.responseData = products.Select(
-                emp => mapper.Map<ProductDto>(emp)
+                    emp => mapper.Map<ProductDto>(emp)
                 );
                 responseMessage.ErrorCode = 200;
                 log.Info("Response sent");
@@ -139,22 +141,26 @@ namespace ECom.Services.Products.Handler
         public async Task Handle(GetProductBySlug message, IMessageHandlerContext context)
         {
             var responseMessage = new Response<ProductDto>();
-            if (message.productSlug == null)
+            if (message.ProductSlug == null)
             {
                 log.Error("BadRequest, missing product id");
-                responseMessage.ErrorCode = 403;
+                responseMessage.ErrorCode = 400;
             }
             else
             {
-                string slug = message.productSlug;
+                string slug = message.ProductSlug;
                 try
                 {
-                    List<Product> products = DataAccess.Ins.DB.Products.Where(u => u.Slug == slug)
-                        .Include(item => item.ProductItems)
-                        .ToList();
-
-                    responseMessage.responseData = products.Select(emp => mapper.Map<ProductDto>(emp));
-                    responseMessage.ErrorCode = 200;
+                    var product = DataAccess.Ins.DB.Products.Where(ele => ele.Slug == slug).Include(ele => ele.ProductItems).FirstOrDefault();
+                    if (product != null)
+                    {
+                        responseMessage.responseData = new List<ProductDto>() { mapper.Map<ProductDto>(product) };
+                        responseMessage.ErrorCode = 200;
+                    }
+                    else
+                    {
+                        responseMessage.ErrorCode = 404;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -252,7 +258,7 @@ namespace ECom.Services.Products.Handler
             if (message.ItemId == 0)
             {
                 log.Error("BadRequest, missing product id");
-                responseMessage.ErrorCode = 403;
+                responseMessage.ErrorCode = 400;
             }
             else
             {
@@ -379,5 +385,28 @@ namespace ECom.Services.Products.Handler
 
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
+
+        public Task Handle(GetAllProductId message, IMessageHandlerContext context)
+        {
+            var respondMessage = new GetAllProductIdResponse();
+            respondMessage.SagaId = message.SagaId;
+            try
+            {
+                List<Product> products = DataAccess.Ins.DB.Products.ToList();
+                respondMessage.ProductIds = products.Select(
+                    emp => emp.Id).ToList();
+
+                context.Send(respondMessage).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error: {ex.Message}");
+                log.Error(ex.StackTrace);
+            }
+
+            return Task.CompletedTask;
+        }
+
+
     }
 }

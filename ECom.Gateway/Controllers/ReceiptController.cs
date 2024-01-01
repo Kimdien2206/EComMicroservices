@@ -1,11 +1,9 @@
-﻿using Dto.ReceiptDto;
-using Messages.OrderMessages;
+﻿using System.Net;
+using Dto.ReceiptDto;
 using Messages;
+using Messages.ReceiptMessages;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Net;
-using Messages.ReceiptMessages;
-using Dto.OrderDto;
 
 namespace ECom.Gateway.Controllers
 {
@@ -48,7 +46,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpGet]
         [Route("paid")]
         public async Task<IActionResult> GetPaidReceipt()
@@ -82,7 +80,7 @@ namespace ECom.Gateway.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReceipt(ReceiptDto newReceipt)
         {
-            if(newReceipt == null)
+            if (newReceipt == null)
             {
                 return BadRequest();
             }
@@ -101,12 +99,74 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
+        [HttpPost]
+        [Route("payment/{receiptId}")]
+        public async Task<IActionResult> CreatePaymentUrl(uint receiptId, VNPayPaymentDto paymentDto)
+        {
+            if (paymentDto == null)
+            {
+                return BadRequest();
+            }
+
+            var curTimeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+
+            var message = new CreateVNPayUrl() { Amount = paymentDto.Amount, CreateDate = curTimeStamp, TxnRef = receiptId };
+            try
+            {
+                var response = await this.messageSession.Request<Response<string>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (Exception ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        [Route("payment/{receiptId}/confirm")]
+        public async Task<IActionResult> validateReceiptPayment(uint receiptId, VNPayPaymentResponseDto paymentDto)
+        {
+            if (paymentDto == null)
+            {
+                return BadRequest();
+            }
+
+            var message = new ValidateReceiptPayment()
+            {
+                vnp_Amount = paymentDto.vnp_Amount,
+                vnp_BankCode = paymentDto.vnp_BankCode,
+                vnp_CardType = paymentDto.vnp_CardType,
+                vnp_BankTranNo = paymentDto.vnp_BankTranNo,
+                vnp_OrderInfo = paymentDto.vnp_OrderInfo,
+                vnp_PayDate = paymentDto.vnp_PayDate,
+                vnp_TmnCode = paymentDto.vnp_TmnCode,
+                vnp_TransactionStatus = paymentDto.vnp_TransactionStatus,
+                vnp_ResponseCode = paymentDto.vnp_ResponseCode,
+                vnp_SecureHash = paymentDto.vnp_SecureHash,
+                vnp_TransactionNo = paymentDto.vnp_TransactionNo,
+                vnp_TxnRef = paymentDto.vnp_TxnRef
+            };
+            try
+            {
+                var response = await this.messageSession.Request<Response<string>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (Exception ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                return StatusCode(500);
+            }
+        }
+
         [HttpPatch]
         [Route("paid/{id}")]
         public async Task<IActionResult> PaidReceipt(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return BadRequest();
             }

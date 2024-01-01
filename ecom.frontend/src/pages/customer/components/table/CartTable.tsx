@@ -3,8 +3,7 @@ import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react'
 import LocalStorage from '../../../../helper/localStorage';
 import ICart from '../../../../interface/Cart';
-import { deleteCart, updateCart } from '../../../../api/CustomerAPI';
-import { formatNumberWithComma } from '../../../../helper/utils';
+import { formatNumberWithComma, uuidv4 } from '../../../../helper/utils';
 
 export type CartItemType = {
   image01: string,
@@ -55,15 +54,15 @@ const CartTable = ({ setCartList, cartList }: CartTableProps) => {
       width: '15%',
       dataIndex: 'tags',
       render: (_, record) => {
-        return <InputNumber min={1} defaultValue={record.quantity} onChange={(value) => {
+        return <InputNumber min={1} defaultValue={1} value={record.quantity} onChange={(value) => {
           console.log(value)
           console.log(cartList)
           const currentUser = LocalStorage.getItem('user');
           setCartList((prev: any) => prev.map((data: ICart) => {
             if (data.itemID === record.itemID) {
-              if (currentUser) {
-                updateCart(data.id, { quantity: value });
-              }
+              // if (currentUser) {
+              //   updateCart(data.id, { quantity: value }).catch((err) => console.error(err));
+              // }
               return {
                 ...data,
                 quantity: value
@@ -103,16 +102,17 @@ const CartTable = ({ setCartList, cartList }: CartTableProps) => {
       render: (_, record) => {
         return <Button onClick={() => {
           console.log(record.id);
-          deleteCart(record.id).then((data) => {
-            LocalStorage.setItem('cart', LocalStorage.getItem('cart').filter((item: any) => JSON.stringify(item) !== JSON.stringify(record)))
-          })
+          // deleteCart(record.id).then((data) => {
+
+          // }).catch((err) => console.error(err))
+          LocalStorage.setItem('cart', LocalStorage.getItem('cart').filter((item: any) => JSON.stringify(item) !== JSON.stringify(record)))
           setCartList((prev: ICart[]) => prev.filter((item) => JSON.stringify(item) !== JSON.stringify(record)));
         }}>Xóa</Button>
       }
     },
   ];
   return (
-    <Table rowKey={record => record.id} columns={columns} dataSource={cartList} scroll={{ x: '100%' }} ></Table>
+    <Table rowKey={record => uuidv4()} columns={columns} dataSource={cartList} scroll={{ x: '100%' }} ></Table>
   )
 }
 

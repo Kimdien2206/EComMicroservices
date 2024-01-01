@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,7 +18,7 @@ public partial class Cart
     [Required]
     [Column("item_id")]
     public int ItemId { get; set; }
-    
+
     [DefaultValue(1)]
     [Column("quantity")]
     public int Quantity { get; set; }

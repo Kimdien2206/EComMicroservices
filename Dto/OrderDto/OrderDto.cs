@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-
-namespace Dto.OrderDto
+﻿namespace Dto.OrderDto
 {
     public class OrderDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -28,6 +18,6 @@ namespace Dto.OrderDto
 
         public string PhoneNumber { get; set; } = null!;
 
-        public virtual ICollection<OrderDetailDto> OrderDetails { get; set; } = new List<OrderDetailDto>();  
+        public virtual ICollection<OrderDetailDto> OrderDetails { get; set; } = new List<OrderDetailDto>();
     }
 }

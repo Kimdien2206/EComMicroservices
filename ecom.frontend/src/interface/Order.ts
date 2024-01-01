@@ -5,7 +5,7 @@ import IUser from "./User";
 export default interface IOrder {
   id: number;
   date: Date;
-  total_cost: number;
+  totalCost: number;
   status: string;
   firstname: string;
   lastname: string;

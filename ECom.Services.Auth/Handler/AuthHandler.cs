@@ -2,30 +2,29 @@
 using Dto.AuthDto;
 using ECom.Services.Auth.Data;
 using ECom.Services.Auth.Models;
+using ECom.Services.Auth.Service;
 using ECom.Services.Auth.Utility;
 using Messages;
 using Messages.AuthMessages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECom.Services.Auth.Handler
 {
-    public class AuthHandler : 
+    public class AuthHandler :
         IHandleMessages<LoginMessage>,
         IHandleMessages<MailSentEvent>,
         IHandleMessages<ResetPasswordCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<AuthHandler>();
-
+        private IConfiguration configuration;
         public AuthHandler()
         {
+            configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new MappingProfile());
@@ -39,15 +38,7 @@ namespace ECom.Services.Auth.Handler
 
             string email = message.loginUser.email;
             string password = message.loginUser.password;
-            Account loginAccount = DataAccess.Ins.DB.Accounts.First(u => u.Email == email);
-
-            //int salt = 12;
-            
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            //string hashed = BCrypt.Net.BCrypt.HashPassword(password);
-
-            //Console.WriteLine($"Hashed: {hashed}");
+            var loginAccount = DataAccess.Ins.DB.Accounts.FirstOrDefault(u => u.Email == email);
 
             if (loginAccount == null)
             {
@@ -55,29 +46,44 @@ namespace ECom.Services.Auth.Handler
             }
             else
             {
-                if(BCrypt.Net.BCrypt.Verify(password, loginAccount.Password))
+                try
                 {
-                    response.ErrorCode = 200;
+                    log.Info($"account password hashed: {loginAccount.Password}");
+                    log.Info($"password: {password}");
+                    if (BCrypt.Net.BCrypt.Verify(password, loginAccount.Password))
+                    {
+                        response.ErrorCode = 200;
 
-                    User userInfo = DataAccess.Ins.DB.Users.Where(u => u.Email == email).Include(u => u.Account).First();
+                        User userInfo = DataAccess.Ins.DB.Users.Where(u => u.Email == email).Include(u => u.Account).First();
 
-                    userInfo.LoggedDate = DateTime.Now;
+                        userInfo.LoggedDate = DateTime.Now;
 
-                    AuthDto Dto = new AuthDto();
-                    Dto.userInfo = mapper.Map<UserDto>(userInfo);
-                    Dto.userInfo.IsAdmin = userInfo.Account.IsAdmin;
-                    
-                    List<AuthDto> responseData = new List<AuthDto>() { Dto };
+                        AuthDto Dto = new AuthDto();
+                        Dto.userInfo = mapper.Map<UserDto>(userInfo);
+                        Dto.userInfo.IsAdmin = userInfo.Account.IsAdmin;
 
-                    response.responseData = responseData;
-                    DataAccess.Ins.DB.SaveChanges();
+                        Dto.AccessToken = JwtService.GenerateJSONWebToken(configuration["Jwt:Issuer"], configuration["Jwt:Key"]);
+
+                        log.Info($"AccessToken: {Dto.AccessToken}");
+                        List<AuthDto> responseData = new List<AuthDto>() { Dto };
+
+                        response.responseData = responseData;
+                        DataAccess.Ins.DB.SaveChanges();
+                    }
+                    else
+                    {
+                        response.ErrorCode = 403;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    response.ErrorCode = 403;
+                    log.Error($"Error message: {e.Message}");
+                    log.Error(e.StackTrace);
+
+                    response.ErrorCode = 500;
                 }
+
             }
-
 
             await context.Reply(response);
         }
@@ -86,9 +92,12 @@ namespace ECom.Services.Auth.Handler
         {
             log.Info($"{message.Email} + {message.Code}");
 
-            Authenticator authenticator = new Authenticator() { Code = message.Code, 
-            Email = message.Email, 
-            Expiration = DateTime.Now.AddMinutes(30)};
+            Authenticator authenticator = new Authenticator()
+            {
+                Code = message.Code,
+                Email = message.Email,
+                Expiration = DateTime.Now.AddMinutes(30)
+            };
 
             DataAccess.Ins.DB.Authenticators.Add(authenticator);
 
@@ -133,13 +142,15 @@ namespace ECom.Services.Auth.Handler
                         DataAccess.Ins.DB.Authenticators.RemoveRange(vertificationCodes);
                         DataAccess.Ins.DB.SaveChanges();
                     }
-                } else
+                }
+                else
                 {
                     response.ErrorCode = 400;
                     response.responseData = new List<string>() { "Vertification code is wrong or out of date" };
                 }
 
-            } else
+            }
+            else
             {
                 response.ErrorCode = 400;
                 response.responseData = new List<string>() { "Vertification code is not exist or wrong" };

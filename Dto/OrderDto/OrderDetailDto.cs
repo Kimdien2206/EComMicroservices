@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dto.OrderDto
+﻿namespace Dto.OrderDto
 {
     public class OrderDetailDto
     {
@@ -19,5 +11,7 @@ namespace Dto.OrderDto
         public int ItemId { get; set; }
 
         public int Price { get; set; }
+
+        public ProductDto.ProductDto? Product { get; set; }
     }
 }

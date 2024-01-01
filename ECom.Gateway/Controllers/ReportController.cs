@@ -1,12 +1,10 @@
-﻿using Dto.ProductDto;
-using Messages.TagMessages;
+﻿using System.Net;
+using Dto.ReportDto;
 using Messages;
+using Messages.ReportMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Net;
-using Messages.ReportMessages;
-using Dto.ReportDto;
 
 namespace ECom.Gateway.Controllers
 {
@@ -28,7 +26,7 @@ namespace ECom.Gateway.Controllers
         public async Task<IActionResult> GetYearlyReport(string year)
         {
             log.Info("Received request");
-            if(year == null)
+            if (year == null)
             {
                 return BadRequest();
             }
@@ -38,32 +36,6 @@ namespace ECom.Gateway.Controllers
                 var message = new GetYearlyReport() { Year = requestYear };
 
                 var response = await this.messageSession.Request<Response<YearlyReportDto>>(message);
-                log.Info($"Message sent, received: {response.responseData}");
-                return ReturnWithStatus(response);
-            }
-            catch (OperationCanceledException ex)
-            {
-                log.Info($"Message sent, but {ex}");
-                Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
-                return StatusCode(500);
-            }
-        }
-
-        [HttpGet]
-        [EnableCors]
-        [Route("forecast/{productId}")]
-        public async Task<IActionResult> GetForecastByProductId(int productId)
-        {
-            if (productId == null)
-            {
-                return BadRequest();
-            }
-            try
-            {
-
-                var message = new GetForecastByProductId() { Id = productId };
-
-                var response = await this.messageSession.Request<Response<GetForecastByProductId>>(message);
                 log.Info($"Message sent, received: {response.responseData}");
                 return ReturnWithStatus(response);
             }

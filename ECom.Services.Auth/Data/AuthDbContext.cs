@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECom.Services.Auth.Models;
+﻿using ECom.Services.Auth.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ECom.Services.Auth.Data
@@ -47,7 +41,8 @@ namespace ECom.Services.Auth.Data
                     Address = "Ba Đình, TP. HCM",
                     Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
                     Email = "20520442@gmail.com",
-                    LoggedDate = DateTime.Now
+                    LoggedDate = DateTime.Now,
+                    DateOfBirth = DateTime.Parse("1970/01/01")
                 },
                 new User
                 {
@@ -57,13 +52,15 @@ namespace ECom.Services.Auth.Data
                     Address = "Kiến Tường, Long An",
                     Avatar = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png",
                     Email = "nguyenduc147862@gmail.com",
-                    LoggedDate = DateTime.Now
+                    LoggedDate = DateTime.Now,
+                    DateOfBirth = DateTime.Parse("1970/01/01")
                 }
                 );
+
             modelBuilder.Entity<Account>().HasData(
-                new Account { Email = "20520442@gmail.com", Password = "123456", IsAdmin = true },
-                new Account { Email = "nguyenduc147862@gmail.com", Password = "123456", IsAdmin = false }
+                new Account { Email = "20520442@gmail.com", Password = "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S", IsAdmin = true },
+                new Account { Email = "nguyenduc147862@gmail.com", Password = "$2y$12$7OtfZjfBIIzSjzwH04JHeufIzffmVKZ6XF73QysK7QwjpZ5MM3y4S", IsAdmin = false }
                 );
         }
-    } 
+    }
 }

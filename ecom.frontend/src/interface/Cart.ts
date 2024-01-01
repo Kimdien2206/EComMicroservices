@@ -3,7 +3,7 @@ import IProduct_item from "./ProductItem";
 import IUser from "./User";
 
 export default interface ICart {
-  id: number;
+  id: string;
   owner: IUser;
   userID: string;
   quantity: number;

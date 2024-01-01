@@ -1,4 +1,4 @@
-import { Tag, Descriptions, Modal, Image as AntdImage, InputNumber, Button, Space, Divider, UploadFile, Tabs, TabsProps } from 'antd'
+import { Tag, Descriptions, Modal, Image as AntdImage, InputNumber, Button, Space, Divider, UploadFile, Tabs, TabsProps, Result } from 'antd'
 import { FormInstance, useForm } from 'antd/es/form/Form'
 import { FC, useEffect, useState } from 'react'
 import { ModalProps } from '../../interface/ModalProps'
@@ -20,6 +20,9 @@ import { formatNumberWithComma } from '../../helper/utils'
 import IProduct_item from '../../interface/ProductItem'
 import { createImport } from '../../api/admin/importAPI'
 import ForecastChart from '../Chart/ForecastChart'
+import { getForecastByProductId } from '../../api/admin/forecastAPI'
+import Forecast from '../../interface/Forecast'
+import ForecastDetail from '../../interface/ForecastDetail'
 
 interface ProductModalProps extends ModalProps {
   action: string,
@@ -35,7 +38,7 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
   const [collection, setCollection] = useState([]);
   const [discount, setDiscount] = useState([]);
   const [imageList, setImageList] = useState([]);
-  const [forecastData, setForeCastData] = useState([]);
+  const [forecastData, setForeCastData] = useState<Forecast | null>(null);
 
   const tabItems: TabsProps['items'] = [
     {
@@ -46,12 +49,27 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
     {
       key: '2',
       label: 'Dự báo',
-      children: <ForecastChart />,
+      children: forecastData && forecastData?.details ? <ForecastChart data={forecastData} /> : <Result
+        title="Không có dữ liệu"
+        subTitle="Dự liệu không đủ hoặc chưa có dữ liệu dự báo cho sản phẩm này"
+      />,
     },
   ];
 
   const tabsOnchange = (key: string) => {
-    console.log(key);
+    switch (key) {
+      case "1":
+        break;
+      case "2":
+        if (selectedItem?.id)
+          getForecastByProductId(selectedItem.id.toString()).then(({ data }) => {
+            console.log(["product model forecast data", data[0]]);
+            setForeCastData(data[0]);
+          }).catch((err) => console.log(err));
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {

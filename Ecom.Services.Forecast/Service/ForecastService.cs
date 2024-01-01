@@ -1,23 +1,20 @@
 ﻿using System.Data;
 using System.Globalization;
 using CsvHelper;
+using Dto.ReportDto;
 using Ecom.Services.Forecasts.Models;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
 
 namespace Ecom.Services.Forecasts.Service
 {
-    public class ForecastService
+    public static class ForecastService
     {
-        MLContext mlContext;
+        static MLContext mlContext = new MLContext();
 
-        public MLContext MLContext { get { return mlContext; } }
-        public ForecastService()
-        {
-            mlContext = new MLContext();
-        }
+        public static MLContext MLContext { get { return mlContext; } }
 
-        public IDataView LoadDataFromCsv(List<string> sources, int year)
+        public static IDataView LoadDataFromCsv(List<string> sources, int year)
         {
             IDataView trainingDataView;
             List<ModelInput> trainingInputs = new List<ModelInput>();
@@ -42,8 +39,19 @@ namespace Ecom.Services.Forecasts.Service
             return trainingDataView;
         }
 
+        public static IDataView ConvertData(List<DailyReportDetailDto> dailyReportDetailDtos)
+        {
+            IDataView dataView;
+            List<ModelInput> modelInputs = new List<ModelInput>();
 
-        public ITransformer BuildAndTrainModel(IDataView trainingDataView)
+            modelInputs = dailyReportDetailDtos.Select(dailyRp => new ModelInput() { SoldDate = DateTime.Parse(dailyRp.Date.ToString()), TotalSold = dailyRp.Quantity, Year = dailyRp.Date.Year }).ToList();
+
+            dataView = mlContext.Data.LoadFromEnumerable<ModelInput>(modelInputs);
+            return dataView;
+        }
+
+
+        public static ITransformer BuildAndTrainModel(IDataView trainingDataView)
         {
             var forecastingPipeline = mlContext.Forecasting.ForecastBySsa(
                 outputColumnName: "ForecastedSold",
@@ -61,7 +69,7 @@ namespace Ecom.Services.Forecasts.Service
             return forecaster;
         }
 
-        public void EvaluateModel(IDataView testDataView, ITransformer model)
+        public static void EvaluateModel(IDataView testDataView, ITransformer model)
         {
             Console.WriteLine("=============== Evaluating the model ===============");
             IDataView predictions = model.Transform(testDataView);
@@ -87,7 +95,7 @@ namespace Ecom.Services.Forecasts.Service
             Console.WriteLine($"Root Mean Squared Error: {RMSE:F3}\n");
         }
 
-        public void ForecastWithTestData(IDataView testData, int horizon, TimeSeriesPredictionEngine<ModelInput, ModelOutput> forecaster, MLContext mlContext)
+        public static void ForecastWithTestData(IDataView testData, int horizon, TimeSeriesPredictionEngine<ModelInput, ModelOutput> forecaster)
         {
             ModelOutput forecast = forecaster.Predict();
 
@@ -113,6 +121,21 @@ namespace Ecom.Services.Forecasts.Service
             {
                 Console.WriteLine(prediction);
             }
+        }
+
+        public static float[] ForecastNextDays(TimeSeriesPredictionEngine<ModelInput, ModelOutput> forecaster)
+        {
+            ModelOutput forecasts = forecaster.Predict();
+            int index = forecasts.ForecastedSold.Count();
+
+            for (int i = 0; i < index; i++)
+            {
+                Console.WriteLine($"Lower Estimate: {forecasts.LowerBoundSold[i]}\n" +
+                            $"Forecast: {forecasts.ForecastedSold[i]}\n" +
+                            $"Upper Estimate: {forecasts.UpperBoundSold[i]}\n");
+            }
+
+            return forecasts.ForecastedSold;
         }
     }
 }

@@ -112,7 +112,8 @@ const HeaderCustom = () => {
     return (
         <div className="header" ref={headerRef}>
             <div className="container">
-                <div className="header__logo">
+
+                <div className="header__logo" >
                     <img src={logo} alt="logo" />
                 </div>
                 <div className="header__menu">

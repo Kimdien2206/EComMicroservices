@@ -15,11 +15,9 @@ namespace ECom.Services.Reports
                     endpointConfiguration.UseSerialization<SystemJsonSerializer>();
 
                     var transport = endpointConfiguration.UseTransport<LearningTransport>();
-
                     var route = transport.Routing();
 
-                    route.RouteToEndpoint(typeof(GetForecastByProductId), "Forecast");
-
+                    route.RouteToEndpoint(typeof(GetAllDailyDetailReportSaga), "Forecast");
 
                     return endpointConfiguration;
                 })

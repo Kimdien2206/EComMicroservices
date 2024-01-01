@@ -1,11 +1,9 @@
-﻿using Dto.ProductDto;
-using Messages.CartMessages;
+﻿using Dto.CartDto;
 using Messages;
+using Messages.CartMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Net;
-using Dto.CartDto;
 
 namespace ECom.Gateway.Controllers
 {
@@ -22,12 +20,10 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [EnableCors]
-        public async Task<IActionResult> GetAllCart()
+        [Route("{phoneNumber}")]
+        public async Task<IActionResult> GetCartByPhonenumber(string phoneNumber)
         {
-            //var cancellationTokenSource = new CancellationTokenSource();
-            //cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(5));
-            log.Info("Received request");
-            var message = new GetCartByUser();
+            var message = new GetCartByUser() { PhoneNumber = phoneNumber };
             try
             {
                 var response = await this.messageSession.Request<Response<CartDto>>(message);
@@ -37,7 +33,74 @@ namespace ECom.Gateway.Controllers
             catch (OperationCanceledException ex)
             {
                 log.Info($"Message sent, but {ex}");
-                Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        [EnableCors]
+        public async Task<IActionResult> CreateCart(CreateCartDto createCartDto)
+        {
+            if (createCartDto == null)
+            {
+                return BadRequest();
+            }
+            var message = new CreateCart() { newCart = createCartDto };
+            try
+            {
+                var response = await this.messageSession.Request<Response<string>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPatch]
+        [EnableCors]
+        [Route("{phoneNumber}")]
+        public async Task<IActionResult> UpdateCart([FromBody] UpdateCartDto updateCartDto)
+        {
+            if (updateCartDto == null)
+            {
+                return BadRequest();
+            }
+            var message = new UpdateQuantity() { CartDto = updateCartDto };
+            try
+            {
+                var response = await this.messageSession.Request<Response<string>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete]
+        [EnableCors]
+        [Route("{phoneNumber}")]
+        public async Task<IActionResult> Delete(string phoneNumber, DeleteCartDto deleteCartDto)
+        {
+            if (deleteCartDto == null)
+            {
+                return BadRequest();
+            }
+            var message = new RemoveCart() { PhoneNumber = phoneNumber, IsDeleteAll = deleteCartDto.IsDeleteAll, RemoveDetail = deleteCartDto.Detail };
+            try
+            {
+                var response = await this.messageSession.Request<Response<string>>(message);
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                log.Info($"Message sent, but {ex}");
                 return StatusCode(500);
             }
         }

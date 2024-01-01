@@ -18,6 +18,7 @@ import { AppContext } from '../../context/AppContext'
 import IProduct from '../../interface/Product'
 import { fetchTopTenBestSellers, fetchTopTenMostViewed } from '../../api/productAPI'
 import '../../index.css';
+import { uuidv4 } from '../../helper/utils'
 
 const Home = () => {
     const appContext = useContext(AppContext);
@@ -38,15 +39,15 @@ const Home = () => {
         }
 
         fetchTopProducts();
-    })
+    }, []);
 
     return (
         <Helmet title="Trang chủ">
             {/* hero slider */}
             <Carousel>
-                <Image src={slider_1} preview={false} />
-                <Image src={slider_2} preview={false} />
-                <Image src={slider_3} preview={false} />
+                <Image id={uuidv4()} src={slider_1} preview={false} />
+                <Image id={uuidv4()} src={slider_2} preview={false} />
+                <Image id={uuidv4()} src={slider_3} preview={false} />
             </Carousel>
             {/* end hero slider */}
 
@@ -63,7 +64,7 @@ const Home = () => {
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} style={{ margin: 0 }}>
                     {
                         policy.map((item, index) =>
-                            <Col span={5} style={{ padding: 0 }} offset={1}>
+                            <Col id={uuidv4()} span={5} style={{ padding: 0 }} offset={1}>
                                 <PolicyCard
                                     name={item.name}
                                     description={item.description}

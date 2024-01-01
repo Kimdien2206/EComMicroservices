@@ -4,9 +4,10 @@ import { CheckoutContext } from '../../../context/CheckoutContext'
 import { formatNumberWithComma } from '../../../helper/utils';
 import { useNavigate } from 'react-router-dom';
 
-const CashOnDeliveryPayment = () => {
+const PaymentResultSuccess = () => {
   const checkout = useContext(CheckoutContext);
   const nav = useNavigate();
+  console.log(['checkout order', checkout?.order]);
   return (
     <div className='centerflex' style={{ flexDirection: 'column', rowGap: 50, padding: '20px 0' }}>
       <Row style={{ width: '80%' }}>
@@ -18,7 +19,7 @@ const CashOnDeliveryPayment = () => {
               subTitle={<Space direction='vertical'>
                 <p>Thông tin đơn hàng:</p>
                 <p>Họ tên: {checkout?.order?.firstname + " " + checkout?.order?.lastname}</p>
-                <p>Số điện thoại: {checkout?.order?.phone_number}</p>
+                <p>Số điện thoại: {checkout?.order?.phoneNumber}</p>
                 <p>Địa chỉ: {checkout?.order?.address}</p>
                 <p>Cảm ơn bạn đã mua hàng.</p>
                 <p>Nếu có bất kì vấn đề gì cần hỗ trợ, hãy liên lạc với của hàng qua số điện thoại 0912324274</p>
@@ -36,7 +37,7 @@ const CashOnDeliveryPayment = () => {
             <List
               itemLayout="horizontal"
               dataSource={
-                checkout?.order?.Order_detail
+                checkout?.order?.orderDetails
               }
               renderItem={(item, index) => (
                 <List.Item key={item.product_item.id}>
@@ -60,4 +61,4 @@ const CashOnDeliveryPayment = () => {
   )
 }
 
-export default CashOnDeliveryPayment
+export default PaymentResultSuccess

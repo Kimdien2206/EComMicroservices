@@ -1,11 +1,11 @@
-﻿using Dto.ProductDto;
+﻿using System.Net;
+using Dto.ProductDto;
 using Messages;
+using Messages.ProductMessages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Collections;
-using System.Net;
-using Messages.ProductMessages;
 
 namespace ECom.Gateway.Controllers
 {
@@ -44,8 +44,9 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpGet]
-        [Route("{slug}")]
+        [Route("slug/{slug}")]
         [EnableCors]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductsBySlug(string slug)
         {
             if (slug == null)
@@ -54,7 +55,7 @@ namespace ECom.Gateway.Controllers
             }
             try
             {
-                var message = new GetProductBySlug() { productSlug = slug };
+                var message = new GetProductBySlug() { ProductSlug = slug };
                 log.Info("Message sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus(response);
@@ -64,7 +65,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpGet]
         [Route("product-detail")]
         [EnableCors]
@@ -95,7 +96,7 @@ namespace ECom.Gateway.Controllers
             try
             {
                 var message = new GetBestSellers();
-                log.Info("Message sent, waiting for response");
+                log.Info("Message GetBestSellers sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
                 return ReturnWithStatus(response);
             }
@@ -129,9 +130,9 @@ namespace ECom.Gateway.Controllers
             try
             {
                 var message = new GetMostViewed();
-                log.Info("Message sent, waiting for response");
+                log.Info("Message GetMostViewed sent, waiting for response");
                 var response = await this.messageSession.Request<Response<ProductDto>>(message);
-                return ReturnWithStatus (response);
+                return ReturnWithStatus(response);
             }
             catch
             {
@@ -144,7 +145,7 @@ namespace ECom.Gateway.Controllers
         [EnableCors]
         public async Task<IActionResult> ViewProduct(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return BadRequest();
             }

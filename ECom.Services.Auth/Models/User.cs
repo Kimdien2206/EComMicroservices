@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,14 +16,15 @@ public partial class User
 
     [Column("lastname")]
     public string? Lastname { get; set; }
-
+    [Column("date_of_birth")]
+    public DateTime DateOfBirth { get; set; }
     [Column("address")]
     [Required]
     public string Address { get; set; }
 
     [Column("avatar")]
     [DefaultValue("https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png")]
-    public string Avatar { get; set; } = null!;
+    public string? Avatar { get; set; } = "https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png";
 
     [Column("email")]
     [Required]

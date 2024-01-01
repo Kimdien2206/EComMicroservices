@@ -1,23 +1,21 @@
 ﻿using AutoMapper;
-using Dto.OrderDto;
 using Dto.ReportDto;
 using ECom.Services.Reports.Data;
 using ECom.Services.Reports.Models;
+using ECom.Services.Reports.Services;
 using ECom.Services.Reports.Utility;
 using Messages;
-using Messages.OrderMessages;
-using Messages.ProductMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus.Logging;
-using ECom.Services.Reports.Services;
 
 namespace ECom.Services.Reports.Handler
 {
     public class ReportHandler :
         IHandleMessages<GetYearlyReport>,
-        IHandleMessages<ReceiptPaid>
+        IHandleMessages<ReceiptPaid>,
+        IHandleMessages<GetAllDailyDetailReport>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ReportHandler>();
@@ -35,8 +33,8 @@ namespace ECom.Services.Reports.Handler
         {
             log.Info("Received message");
             var responseMessage = new Response<YearlyReportDto>();
-            
-            if(message.Year == null)
+
+            if (message.Year == null)
             {
                 responseMessage.ErrorCode = 400;
                 log.Info("Missing parameter");
@@ -82,6 +80,29 @@ namespace ECom.Services.Reports.Handler
 
                 ReportServices.UpdateReport(message.PaidDate);
             }
+        }
+
+        public Task Handle(GetAllDailyDetailReport message, IMessageHandlerContext context)
+        {
+            var respond = new GetAllDailyDetailReportSaga();
+
+            try
+            {
+                var dailyDetailRps = DataAccess.Ins.DB.DailyReportDetails.ToList();
+
+                var forecastRps = dailyDetailRps.Select(dailyDetailRp => mapper.Map<DailyReportDetailDto>(dailyDetailRp)).ToList();
+
+                respond.Forecasts = forecastRps;
+                respond.SagaId = message.SagaId;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error: {ex.Message}");
+                log.Error(ex.StackTrace);
+            }
+
+            context.Send(respond).ConfigureAwait(false);
+            return Task.CompletedTask;
         }
     }
 }

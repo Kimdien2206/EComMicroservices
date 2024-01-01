@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { uuidv4 } from '../../../helper/utils'
 
 type PolicyCardProps = {
     icon: any,
@@ -9,7 +10,7 @@ type PolicyCardProps = {
 
 const PolicyCard = (props: PolicyCardProps) => {
     return (
-        <div className="policy-card">
+        <div id={uuidv4()} className="policy-card">
             <div className="policy-card__icon">
                 <i className={props.icon}></i>
             </div>
