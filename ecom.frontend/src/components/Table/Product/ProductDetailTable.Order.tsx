@@ -17,45 +17,6 @@ interface DataType {
   price: number;
 }
 
-const data = [
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-  {
-    id: 1,
-    name: 'Ao vang khe',
-    image: 'https://lggcxbdwmetbsvmtuctl.supabase.co/storage/v1/object/public/avatar/default.png',
-    color: 'Vang',
-    size: 'XL',
-    quantity: 10,
-    price: 1000000000,
-  },
-]
-
 const columns: ColumnsType<IOrder_detail> = [
   {
     title: 'ID',
@@ -68,8 +29,8 @@ const columns: ColumnsType<IOrder_detail> = [
     key: 'name_image',
     render: (text, record) => {
       return <Space direction='horizontal'>
-        <Image width={100} height={150} alt="example" src={record.product_item.product.image[0]} style={{ borderRadius: 10 }} />
-        <Text>{record.product_item.product.name}</Text>
+        <Image width={100} height={150} alt="example" src={record.product.image[0]} style={{ borderRadius: 10 }} />
+        <Text>{record.product.name}</Text>
       </Space>
     },
   },
@@ -77,13 +38,13 @@ const columns: ColumnsType<IOrder_detail> = [
     title: 'Màu',
     dataIndex: 'color',
     key: 'color',
-    render: (text, record) => <p>{record.product_item.color}</p>,
+    render: (text, record) => <p>{record.product.productItems.find((ele) => ele.id == record.itemId)?.color}</p>,
   },
   {
     title: 'Kích cỡ',
     dataIndex: 'size',
     key: 'size',
-    render: (text, record) => <p>{record.product_item.size}</p>,
+    render: (text, record) => <p>{record.product.productItems.find((ele) => ele.id == record.itemId)?.size}</p>,
   },
   {
     title: 'Số lượng',
@@ -92,10 +53,10 @@ const columns: ColumnsType<IOrder_detail> = [
     render: (text, record) => <p>{record.quantity}</p>,
   },
   {
-    title: 'Gía',
+    title: 'Giá',
     dataIndex: 'price',
     key: 'price',
-    render: (text, record) => <p>{formatNumberWithComma(record.product_item.product.price)}</p>,
+    render: (text, record) => <p>{formatNumberWithComma(record.product.price)}</p>,
   },
 ];
 
@@ -104,6 +65,7 @@ type OrderDetailTableProps = {
 }
 
 const ProductOrderDetailTable = ({ data }: OrderDetailTableProps) => {
+  console.log(["product", data])
   return (
     <Table columns={columns} dataSource={data} pagination={{ pageSize: 4 }} />
   )

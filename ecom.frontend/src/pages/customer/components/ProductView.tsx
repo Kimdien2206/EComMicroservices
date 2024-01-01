@@ -1,15 +1,13 @@
 import { Button, Carousel, Col, Image, InputNumber, Radio, RadioChangeEvent, Row, Space, Spin, Tag, Typography } from 'antd'
 import { useState, useEffect } from 'react'
-import { createCart, fetchProductBySlug, increaseViewForProduct } from '../../../api/CustomerAPI'
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/scss/image-gallery.scss'
-import ReactImageGallery from 'react-image-gallery';
 import { ReactImageGalleryItem } from 'react-image-gallery';
 import IProduct from '../../../interface/Product';
 import { useNavigate } from 'react-router-dom';
 import LocalStorage from '../../../helper/localStorage';
 import ErrorAlert from '../../../components/Alert/ErrorAlert';
-import { formatNumberWithComma } from '../../../helper/utils';
+import { formatNumberWithComma, uuidv4 } from '../../../helper/utils';
 import ICart from '../../../interface/Cart';
 import SuccessAlert from '../../../components/Alert/SuccessAlert';
 
@@ -111,33 +109,27 @@ const ProductView = ({ product }: ProductViewProps) => {
             const productItems = product?.productItems.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (productItems && product)
                 if (currentUser) {
-                    createCart({
-                        userID: currentUser.phoneNumber,
+                    const newCartItem: ICart = {
+                        id: uuidv4(),
                         itemID: productItems[0]?.id,
                         quantity: quantity,
-                    }).then((data) => {
-                        const newCartItem: ICart = {
-                            id: data.data.id,
-                            itemID: productItems[0]?.id,
-                            quantity: quantity,
-                            userID: LocalStorage.getItem('user') ? LocalStorage.getItem('user').id : undefined,
-                            product_item: {
-                                color: selectedColor,
-                                size: selectedSize,
-                                product: product,
-                            }
+                        userID: LocalStorage.getItem('user') ? LocalStorage.getItem('user').id : undefined,
+                        product_item: {
+                            color: selectedColor,
+                            size: selectedSize,
+                            product: product,
                         }
-                        if (LocalStorage.getItem('cart') &&
-                            !Array(LocalStorage.getItem('cart')).some((data: any) =>
-                                JSON.stringify(data[0]) === JSON.stringify(newCartItem))) {
-                            LocalStorage.setItem('cart', [...LocalStorage.getItem('cart'), newCartItem]);
-                        }
-                        else if (!LocalStorage.getItem('cart')) {
-                            LocalStorage.setItem('cart', [newCartItem])
-                        }
-                        SuccessAlert('Thêm vào giỏ hàng thành công.');
-                        nav('/cart');
-                    })
+                    }
+                    if (LocalStorage.getItem('cart') &&
+                        !Array(LocalStorage.getItem('cart')).some((data: any) =>
+                            JSON.stringify(data[0]) === JSON.stringify(newCartItem))) {
+                        LocalStorage.setItem('cart', [...LocalStorage.getItem('cart'), newCartItem]);
+                    }
+                    else if (!LocalStorage.getItem('cart')) {
+                        LocalStorage.setItem('cart', [newCartItem])
+                    }
+                    SuccessAlert('Thêm vào giỏ hàng thành công.');
+                    nav('/cart');
                 }
                 else {
                     const newCartItem: ICart = {
@@ -173,31 +165,25 @@ const ProductView = ({ product }: ProductViewProps) => {
             const productItem = product?.productItems.filter((item) => item.color === selectedColor && item.size === selectedSize)
             if (productItem)
                 if (currentUser) {
-                    createCart({
-                        userID: currentUser.phoneNumber,
+                    const newCartItem: ICart = {
+                        id: uuidv4(),
                         itemID: productItem[0]?.id,
                         quantity: quantity,
-                    }).then((data) => {
-                        const newCartItem: ICart = {
-                            id: data.data.id,
-                            itemID: productItem[0]?.id,
-                            quantity: quantity,
-                            userID: LocalStorage.getItem('user') ? LocalStorage.getItem('user').id : undefined,
-                            product_item: {
-                                color: selectedColor,
-                                size: selectedSize,
-                                product: product,
-                            }
+                        userID: LocalStorage.getItem('user') ? LocalStorage.getItem('user').id : undefined,
+                        product_item: {
+                            color: selectedColor,
+                            size: selectedSize,
+                            product: product,
                         }
-                        if (LocalStorage.getItem('cart') &&
-                            !LocalStorage.getItem('cart').some((value: any) =>
-                                value.itemID === newCartItem.itemID)) {
-                            LocalStorage.setItem('cart', [...LocalStorage.getItem('cart'), newCartItem]);
-                        }
-                        else if (!LocalStorage.getItem('cart'))
-                            LocalStorage.setItem('cart', [newCartItem])
-                        SuccessAlert('Thêm vào giỏ hàng thành công.')
-                    })
+                    }
+                    if (LocalStorage.getItem('cart') &&
+                        !LocalStorage.getItem('cart').some((value: any) =>
+                            value.itemID === newCartItem.itemID)) {
+                        LocalStorage.setItem('cart', [...LocalStorage.getItem('cart'), newCartItem]);
+                    }
+                    else if (!LocalStorage.getItem('cart'))
+                        LocalStorage.setItem('cart', [newCartItem])
+                    SuccessAlert('Thêm vào giỏ hàng thành công.')
                 }
                 else {
                     const newCartItem: ICart = {
@@ -278,7 +264,7 @@ const ProductView = ({ product }: ProductViewProps) => {
                             Số lượng
                         </div>
                         <div>
-                            <InputNumber defaultValue={1} onChange={(value) => setQuantity(value)} />
+                            <InputNumber min={1} defaultValue={1} onChange={(value) => setQuantity(value)} />
                         </div>
                     </div>
                     <div className="product__info__item">

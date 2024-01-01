@@ -7,8 +7,7 @@ import { login } from '../../api/authAPI'
 import { REQUIRED_RULE } from '../../constant/formRules'
 import { AppContext } from '../../context/AppContext'
 import LocalStorage from '../../helper/localStorage'
-import { getCart, updateUser, userLoggedIn } from '../../api/CustomerAPI'
-import dayjs from 'dayjs'
+import { updateUser, userLoggedIn } from '../../api/CustomerAPI'
 import ErrorAlert from '../../components/Alert/ErrorAlert'
 
 const Login = () => {
@@ -25,9 +24,11 @@ const Login = () => {
       LocalStorage.setItem('access_token', data[0].accessToken)
       LocalStorage.setItem('user', data[0].userInfo)
       await userLoggedIn(data[0].userInfo.phoneNumber);
-      getCart(data[0].userInfo.phoneNumber).then((res) => {
-        LocalStorage.setItem('cart', res.data);
-      });
+      // getCart(data[0].userInfo.phoneNumber).then((res) => {
+      //   LocalStorage.setItem('cart', res.data);
+      // });
+      if (!LocalStorage.getItem('cart'))
+        LocalStorage.setItem('cart', []);
       appCtx?.setUser(data[0].userInfo);
       if (data[0].userInfo.isAdmin) {
         nav('/admin')

@@ -1,4 +1,5 @@
-﻿using Dto.OrderDto;
+﻿using System.Net;
+using Dto.OrderDto;
 using Dto.ProductDto;
 using Messages;
 using Messages.OrderMessages;
@@ -6,7 +7,6 @@ using Messages.ProductMessages;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus.Logging;
-using System.Net;
 
 namespace ECom.Gateway.Controllers
 {
@@ -24,14 +24,58 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [EnableCors]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders([FromQuery] string phoneNumber = null)
         {
-
-            log.Info("Received request");
             var message = new GetAllOrder();
             try
             {
+                message.PhoneNumber = phoneNumber;
+
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
+
+                foreach (OrderDto orderDto in response.responseData.ToList())
+                {
+                    foreach (OrderDetailDto detail in orderDto.OrderDetails)
+                    {
+                        var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
+                        var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);
+
+                        detail.Product = getProductResponse.responseData.First();
+                    }
+                }
+
+                log.Info($"Message sent, received: {response.responseData}");
+                return ReturnWithStatus(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                log.Info($"Message sent, but {ex}");
+                Request.HttpContext.Response.StatusCode = (int)HttpStatusCode.RequestTimeout;
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet]
+        [EnableCors]
+        [Route("{id}")]
+        public async Task<IActionResult> GetOrderById(int id)
+        {
+            var message = new GetOrderById() { ID = id };
+            try
+            {
+                var response = await this.messageSession.Request<Response<OrderDto>>(message);
+
+                foreach (OrderDto orderDto in response.responseData.ToList())
+                {
+                    foreach (OrderDetailDto detail in orderDto.OrderDetails)
+                    {
+                        var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
+                        var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);
+
+                        detail.Product = getProductResponse.responseData.First();
+                    }
+                }
+
                 log.Info($"Message sent, received: {response.responseData}");
                 return ReturnWithStatus(response);
             }
@@ -63,7 +107,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpGet]
         [Route("completed")]
         public async Task<IActionResult> GetCompletedOrders()
@@ -84,7 +128,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-       
+
         [HttpGet]
         [Route("canceled")]
         public async Task<IActionResult> GetCanceledOrders()
@@ -105,7 +149,7 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpGet]
         [Route("delivering")]
         public async Task<IActionResult> GetDeliveringOrders()
@@ -133,11 +177,11 @@ namespace ECom.Gateway.Controllers
         {
             log.Info("Received request");
 
-            if(Id == null)
+            if (Id == null)
             {
                 return BadRequest();
             }
-            var message = new UpdateOrderStatus() { Id = Id, Status = '1'};
+            var message = new UpdateOrderStatus() { Id = Id, Status = '1' };
             try
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
@@ -151,18 +195,18 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpPatch]
         [Route("complete/{id}")]
         public async Task<IActionResult> CompleteOrder(string Id)
         {
             log.Info("Received request");
 
-            if(Id == null)
+            if (Id == null)
             {
                 return BadRequest();
             }
-            var message = new UpdateOrderStatus() { Id = Id, Status = '2'};
+            var message = new UpdateOrderStatus() { Id = Id, Status = '2' };
             try
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
@@ -176,18 +220,18 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
-        
+
         [HttpPatch]
         [Route("cancel/{id}")]
         public async Task<IActionResult> CancelOrder(string Id)
         {
             log.Info("Received request");
 
-            if(Id == null)
+            if (Id == null)
             {
                 return BadRequest();
             }
-            var message = new UpdateOrderStatus() { Id = Id, Status = '3'};
+            var message = new UpdateOrderStatus() { Id = Id, Status = '3' };
             try
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
@@ -213,15 +257,15 @@ namespace ECom.Gateway.Controllers
             {
                 newOrder.TotalCost = 0;
 
-                foreach(OrderDetailDto detail in newOrder.OrderDetails)
+                foreach (OrderDetailDto detail in newOrder.OrderDetails)
                 {
                     var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
                     var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);
 
                     int productPrice = getProductResponse.responseData.First().Price;
 
-                    detail.Price = productPrice;
-                    newOrder.TotalCost += productPrice;
+                    detail.Price = productPrice * detail.Quantity;
+                    newOrder.TotalCost += productPrice * detail.Quantity;
                 }
 
 

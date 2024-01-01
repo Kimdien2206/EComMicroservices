@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Messages.OrderMessages
+﻿namespace Messages.OrderMessages
 {
     public class GetAllOrder : ICommand
     {
-
+        public string? PhoneNumber { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 export const http = axios.create({
   baseURL: 'https://localhost:1205/api',
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     Authorization: localStorage.getItem('access_token') ? `Bearer ${localStorage.getItem('access_token')}` : undefined
   },

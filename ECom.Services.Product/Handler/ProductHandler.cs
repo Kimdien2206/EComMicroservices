@@ -254,7 +254,7 @@ namespace ECom.Services.Products.Handler
             if (message.ItemId == 0)
             {
                 log.Error("BadRequest, missing product id");
-                responseMessage.ErrorCode = 403;
+                responseMessage.ErrorCode = 400;
             }
             else
             {

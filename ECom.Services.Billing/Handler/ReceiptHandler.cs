@@ -1,23 +1,15 @@
 ﻿using AutoMapper;
-using Dto.OrderDto;
-using Dto.ReceiptDto;
 using Dto.ReceiptDto;
 using ECom.Services.Billing.Data;
 using ECom.Services.Billing.Models;
 using ECom.Services.Sales.Utility;
 using Messages;
-using Messages.ProductMessages;
 using Messages.ReceiptMessages;
 using NServiceBus.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECom.Services.Billing.Handler
 {
-    public class ReceiptHandler : 
+    public class ReceiptHandler :
         IHandleMessages<GetReceiptByStatus>,
         IHandleMessages<PaidReceipt>,
         IHandleMessages<CreateReceipt>
@@ -92,7 +84,7 @@ namespace ECom.Services.Billing.Handler
             if (message.newReceipt == null)
             {
                 log.Error("BadRequest, missing product info");
-                responseMessage.ErrorCode = 403;
+                responseMessage.ErrorCode = 400;
             }
             else
             {
@@ -104,9 +96,9 @@ namespace ECom.Services.Billing.Handler
 
                     DataAccess.Ins.DB.SaveChanges();
 
-
                     log.Info("Receipt added");
                     responseMessage.ErrorCode = 200;
+                    responseMessage.responseData = new List<ReceiptDto>() { mapper.Map<ReceiptDto>(newReceipt) };
                 }
                 catch (Exception ex)
                 {

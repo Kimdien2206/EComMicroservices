@@ -36,7 +36,7 @@ namespace ECom.Services.Billing.Handler
             string currCode = configuration["VNPay:CurrCode"];
             string locale = configuration["VNPay:Locale"];
             string orderType = configuration["VNPay:OrderType"];
-            string returnUrl = configuration["VNPay:ReturnUrl"];
+            string returnUrl = configuration["VNPay:ReturnUrl"].ToString() + message.TxnRef;
             string defaultOrderInfor = configuration["VNPay:DefaultOrderInfor"];
 
             payService.AddRequestData("vnp_Version", version);
@@ -86,6 +86,7 @@ namespace ECom.Services.Billing.Handler
             if (isValid)
             {
                 DataAccess.Ins.DB.Receipts.Where(ele => message.vnp_TxnRef == ele.Id).ExecuteUpdate(setter => setter.SetProperty(receipt => receipt.Status, ReceiptStatus.PAID));
+
                 response.ErrorCode = 200;
             }
             else

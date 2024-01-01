@@ -5,14 +5,14 @@ import IUser from "./User";
 export default interface IOrder {
   id: number;
   date: Date;
-  total_cost: number;
+  totalCost: number;
   status: string;
   firstname: string;
   lastname: string;
-  phone_number: string; 
+  phoneNumber: string; 
   address: string;     
   buyer: IUser;
   userID: string;
   Receipt: IReceipt[];
-  Order_detail: IOrder_detail[];
+  orderDetails: IOrder_detail[];
 }

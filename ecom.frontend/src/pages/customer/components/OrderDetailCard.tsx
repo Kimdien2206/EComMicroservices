@@ -40,18 +40,16 @@ const OrderDetailCard = ({ data }: OrderDetailProps) => {
         <Descriptions.Item label="Địa chỉ" span={3}>{data?.address}</Descriptions.Item>
         <Descriptions.Item label="Ngày đặt hàng">{formatToFullDate(data?.date)}</Descriptions.Item>
         <Descriptions.Item label="Số điện thoại" span={2}>
-          {data?.phone_number}
+          {data?.phoneNumber}
         </Descriptions.Item>
         <Descriptions.Item label="Trạng thái" span={3}>
           {renderTag(data?.status)}
         </Descriptions.Item>
-        <Descriptions.Item label="Ghi chú" span={3}>
-        </Descriptions.Item>
         {/* <Descriptions.Item label="Giảm giá" span={3}>$20.00</Descriptions.Item> */}
-        <Descriptions.Item label="Tổng giá" span={3}>{formatNumberWithComma(data?.total_cost)}</Descriptions.Item>
+        <Descriptions.Item label="Tổng giá" span={3}>{formatNumberWithComma(data?.totalCost)}</Descriptions.Item>
       </Descriptions>
       <Divider />
-      <ProductOrderDetailTable data={data?.Order_detail} />
+      <ProductOrderDetailTable data={data?.orderDetails} />
     </Card>
   )
 }

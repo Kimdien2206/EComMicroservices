@@ -18,7 +18,7 @@ export function fetchProductBySlug(slug: string){
 }
 
 export function createOrder(order: any){
-  return http.post('/order', order)
+  return http.post('/Order', order)
 }
 
 export function getVoucher(voucherCode: string, isActive: boolean = true){ 
@@ -26,7 +26,7 @@ export function getVoucher(voucherCode: string, isActive: boolean = true){
 }
 
 export function createReceipt(newReceipt: any){
-  return http.post(`/receipt`, newReceipt);
+  return http.post(`/Receipt`, newReceipt);
 }
 
 export function updateUser(newUser: any, phoneNumber: string){
@@ -34,15 +34,15 @@ export function updateUser(newUser: any, phoneNumber: string){
 }
 
 export function userLoggedIn(phoneNumber: string){
-  return http.patch(`/user/logged-in/${phoneNumber}`)
+  return http.patch(`/User/logged-in/${phoneNumber}`)
 }
 
-export function getOrdersByUserID(userID: any){
-  return http.get(`/order?user=${userID}`)
+export function getOrdersByPhoneNumber(phoneNumber: string){
+  return http.get(`/Order?phoneNumber=${phoneNumber}`)
 }
 
 export function getOrder(id: string){
-  return http.get(`/order/${id}`);
+  return http.get(`/Order/${id}`);
 }
 
 export function getCart(userID: string){

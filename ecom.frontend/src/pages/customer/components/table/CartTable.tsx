@@ -3,7 +3,6 @@ import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react'
 import LocalStorage from '../../../../helper/localStorage';
 import ICart from '../../../../interface/Cart';
-import { deleteCart, updateCart } from '../../../../api/CustomerAPI';
 import { formatNumberWithComma, uuidv4 } from '../../../../helper/utils';
 
 export type CartItemType = {

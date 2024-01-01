@@ -32,7 +32,7 @@ import dayjs from 'dayjs';
 import ReturnPolicy from './pages/customer/ReturnPolicy.js';
 import ImportingList from './pages/admin/ImportingList.js';
 import Importing from './pages/admin/Importing.js';
-import CashOnDeliveryPayment from './pages/customer/payment/CashOnDeliveryPayment.js';
+import PaymentResultSuccess from './pages/customer/payment/PaymentResultSuccess.js';
 import NotFound from './pages/customer/NotFound.js';
 import ForgotPassword from './pages/auth/ForgotPassword.js';
 import ResetPasswordSuccess from './pages/auth/ResetPasswordSuccess.js';
@@ -100,7 +100,7 @@ function App() {
 
             <Route key={'checkout'} path='checkout'>
               <Route key={'bank'} path='bank/:orderID' element={<BankPayment />} />
-              <Route key={'cash-on-delivery'} path='cash-on-delivery/:orderID' element={<CashOnDeliveryPayment />} />
+              <Route key={'PaymentResultSuccess'} path='checkout/success/:orderID' element={<PaymentResultSuccess />} />
             </Route>
             <Route key={'return-policy'} path='return-policy' element={<ReturnPolicy />} />
             <Route key={'not-found'} path='*' element={<NotFound />} />

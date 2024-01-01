@@ -16,11 +16,10 @@ const OrderDetail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     if (id)
       getOrder(id).then((data) => {
-        console.log(data)
-        setData(data.data);
+        console.log(['order', data])
+        setData(data.data[0]);
       }).finally(() => setLoading(false))
   }, []);
 
