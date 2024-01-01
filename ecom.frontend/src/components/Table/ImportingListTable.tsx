@@ -28,15 +28,15 @@ const ImportingListTable: FC<ImportingTableProps> = ({ data, setIsModalOpen, set
     },
     {
       title: 'Tổng số lượng nhập',
-      dataIndex: 'total_amount',
-      key: 'total_amount',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
       sorter: (a: IImporting, b: IImporting) => compareNumber(a.total_amount, b.total_amount),
       render: (text: number) => <p>{formatNumberWithComma(text)}</p>
     },
     {
       title: 'Tổng tiền',
-      dataIndex: 'total_cost',
-      key: 'total_cost',
+      dataIndex: 'totalCost',
+      key: 'totalCost',
       sorter: (a: IImporting, b: IImporting) => compareNumber(a.total_cost, b.total_cost),
       render: (text: number) => <p>{formatNumberWithComma(text)}</p>
     },

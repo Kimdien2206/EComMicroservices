@@ -1,4 +1,5 @@
 import { IImporting } from "./Importing";
+import IProduct from "./Product";
 import IProduct_item from "./ProductItem";
 
 
@@ -8,7 +9,7 @@ export interface IImportDetail{
     quantity: number;
     price: number;
     importID: number
-    total_cost: number
-    import: IImporting   
-    Product_item: IProduct_item
+    totalCost: number
+    import: IImporting;
+    product: IProduct      
 }

@@ -66,10 +66,41 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<ImportingDto>();
             try
             {
-                List<Importing> products = DataAccess.Ins.DB.Importings.Include("ImportDetails").OrderBy(x =>x.Date).ToList();
-                responseMessage.responseData = products.Select(
-                    emp => mapper.Map<ImportingDto>(emp)
-                    );
+                List<Importing> importings = DataAccess.Ins.DB.Importings
+                    .Include(x => x.ImportDetails)
+                    .OrderBy(u => u.Date)
+                    .ToList();
+
+                List<ImportingDto> importingDtos = new List<ImportingDto> ();
+
+                foreach (Importing item in importings)
+                {
+                    ImportingDto importingDto = mapper.Map<ImportingDto>(item);
+                    importingDto.ImportDetails = [];
+
+                    foreach (ImportDetail detail in item.ImportDetails)
+                    {
+                        //get productItem
+                        ProductItem productItem = DataAccess.Ins.DB.ProductItems.First(u => u.Id == detail.Item);
+                        
+                        //get product
+                        Product product = DataAccess.Ins.DB.Products.First(u => u.Id == productItem.ProductId);
+
+                        //link productItem to product
+                        //product.ProductItems.Add(productItem);
+
+                        ImportDetailDto importDetailDto = mapper.Map<ImportDetailDto>(detail);
+
+                        //link product to importDetail
+                        importDetailDto.Product = mapper.Map<ProductDto>(product);
+
+                        //link importDetail to import
+                        importingDto.ImportDetails.Add(importDetailDto);
+                    }
+                    importingDtos.Add(importingDto);
+                }
+
+                responseMessage.responseData = importingDtos;
                 responseMessage.ErrorCode = 200;
                 log.Info("Response sent");
             }

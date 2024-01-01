@@ -21,5 +21,7 @@ namespace Dto.ProductDto
         public int ImportId { get; set; }
 
         public int TotalCost { get; set; }
+
+        public virtual ProductDto Product { get; set; }
     }
 }

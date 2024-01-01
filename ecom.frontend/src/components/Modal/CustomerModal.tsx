@@ -5,7 +5,7 @@ import { FC, useState } from 'react'
 import { ModalProps } from '../../interface/ModalProps'
 import CustomerTab from '../Tab/CustomerTab'
 import ProductOrderDetailTable from '../Table/Product/ProductDetailTable.Order'
-import { IUser } from '../../interface/User'
+import IUser from '../../interface/User'
 import dayjs from 'dayjs'
 
 interface ProductModalProps extends ModalProps {

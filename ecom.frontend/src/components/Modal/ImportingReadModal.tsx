@@ -9,7 +9,7 @@ interface ImportingModalProps extends ModalProps {
 }
 
 const ImportingReadModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, data }) => {
-  console.log(data)
+  // console.log(data)
   return (
     <Modal
       title={'Thông tin nhập hàng'}

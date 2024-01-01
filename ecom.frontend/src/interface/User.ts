@@ -9,9 +9,10 @@ export default interface IUser {
   id: number;
   firstname?: string;
   lastname?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   address?: string;
   avatar?: string;
+  logged_date: Date;
   product_viewed?: string[];
   account?: IAccount;
   email: string;

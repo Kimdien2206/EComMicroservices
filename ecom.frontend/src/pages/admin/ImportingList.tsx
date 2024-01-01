@@ -21,7 +21,7 @@ const ImportingList = () => {
     <Spin spinning={loading}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <ImportingListTable data={data} setSelectedItem={setSelectedItem} setIsModalOpen={setIsImportModalOpen} />
-        <ImportingReadModal isOpen={isImportModalOpen} data={selectedItem?.ImportDetail ? selectedItem?.ImportDetail : []} setIsModalOpen={setIsImportModalOpen} />
+        <ImportingReadModal isOpen={isImportModalOpen} data={selectedItem?.importDetails ? selectedItem?.importDetails : []} setIsModalOpen={setIsImportModalOpen} />
       </Space>
     </Spin>
   )
