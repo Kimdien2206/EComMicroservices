@@ -2,7 +2,7 @@
 {
     static public class ReceiptStatus
     {
-        public static int UNPAID = 0;
-        public static int PAID = 1;
+        public static char UNPAID = '0';
+        public static char PAID = '1';
     }
 }
