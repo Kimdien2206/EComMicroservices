@@ -99,7 +99,7 @@ const Cart = () => {
                         paymentMethod: data.paymentMethod,
                     }
                     console.log(newReceipt)
-                    createReceipt(newReceipt).then(({ data }) => {
+                    createReceipt(newReceipt).then(({ data: receiptRes }) => {
                         // if (currentUser)
                         //     cartProducts.forEach((data) => {
                         //         deleteCart(data.id);
@@ -107,18 +107,18 @@ const Cart = () => {
                         LocalStorage.setItem('cart', []);
                         setCartProducts([]);
                         checkOut?.setOrder({ ...orderCreated, orderDetails: cartProducts });
-                        checkOut?.setReceipt(data[0]);
+                        checkOut?.setReceipt(receiptRes[0]);
 
                         if (data.paymentMethod === COD)
-                            nav(`/checkout/success/${orderCreated.id}`);
+                            nav(`/checkout/order/${orderCreated.id}`);
                         else
-                            createVnPayPaymentUrl(data[0].id).then(({ data: paymentUrlRes }) => {
+                            createVnPayPaymentUrl(orderCreated.id, receiptRes[0].id, orderCreated.totalCost).then(({ data: paymentUrlRes }) => {
+                                console.log("🚀 ~ file: Cart.tsx:121 ~ createVnPayPaymentUrl ~ paymentUrlRes:", paymentUrlRes)
                                 window.location.replace(paymentUrlRes[0]);
                             }).catch((error) => {
                                 console.log(error);
-                                setIsCreateOrderError(true);
+                                throw Error();
                             })
-
                     }).catch((error) => {
                         console.log(error);
                         setIsCreateOrderError(true);

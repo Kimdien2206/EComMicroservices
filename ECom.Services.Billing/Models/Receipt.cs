@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,7 +21,7 @@ public partial class Receipt
 
     [Column("status")]
     [DefaultValue('0')]
-    public char Status { get; set; }
+    public char Status { get; set; } = '0';
 
     [Column("voucher_code")]
     public string? VoucherCode { get; set; }

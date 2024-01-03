@@ -104,7 +104,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [Route("payment/{receiptId}")]
-        public async Task<IActionResult> CreatePaymentUrl(uint receiptId, VNPayPaymentDto paymentDto)
+        public async Task<IActionResult> CreatePaymentUrl(uint receiptId, [FromBody] VNPayPaymentDto paymentDto, [FromQuery] int orderId = 0)
         {
             if (paymentDto == null)
             {
@@ -113,7 +113,8 @@ namespace ECom.Gateway.Controllers
 
             var curTimeStamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
-            var message = new CreateVNPayUrl() { Amount = paymentDto.Amount, CreateDate = curTimeStamp, TxnRef = receiptId };
+            var message = new CreateVNPayUrl() { Amount = paymentDto.Amount, CreateDate = curTimeStamp, TxnRef = receiptId, OrderId = orderId };
+
             try
             {
                 var response = await this.messageSession.Request<Response<string>>(message);
@@ -179,6 +180,7 @@ namespace ECom.Gateway.Controllers
             try
             {
                 var response = await this.messageSession.Request<Response<ReceiptDto>>(message);
+
                 log.Info($"Message sent, received: {response.responseData}");
                 return ReturnWithStatus(response);
             }

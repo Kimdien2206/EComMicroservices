@@ -38,6 +38,7 @@ import ForgotPassword from './pages/auth/ForgotPassword.js';
 import ResetPasswordSuccess from './pages/auth/ResetPasswordSuccess.js';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorResult from './components/Result/ErrorResult.js';
+import OrderResultSuccess from './pages/customer/payment/OrderResultSuccess.js';
 
 
 function App() {
@@ -99,8 +100,8 @@ function App() {
             <Route key={'order-detail'} path='orders/:id' element={<OrderDetail />} />
 
             <Route key={'checkout'} path='checkout'>
-              <Route key={'bank'} path='bank/:orderID' element={<BankPayment />} />
-              <Route key={'PaymentResultSuccess'} path='checkout/success/:orderID' element={<PaymentResultSuccess />} />
+              <Route key={'order-checkout-success'} path='order/:orderID' element={<OrderResultSuccess />} />
+              <Route key={'PaymentResultSuccess'} path='payment/success/:orderID' element={<PaymentResultSuccess />} />
             </Route>
             <Route key={'return-policy'} path='return-policy' element={<ReturnPolicy />} />
             <Route key={'not-found'} path='*' element={<NotFound />} />

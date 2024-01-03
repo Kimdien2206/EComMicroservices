@@ -83,7 +83,7 @@ namespace ECom.Services.Billing.Handler
             var responseMessage = new Response<ReceiptDto>();
             if (message.newReceipt == null)
             {
-                log.Error("BadRequest, missing product info");
+                log.Error("BadRequest, missing receipt info");
                 responseMessage.ErrorCode = 400;
             }
             else
