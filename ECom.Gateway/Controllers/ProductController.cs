@@ -85,6 +85,8 @@ namespace ECom.Gateway.Controllers
 
         [HttpGet]
         [Route("most-viewed")]
+        [EnableCors]
+
         public async Task<IActionResult> GetMostViewedProducts()
         {
             try
@@ -123,6 +125,7 @@ namespace ECom.Gateway.Controllers
 
         [HttpPost]
         [EnableCors]
+
         public async Task<IActionResult> CreateProduct(ProductDto newProduct)
         {
             if (newProduct == null)

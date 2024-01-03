@@ -110,15 +110,15 @@ const Cart = () => {
                         checkOut?.setReceipt(data[0]);
 
                         if (data.paymentMethod === COD)
-                            nav(`/checkout/success/${orderCreated.id}`);
+                            nav(`/checkout/order/${orderCreated.id}`);
                         else
-                            createVnPayPaymentUrl(data[0].id).then(({ data: paymentUrlRes }) => {
+                            createVnPayPaymentUrl(orderCreated.id, data[0].id, orderCreated.totalCost).then(({ data: paymentUrlRes }) => {
+                                console.log("🚀 ~ file: Cart.tsx:121 ~ createVnPayPaymentUrl ~ paymentUrlRes:", paymentUrlRes)
                                 window.location.replace(paymentUrlRes[0]);
                             }).catch((error) => {
                                 console.log(error);
-                                setIsCreateOrderError(true);
+                                throw Error();
                             })
-
                     }).catch((error) => {
                         console.log(error);
                         setIsCreateOrderError(true);

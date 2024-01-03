@@ -1,9 +1,10 @@
-﻿using ECom.Services.Billing.Constant;
+﻿using AutoMapper;
+using ECom.Services.Billing.Constant;
 using ECom.Services.Billing.Data;
 using ECom.Services.Billing.Services;
+using ECom.Services.Sales.Utility;
 using Messages;
 using Messages.ReceiptMessages;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 
@@ -14,12 +15,19 @@ namespace ECom.Services.Billing.Handler
         IConfiguration configuration;
         private readonly ILog log = LogManager.GetLogger(typeof(PaymentHandler));
         VnPayService payService;
+        private IMapper mapper;
         public PaymentHandler()
         {
             configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
             payService = new VnPayService();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
+            this.mapper = config.CreateMapper();
         }
         public async Task Handle(CreateVNPayUrl message, IMessageHandlerContext context)
         {
@@ -36,7 +44,7 @@ namespace ECom.Services.Billing.Handler
             string currCode = configuration["VNPay:CurrCode"];
             string locale = configuration["VNPay:Locale"];
             string orderType = configuration["VNPay:OrderType"];
-            string returnUrl = configuration["VNPay:ReturnUrl"].ToString() + message.TxnRef;
+            string returnUrl = configuration["VNPay:ReturnUrl"].ToString() + message.OrderId;
             string defaultOrderInfor = configuration["VNPay:DefaultOrderInfor"];
 
             payService.AddRequestData("vnp_Version", version);
@@ -85,9 +93,18 @@ namespace ECom.Services.Billing.Handler
 
             if (isValid)
             {
-                DataAccess.Ins.DB.Receipts.Where(ele => message.vnp_TxnRef == ele.Id).ExecuteUpdate(setter => setter.SetProperty(receipt => receipt.Status, ReceiptStatus.PAID));
+                var receipt = DataAccess.Ins.DB.Receipts.First(ele => ele.Id == message.vnp_TxnRef);
 
-                response.ErrorCode = 200;
+                if (receipt != null)
+                {
+                    receipt.Status = (char)ReceiptStatus.PAID;
+                    DataAccess.Ins.DB.SaveChanges();
+                    response.ErrorCode = 200;
+                }
+                else
+                {
+                    response.ErrorCode = 404;
+                }
             }
             else
             {

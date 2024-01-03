@@ -30,7 +30,7 @@ const Product = () => {
         console.log("🚀 ~ file: Product.tsx:28 ~ slug&&fetchProductBySlug ~ data:", data)
         setProduct(data[0]);
         if (!isViewedIncreasing)
-          increaseViewForProduct(data.data[0].id).then(() => { setIsViewedIncreasing(true) });
+          increaseViewForProduct(data[0].id).then(() => { setIsViewedIncreasing(true) });
       }).catch((err) => console.error(err)).finally(() => setLoading(false));
     }
     window.scrollTo({
