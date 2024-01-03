@@ -18,7 +18,7 @@ namespace Ecom.Services.Forecast.Handler
 {
     public class ForecastSagaHandler : Saga<ForecastSagaData>,
         IAmStartedByMessages<TrainForecastCommand>,
-        IAmStartedByMessages<GetAllProductIdResponse>,
+        IAmStartedByMessages<GetAllProductIdsResponse>,
         IAmStartedByMessages<GetAllDailyDetailReportSaga>
     {
         static ILog log = LogManager.GetLogger<ForecastHandler>();
@@ -36,7 +36,7 @@ namespace Ecom.Services.Forecast.Handler
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ForecastSagaData> mapper)
         {
             mapper.MapSaga(saga => saga.SagaId)
-                .ToMessage<GetAllProductIdResponse>(mess => mess.SagaId)
+                .ToMessage<GetAllProductIdsResponse>(mess => mess.SagaId)
                 .ToMessage<TrainForecastCommand>(msg => msg.SagaId)
                 .ToMessage<GetAllDailyDetailReportSaga>(msg => msg.SagaId);
         }
@@ -47,7 +47,7 @@ namespace Ecom.Services.Forecast.Handler
             try
             {
                 // get all product
-                await context.Send(new GetAllProductId() { SagaId = message.SagaId });
+                await context.Send(new GetAllProductIdsCommand() { SagaId = message.SagaId });
                 // get report detail daily
                 await context.Send(new GetAllDailyDetailReport() { SagaId = message.SagaId });
             }
@@ -60,7 +60,7 @@ namespace Ecom.Services.Forecast.Handler
             await context.Reply(response);
         }
 
-        public async Task Handle(GetAllProductIdResponse message, IMessageHandlerContext context)
+        public async Task Handle(GetAllProductIdsResponse message, IMessageHandlerContext context)
         {
             log.Info($"Forecast saga {message.SagaId} received {message.ProductIds.Count} product ids");
             this.Data.Products = message.ProductIds;

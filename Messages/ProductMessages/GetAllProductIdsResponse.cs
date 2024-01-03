@@ -1,6 +1,6 @@
 ﻿namespace Messages.ProductMessages
 {
-    public class GetAllProductIdResponse : IMessage
+    public class GetAllProductIdsResponse : IMessage
     {
         public string SagaId { get; set; }
 

@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Messages.OrderMessages;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using NServiceBus;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 
 namespace ECom.Services.Sales
 {
@@ -17,13 +13,16 @@ namespace ECom.Services.Sales
                 {
                     var endpointConfiguration = new EndpointConfiguration("Sales");
 
-                    endpointConfiguration.UseTransport<LearningTransport>();
+                    var tranport = endpointConfiguration.UseTransport<LearningTransport>();
                     endpointConfiguration.UseSerialization<SystemJsonSerializer>();
+
+                    var route = tranport.Routing();
+
+                    route.RouteToEndpoint(typeof(GetAllOrdersResponse), "Recommendation");
 
                     return endpointConfiguration;
                 })
                 .RunConsoleAsync();
-
         }
     }
 }

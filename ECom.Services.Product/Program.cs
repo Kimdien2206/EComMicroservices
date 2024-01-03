@@ -18,7 +18,7 @@ namespace ECom.Services.Products
 
                     var route = transpot.Routing();
 
-                    route.RouteToEndpoint(typeof(GetAllProductIdResponse), "Forecast");
+                    route.RouteToEndpoint(typeof(GetAllProductIdsResponse), "Forecast");
 
                     return endpointConfiguration;
                 })

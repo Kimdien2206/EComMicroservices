@@ -11,11 +11,12 @@ using NServiceBus.Logging;
 namespace ECom.Services.Sales.Handler
 {
     public class OrderHandler :
-        IHandleMessages<GetAllOrder>,
+        IHandleMessages<GetAllOrdersByPhonenumber>,
         IHandleMessages<GetOrderByStatus>,
         IHandleMessages<UpdateOrderStatus>,
         IHandleMessages<CreateOrder>,
-        IHandleMessages<GetOrderById>
+        IHandleMessages<GetOrderById>,
+        IHandleMessages<GetAllOrdersCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<OrderHandler>();
@@ -29,7 +30,7 @@ namespace ECom.Services.Sales.Handler
             this.mapper = config.CreateMapper();
         }
 
-        public async Task Handle(GetAllOrder message, IMessageHandlerContext context)
+        public async Task Handle(GetAllOrdersByPhonenumber message, IMessageHandlerContext context)
         {
             log.Info("Received message");
             var responseMessage = new Response<OrderDto>();
@@ -166,6 +167,27 @@ namespace ECom.Services.Sales.Handler
                 responseMessage.ErrorCode = 500;
             }
             await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+
+        public Task Handle(GetAllOrdersCommand message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<OrderDto>();
+            try
+            {
+                IQueryable<Order> query = DataAccess.Ins.DB.Orders.Include(order => order.OrderDetails);
+
+                List<Order> orders = query.ToList();
+
+                context.Send(new GetAllOrdersResponse() { SagaId = message.SagaId, Orders = orders.Select(ele => mapper.Map<OrderDto>(ele)).ToList() }).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                log.Error(e.StackTrace);
+                return Task.FromException(e);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

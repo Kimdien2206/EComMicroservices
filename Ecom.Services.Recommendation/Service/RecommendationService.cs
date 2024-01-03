@@ -1,31 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using CsvHelper;
+using Dto.OrderDto;
 using Ecom.Services.Recommendation.Models;
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
 
 namespace Ecom.Services.Recommendation.Service
 {
-    public class RecommendationService
+    public static class RecommendationService
     {
-        MLContext mlContext;
+        static public MLContext MLContext = new MLContext();
 
-        public MLContext MLContext { get { return mlContext; } }
-        public RecommendationService() {
-            mlContext = new MLContext();
+        static public IDataView ConvertData(List<OrderDto> orderDtos)
+        {
+            IDataView dataView;
+            List<ProductRating> modelInputs = new List<ProductRating>();
+
+            foreach (OrderDto orderDto in orderDtos)
+            {
+                if (orderDto.User != null)
+                {
+                    foreach (OrderDetailDto detailDto in orderDto.OrderDetails)
+                    {
+                        var currentDate = DateTime.Now;
+                        var birthdate = orderDto.User.DateOfBirth;
+                        // Calculate age
+                        int age = currentDate.Year - birthdate.Year;
+
+                        // Check if the birthday has occurred this year
+                        if (birthdate.Date > currentDate.AddYears(-age))
+                        {
+                            age--;
+                        }
+
+                        modelInputs.Add(new ProductRating() { productId = detailDto.Product.Id, userId = orderDto.PhoneNumber, age = age, Label = 1 });
+                    }
+                }
+            }
+
+            dataView = MLContext.Data.LoadFromEnumerable<ProductRating>(modelInputs);
+            return dataView;
         }
 
-        public (IDataView training, IDataView test) LoadData(string source, double traningSetRatio)
+        static public (IDataView training, IDataView test) LoadData(string source, double traningSetRatio)
         {
             (List<ProductRating> trainData, List<ProductRating> testData) = loadData(source, traningSetRatio);
 
-            IDataView trainingDataView = mlContext.Data.LoadFromEnumerable<ProductRating>(trainData);
-            IDataView testDataView = mlContext.Data.LoadFromEnumerable<ProductRating>(testData);
+            IDataView trainingDataView = MLContext.Data.LoadFromEnumerable<ProductRating>(trainData);
+            IDataView testDataView = MLContext.Data.LoadFromEnumerable<ProductRating>(testData);
 
             return (trainingDataView, testDataView);
         }
@@ -60,28 +82,29 @@ namespace Ecom.Services.Recommendation.Service
                             testSamples.Add(record);
                         }
                     }
-                        
+
                 }
             }
             return (trainSamples, testSamples);
         }
 
-        public ITransformer BuildAndTrainModel(IDataView trainingDataView)
+        static public ITransformer BuildAndTrainModel(IDataView trainingDataView)
         {
-            Console.WriteLine(trainingDataView);
-            IEstimator<ITransformer> estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "ageEncoded", inputColumnName: "age")
-    .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "productIdEncoded", inputColumnName: "productId"));
+            IEstimator<ITransformer> estimator = MLContext.Transforms.Conversion
+                .MapValueToKey(outputColumnName: "ageEncoded", inputColumnName: "age")
+    .Append(MLContext.Transforms.Conversion.MapValueToKey(outputColumnName: "productIdEncoded", inputColumnName: "productId"))
+    .Append(MLContext.Transforms.Conversion.MapValueToKey(outputColumnName: "userIdEncoded", inputColumnName: "userId"));
 
             var options = new MatrixFactorizationTrainer.Options
             {
-                MatrixColumnIndexColumnName = "ageEncoded",
+                MatrixColumnIndexColumnName = "userIdEncoded",
                 MatrixRowIndexColumnName = "productIdEncoded",
                 LabelColumnName = "Label",
                 NumberOfIterations = 100,
                 ApproximationRank = 100
             };
 
-            var trainerEstimator = estimator.Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
+            var trainerEstimator = estimator.Append(MLContext.Recommendation().Trainers.MatrixFactorization(options));
 
             Console.WriteLine("=============== Training the model ===============");
             ITransformer model = trainerEstimator.Fit(trainingDataView);
@@ -90,18 +113,15 @@ namespace Ecom.Services.Recommendation.Service
 
         }
 
-        public void EvaluateModel(IDataView testDataView, ITransformer model)
+        static public void EvaluateModel(IDataView testDataView, ITransformer model)
         {
             Console.WriteLine("=============== Evaluating the model ===============");
             var prediction = model.Transform(testDataView);
 
-            var metrics = mlContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
+            var metrics = MLContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
 
             Console.WriteLine("Root Mean Squared Error : " + metrics.RootMeanSquaredError.ToString());
             Console.WriteLine("RSquared: " + metrics.RSquared.ToString());
         }
-
-
-
     }
 }

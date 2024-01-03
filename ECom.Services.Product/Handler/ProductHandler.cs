@@ -20,7 +20,7 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<UpdateProduct>,
         IHandleMessages<ProductSold>,
         IHandleMessages<GetProductByItemID>,
-        IHandleMessages<GetAllProductId>
+        IHandleMessages<GetAllProductIdsCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -285,9 +285,9 @@ namespace ECom.Services.Products.Handler
             await context.Reply(responseMessage).ConfigureAwait(false);
         }
 
-        public Task Handle(GetAllProductId message, IMessageHandlerContext context)
+        public Task Handle(GetAllProductIdsCommand message, IMessageHandlerContext context)
         {
-            var respondMessage = new GetAllProductIdResponse();
+            var respondMessage = new GetAllProductIdsResponse();
             respondMessage.SagaId = message.SagaId;
             try
             {
