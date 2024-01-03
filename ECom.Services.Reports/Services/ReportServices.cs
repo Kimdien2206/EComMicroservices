@@ -13,7 +13,7 @@ namespace ECom.Services.Reports.Services
     {
         public static DailyReport FindDailyReport(DateOnly reportDate)
         {
-            DailyReport dailyReport = DataAccess.Ins.DB.DailyReports.First(u => u.Date == reportDate);
+            DailyReport dailyReport = DataAccess.Ins.DB.DailyReports.FirstOrDefault(u => u.Date == reportDate);
 
             if(dailyReport == null)
             {
@@ -48,7 +48,7 @@ namespace ECom.Services.Reports.Services
 
         public static MonthlyReport FindMonthlyReport(DateOnly reportMonth) 
         {
-            MonthlyReport monthlyReport = DataAccess.Ins.DB.MonthlyReports.First(u => u.Month == reportMonth);
+            MonthlyReport monthlyReport = DataAccess.Ins.DB.MonthlyReports.FirstOrDefault(u => u.Month == reportMonth);
 
             if (monthlyReport == null)
             {
@@ -82,7 +82,7 @@ namespace ECom.Services.Reports.Services
 
         public static YearlyReport FindYearlyReport(DateOnly reportYear)
         {
-            YearlyReport yearlyReport = DataAccess.Ins.DB.YearlyReports.First(u => u.Year == reportYear);
+            YearlyReport yearlyReport = DataAccess.Ins.DB.YearlyReports.FirstOrDefault(u => u.Year == reportYear);
 
             if (yearlyReport == null)
             {

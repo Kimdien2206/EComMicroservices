@@ -5,6 +5,7 @@ using ECom.Services.Reports.Models;
 using ECom.Services.Reports.Services;
 using ECom.Services.Reports.Utility;
 using Messages;
+using Messages.ImportingMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ namespace ECom.Services.Reports.Handler
     public class ReportHandler :
         IHandleMessages<GetYearlyReport>,
         IHandleMessages<ReceiptPaid>,
-        IHandleMessages<GetAllDailyDetailReport>
+        IHandleMessages<GetAllDailyDetailReport>,
+        IHandleMessages<ImportingCreated>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ReportHandler>();
@@ -79,6 +81,33 @@ namespace ECom.Services.Reports.Handler
                 await DataAccess.Ins.DB.SaveChangesAsync(context.CancellationToken);
 
                 ReportServices.UpdateReport(message.PaidDate);
+            }
+        }
+        
+        public async Task Handle(ImportingCreated message, IMessageHandlerContext context)
+        {
+            log.Info("Receive event");
+            if (message.Date == DateOnly.MinValue || message.TotalCost == 0)
+            {
+                log.Info("Missing parameter when handle ReceiptPaid event");
+            }
+            else
+            {
+                try
+                {
+                    DailyReport paidDate = ReportServices.FindDailyReport(message.Date);
+
+                    paidDate.Outcome += (long)message.TotalCost;
+                    paidDate.Profit -= (long)message.TotalCost;
+
+                    await DataAccess.Ins.DB.SaveChangesAsync(context.CancellationToken);
+
+                    ReportServices.UpdateReport(message.Date);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                }
             }
         }
 

@@ -44,21 +44,30 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateImporting(ImportingDto newImporting)
+        public async Task<IActionResult> CreateImporting(ImportingCreateDto newCreateImporting)
         {
-            if (newImporting == null)
+            if (newCreateImporting == null)
             {
                 return BadRequest();
             }
             try
             {
+                ImportingDto newImporting = new ImportingDto();
+                newImporting.Date = DateTime.Now;
                 newImporting.TotalCost = 0;
                 newImporting.TotalAmount = 0;
-                foreach (ImportDetailDto detail in newImporting.ImportDetails)
+                foreach (ImportDetailCreateDto detail in newCreateImporting.ImportDetails)
                 {
-                    detail.TotalCost = detail.Quantity * detail.Price;
+                    ImportDetailDto newDetail = new ImportDetailDto();
+                    newDetail.Item = detail.Item;
+                    newDetail.Price = detail.Price;
+                    newDetail.Quantity = detail.Quantity;
+                    newDetail.TotalCost = detail.Quantity * detail.Price;
+
+
                     newImporting.TotalCost += detail.TotalCost;
                     newImporting.TotalAmount += detail.Quantity;
+                    newImporting.ImportDetails.Add(newDetail);
                 }
 
                 var message = new CreateImporting() { newImporting = newImporting };

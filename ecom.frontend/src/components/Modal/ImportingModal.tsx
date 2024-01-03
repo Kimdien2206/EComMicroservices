@@ -8,6 +8,7 @@ import { REQUIRED_RULE } from '../../constant/formRules'
 import IProduct_item from '../../interface/ProductItem'
 import { createImport } from '../../api/admin/importAPI'
 import SuccessAlert from '../Alert/SuccessAlert'
+import dayjs from 'dayjs'
 
 interface ImportingModalProps extends ModalProps {
   setIsReadOnly?: Function,
@@ -24,10 +25,12 @@ const ImportingModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, selec
     form.validateFields().then((data) => {
       console.log(data);
       const newImport = {
+        date: dayjs(Date.now()),
         totalCost: price,
         totalAmount: totalAmount,
         importDetails: createImportDetail(data)
       }
+      console.log(newImport)
       createImport(newImport).then((data) => {
         console.log(data.data);
         SuccessAlert("Nhập hàng thành công");
@@ -51,6 +54,7 @@ const ImportingModal: FC<ImportingModalProps> = ({ isOpen, setIsModalOpen, selec
               quantity: item.amount[property],
               price: data.price,
               totalCost: data.price * item.amount[property],
+              product: {}
             }
           ]
         } 
