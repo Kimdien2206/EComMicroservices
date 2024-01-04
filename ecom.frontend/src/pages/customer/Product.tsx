@@ -6,7 +6,7 @@ import Helmet from './components/Helmet';
 import ProductCard from './components/ProductCard';
 import ProductView from './components/ProductView';
 import IProduct from '../../interface/Product';
-import { fetchProductBySlug, fetchProductDetail, increaseViewForProduct } from '../../api/CustomerAPI';
+import { fetchProductBySlug, fetchProductDetail, fetchSimilarProduct, increaseViewForProduct } from '../../api/CustomerAPI';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './components/Arrow';
 import { getSimilarProducts } from '../../api/recommenderAPI';
@@ -29,9 +29,11 @@ const Product = () => {
       fetchProductBySlug(slug).then(({ data }) => {
         console.log("🚀 ~ file: Product.tsx:28 ~ slug&&fetchProductBySlug ~ data:", data)
         setProduct(data[0]);
+        fetchSimilarProduct(data[0].id).then(({ data }) => setRecProduct(data)).catch((err) => console.error(err))
         if (!isViewedIncreasing)
-          increaseViewForProduct(data.data[0].id).then(() => { setIsViewedIncreasing(true) });
+          increaseViewForProduct(data[0].id).then(() => { setIsViewedIncreasing(true) });
       }).catch((err) => console.error(err)).finally(() => setLoading(false));
+
     }
     window.scrollTo({
       top: 0,
@@ -49,7 +51,7 @@ const Product = () => {
           <Space direction='vertical' style={{ width: '100%', margin: '0 20px', paddingRight: '3%' }}>
             <Title level={2} style={{ color: 'var(--main-color)', margin: '20px 0 10px 0' }}>CÓ THỂ BẠN SẼ THÍCH</Title>
             <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} Footer={null}>
-              {recProduct.map((item: IProduct, index: number) => (
+              {recProduct && recProduct.map((item: IProduct, index: number) => (
                 <ProductCard
                   id={index}
                   key={index}

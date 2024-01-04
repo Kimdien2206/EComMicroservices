@@ -70,6 +70,33 @@ namespace ECom.Gateway.Controllers
                 }
             }
         }
+        
+        [HttpGet]
+        [Route("{tagId}")]
+        [EnableCors]
+        public async Task<IActionResult> GetTagByID(string tagId)
+        {
+            if(tagId == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                int id = Int32.Parse(tagId);
+                var message = new GetTagById() { Id = id };
+                try
+                {
+                    var response = await this.messageSession.Request<Response<TagDto>>(message);
+                    log.Info($"Message sent, received: {response.responseData}");
+                    return ReturnWithStatus(response);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    log.Info($"Message sent, but {ex}");
+                    return StatusCode(500);
+                }
+            }
+        }
 
         [HttpPost]
         [EnableCors]

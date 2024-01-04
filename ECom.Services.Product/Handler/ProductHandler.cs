@@ -26,7 +26,8 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetProductOfCollection>,
         IHandleMessages<GetProductByTagId>,
         IHandleMessages<GetProductDetail>,
-        IHandleMessages<GetProductOfDiscount>
+        IHandleMessages<GetProductOfDiscount>,
+        IHandleMessages<GetSimilarProducts>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -151,7 +152,7 @@ namespace ECom.Services.Products.Handler
                 string slug = message.ProductSlug;
                 try
                 {
-                    var product = DataAccess.Ins.DB.Products.Where(ele => ele.Slug == slug).Include(ele => ele.ProductItems).FirstOrDefault();
+                    var product = DataAccess.Ins.DB.Products.Where(ele => ele.Slug == slug).Include(ele => ele.ProductItems).Include(u => u.HaveTags).FirstOrDefault();
                     if (product != null)
                     {
                         responseMessage.responseData = new List<ProductDto>() { mapper.Map<ProductDto>(product) };
@@ -161,6 +162,62 @@ namespace ECom.Services.Products.Handler
                     {
                         responseMessage.ErrorCode = 404;
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        }
+        
+        public async Task Handle(GetSimilarProducts message, IMessageHandlerContext context)
+        {
+            var responseMessage = new Response<ProductDto>();
+            if (message.Id == null)
+            {
+                log.Error("BadRequest, missing product id");
+                responseMessage.ErrorCode = 400;
+            }
+            else
+            {
+                try
+                {
+                    List<HaveTag> haveTags = DataAccess.Ins.DB.HasTags.Where(ele => ele.ProductId == message.Id).ToList();
+
+                    List<int> tagIds = new List<int>(); 
+                    foreach(HaveTag haveTag in haveTags)
+                    {
+                        tagIds.Add(haveTag.Id);
+                    }
+
+                    List<HaveTag> similarHaveTags = new List<HaveTag>();
+                    foreach(int Id in tagIds)
+                    {
+                        HaveTag similarHaveTag = DataAccess.Ins.DB.HasTags.FirstOrDefault(u => u.TagId == Id);
+                        if(similarHaveTags != null)
+                        {
+                            similarHaveTags.Add(similarHaveTag);
+                        }
+                    }
+
+                    List<Product> products = new List<Product>();
+
+                    foreach (HaveTag similarTag in similarHaveTags)
+                    {
+                        Product product = DataAccess.Ins.DB.Products.FirstOrDefault(u => u.Id == similarTag.ProductId);
+
+                        if (product != null && !products.Contains(product))
+                        {
+                            products.Add(product);
+                        }
+                    }
+
+                    List<Product> response = products.Take(10).ToList();
+
+                    responseMessage.responseData = response.Select(emp => mapper.Map<ProductDto>(emp));
+                    responseMessage.ErrorCode = 200;
                 }
                 catch (Exception ex)
                 {

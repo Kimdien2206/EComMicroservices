@@ -65,6 +65,30 @@ namespace ECom.Gateway.Controllers
                 return StatusCode(500);
             }
         }
+        
+        [HttpGet]
+        [Route("similar/{id}")]
+        [EnableCors]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSimilarProducts(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                int productId = Int32.Parse(id);
+                var message = new GetSimilarProducts() { Id = productId };
+                log.Info("Message sent, waiting for response");
+                var response = await this.messageSession.Request<Response<ProductDto>>(message);
+                return ReturnWithStatus(response);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
 
         [HttpGet]
         [Route("product-detail/{detailID}")]
