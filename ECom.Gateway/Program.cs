@@ -43,6 +43,7 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(GetProductOfCollection), "Product");
     route.RouteToEndpoint(typeof(GetProductDetail), "Product");
     route.RouteToEndpoint(typeof(GetProductOfDiscount), "Product");
+    route.RouteToEndpoint(typeof(GetSimilarProducts), "Product");
     route.RouteToEndpoint(typeof(UpdateProduct), "Product");
     route.RouteToEndpoint(typeof(GetAllDiscount), "Product");
     route.RouteToEndpoint(typeof(CreateDiscount), "Product");
@@ -56,6 +57,7 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateTag), "Product");
     route.RouteToEndpoint(typeof(DeleteTag), "Product");
     route.RouteToEndpoint(typeof(UpdateTag), "Product");
+    route.RouteToEndpoint(typeof(GetTagById), "Product");
     route.RouteToEndpoint(typeof(GetAllImporting), "Product");
     route.RouteToEndpoint(typeof(CreateImporting), "Product");
 

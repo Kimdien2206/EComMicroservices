@@ -22,6 +22,6 @@ export default interface IProduct {
   collectionID?: number | null;
   // ReceiptDetail: IReceiptDetail[];
   Review: IReview[];
-  HaveTag: IHaveTag[];
+  haveTags: IHaveTag[];
   productItems: IProduct_item[];
 }

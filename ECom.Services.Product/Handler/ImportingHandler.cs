@@ -33,6 +33,8 @@ namespace ECom.Services.Products.Handler
 
         public async Task Handle(CreateImporting message, IMessageHandlerContext context)
         {
+            log.Info($"Receiving {message.GetType()}");
+
             var responseMessage = new Response<ImportingDto>();
             if (message.newImporting == null)
             {
@@ -43,12 +45,26 @@ namespace ECom.Services.Products.Handler
             {
                 Importing newImporting = mapper.Map<Importing>(message.newImporting);
                 newImporting.Date = DateTime.Now;
+
+                foreach(ImportDetail detail in newImporting.ImportDetails) 
+                {
+                    ProductItem productItem = DataAccess.Ins.DB.ProductItems.First(u => u.Id == detail.Item);
+                    productItem.Quantity += detail.Quantity;
+                }
+
                 try
                 {
                     log.Info("Adding new Importing");
                     DataAccess.Ins.DB.Importings.Add(newImporting);
                     DataAccess.Ins.DB.SaveChanges();
                     log.Info("Importing added");
+
+                    var publishMessage = new ImportingCreated()
+                    {
+                        TotalCost = (ulong)newImporting.TotalCost,
+                        Date = DateOnly.FromDateTime(newImporting.Date)
+                    };
+                    await context.Publish(publishMessage);
                     responseMessage.ErrorCode = 200;
                 }
                 catch (Exception ex)

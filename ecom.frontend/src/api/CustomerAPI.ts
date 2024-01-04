@@ -17,6 +17,16 @@ export function fetchProductBySlug(slug: string){
   return http.get(`/Product/slug/${slug}`)
 }
 
+export function fetchTagById(id: number){
+  return http.get(`/Tag/${id}`)
+}
+
+export function fetchSimilarProduct(id: number){
+  return http.get(`/Product/similar/${id}`)
+}
+
+
+
 export function createOrder(order: any){
   return http.post('/Order', order)
 }

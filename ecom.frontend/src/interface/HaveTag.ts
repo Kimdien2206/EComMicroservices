@@ -6,7 +6,7 @@ import ITag from "./Tag";
 export interface IHaveTag {
     id: number;
     tag: ITag;
-    tagID: Number;
+    tagId: Number;
     product: IProduct; 
     productID: number;
 }

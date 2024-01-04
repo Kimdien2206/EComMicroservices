@@ -19,7 +19,8 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetAllTag>,
         IHandleMessages<CreateTag>,
         IHandleMessages<UpdateTag>,
-        IHandleMessages<DeleteTag>
+        IHandleMessages<DeleteTag>,
+        IHandleMessages<GetTagById>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<TagHandler>();
@@ -32,6 +33,34 @@ namespace ECom.Services.Products.Handler
             });
             this.mapper = config.CreateMapper();
         }
+        public async Task Handle(GetTagById message, IMessageHandlerContext context)
+        {
+            log.Info($"Received {message.GetType()} message");
+                var responseMessage = new Response<TagDto>();
+            if (message.Id == 0)
+            {
+                log.Info("Bad request");
+            }
+            else
+            {
+                try
+                {
+                    List<Tag> tags = DataAccess.Ins.DB.Tags.Where(u => u.Id == message.Id).ToList();
+                    responseMessage.responseData = tags.Select(
+                        emp => mapper.Map<TagDto>(emp)
+                        );
+                    responseMessage.ErrorCode = 200;
+                    log.Info("Response sent");
+                }
+                catch
+                {
+                    log.Info("Something went wrong");
+                    responseMessage.ErrorCode = 500;
+                }
+            }
+            await context.Reply(responseMessage).ConfigureAwait(false);
+        } 
+        
         public async Task Handle(GetAllTag message, IMessageHandlerContext context)
         {
             log.Info("Received message");

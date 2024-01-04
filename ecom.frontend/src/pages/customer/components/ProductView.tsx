@@ -10,6 +10,8 @@ import ErrorAlert from '../../../components/Alert/ErrorAlert';
 import { formatNumberWithComma, uuidv4 } from '../../../helper/utils';
 import ICart from '../../../interface/Cart';
 import SuccessAlert from '../../../components/Alert/SuccessAlert';
+import ITag from '../../../interface/Tag';
+import { fetchTagById } from '../../../api/CustomerAPI';
 
 const images = [
     {
@@ -39,7 +41,9 @@ const ProductView = ({ product }: ProductViewProps) => {
 
     const [size, setSize] = useState<OptionType[]>();
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1); 
+
+    const [tags, setTags] = useState<ITag[]>([]);
 
     const [selectedSize, setSelectedSize] = useState();
 
@@ -66,6 +70,14 @@ const ProductView = ({ product }: ProductViewProps) => {
                     disabled: false
                 }
             }));
+            console.log(product)
+            product.haveTags.forEach((item) => {
+                fetchTagById(item.tagId).then(({ data }) => 
+                {
+                    console.log(data)
+                    setTags((prev) => [...prev, data[0]])
+                });
+            })
         }
     }, [product?.id]);
 
@@ -226,7 +238,7 @@ const ProductView = ({ product }: ProductViewProps) => {
                     <div className="product__info__item">
                         <span className="product__info__item__price">
                             {formatNumberWithComma(product?.price)}
-                            {product?.discount?.discount && product.discount.discount > 0 ? <span className="product-card__price__old">
+                            {product?.discount?.discountAmount && product.discount.discountAmount > 0 ? <span className="product-card__price__old">
                                 <del>{formatNumberWithComma(product?.price)}</del>
                             </span> : null}
                         </span>
@@ -281,7 +293,7 @@ const ProductView = ({ product }: ProductViewProps) => {
                     </div>
                     <Space style={{ marginTop: 15 }}>
                         <Typography.Text>Thẻ: </Typography.Text>
-                        {product?.HaveTag ? product?.HaveTag.map((tag) => <Tag>{tag.tag.name}</Tag>) : null}
+                        {tags ? tags.map((tag) => <Tag>{tag.name}</Tag>) : null}
                     </Space>
                 </div>
             </Col>
