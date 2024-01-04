@@ -27,7 +27,7 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetProductByTagId>,
         IHandleMessages<GetProductDetail>,
         IHandleMessages<GetProductOfDiscount>,
-        IHandleMessages<GetSimilarProducts>
+        IHandleMessages<GetSimilarProducts>,
         IHandleMessages<GetAllProductIdsCommand>
     {
         private IMapper mapper;

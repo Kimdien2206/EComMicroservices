@@ -90,7 +90,7 @@ const Home = () => {
                                     name={item.name}
                                     price={Number(item.price)}
                                     slug={item.slug}
-                                    discount={item.discount?.discount ? item.discount?.discount : null}
+                                    discount={item.discount?.discountAmount ? item.discount?.discountAmount : null}
                                 />
                             ))}
                         </ScrollMenu>
@@ -110,7 +110,7 @@ const Home = () => {
                                     name={item.name}
                                     price={Number(item.price)}
                                     slug={item.slug}
-                                    discount={item.discount?.discount ? item.discount?.discount : null}
+                                    discount={item.discount?.discountAmount ? item.discount?.discountAmount : null}
                                 />
                             ))}
                         </ScrollMenu>
@@ -132,7 +132,7 @@ const Home = () => {
                                     name={item.name}
                                     price={Number(item.price)}
                                     slug={item.slug}
-                                    discount={item.discount?.discount ? item.discount?.discount : null}
+                                    discount={item.discount?.discountAmount ? item.discount?.discountAmount : null}
                                 />
                             ))}
                         </ScrollMenu>

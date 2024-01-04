@@ -10,11 +10,13 @@ using SagaData.Recommendation;
 
 namespace Ecom.Services.Recommendation.Handlers
 {
-    public class RecommendSagaHandler : Saga<RecommendSagaData>, IAmStartedByMessages<TrainModelCommand>, IHandleMessages<GetAllOrdersResponse>, IHandleMessages<GetAllUsersResponse>
+    public class RecommendSagaHandler :
+        Saga<RecommendSagaData>,
+        IAmStartedByMessages<TrainModelCommand>,
+        IHandleMessages<GetAllOrdersResponse>,
+        IHandleMessages<GetAllUsersResponse>
     {
         ILog log = LogManager.GetLogger<RecommendSagaHandler>();
-
-        List
 
         public async Task Handle(TrainModelCommand message, IMessageHandlerContext context)
         {
