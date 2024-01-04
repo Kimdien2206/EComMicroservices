@@ -1,6 +1,6 @@
 ﻿namespace Messages.OrderMessages
 {
-    public class GetAllOrder : ICommand
+    public class GetAllOrdersByPhonenumber : ICommand
     {
         public string? PhoneNumber { get; set; }
     }

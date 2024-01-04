@@ -26,7 +26,7 @@ namespace ECom.Gateway.Controllers
         [EnableCors]
         public async Task<IActionResult> GetAllOrders([FromQuery] string phoneNumber = null)
         {
-            var message = new GetAllOrder();
+            var message = new GetAllOrdersByPhonenumber();
             try
             {
                 message.PhoneNumber = phoneNumber;

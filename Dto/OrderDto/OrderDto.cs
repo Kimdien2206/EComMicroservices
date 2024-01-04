@@ -1,4 +1,6 @@
-﻿namespace Dto.OrderDto
+﻿using Dto.AuthDto;
+
+namespace Dto.OrderDto
 {
     public class OrderDto
     {
@@ -17,6 +19,8 @@
         public string? Lastname { get; set; }
 
         public string PhoneNumber { get; set; } = null!;
+
+        public UserDto? User { get; set; }
 
         public virtual ICollection<OrderDetailDto> OrderDetails { get; set; } = new List<OrderDetailDto>();
     }

@@ -21,7 +21,7 @@ namespace ECom.Services.Forecasts
 
                     var route = transport.Routing();
 
-                    route.RouteToEndpoint(typeof(GetAllProductId), "Product");
+                    route.RouteToEndpoint(typeof(GetAllProductIdsCommand), "Product");
                     route.RouteToEndpoint(typeof(GetAllDailyDetailReport), "Reports");
 
                     return endpointConfiguration;

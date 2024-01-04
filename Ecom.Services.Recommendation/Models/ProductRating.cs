@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ML.Data;
+﻿using Microsoft.ML.Data;
 
 namespace Ecom.Services.Recommendation.Models
 {
     internal class ProductRating
     {
+        public string userId;
         [LoadColumn(0)]
         public float productId;
         [LoadColumn(1)]

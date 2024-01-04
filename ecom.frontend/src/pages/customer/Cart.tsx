@@ -160,7 +160,7 @@ const Cart = () => {
                         <Space direction='vertical' style={{ width: '90%' }}>
                             <Form onFinish={onFinish} form={form} layout='vertical' style={{ paddingTop: 20 }}>
                                 <Form.Item
-                                    label='email'
+                                    label='Email'
                                     name="email"
                                     rules={[REQUIRED_RULE, EMAIL_FORMAT_RULE]}
                                     initialValue={currentUser?.email}

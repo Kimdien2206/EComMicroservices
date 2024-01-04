@@ -1,13 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using NServiceBus;
-using Microsoft.Extensions.DependencyInjection;
-//using ECom.Services.Auth.Data;
-using Microsoft.Extensions.Configuration;
+﻿//using ECom.Services.Auth.Data;
 using Messages.MailerMessage;
-using ECom.Services.Auth.Data;
-using Microsoft.EntityFrameworkCore;
+using Messages.UserMessages;
+using Microsoft.Extensions.Hosting;
 
 namespace ECom.Services.Auth
 {
@@ -27,7 +21,8 @@ namespace ECom.Services.Auth
                     var route = transport.Routing();
 
                     route.RouteToEndpoint(typeof(SendMailMessage), "Mailer");
-                    
+                    route.RouteToEndpoint(typeof(GetAllUsersResponse), "Recommendation");
+
                     return endpointConfiguration;
                 })
                 .RunConsoleAsync();

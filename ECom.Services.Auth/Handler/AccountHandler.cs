@@ -16,7 +16,8 @@ namespace ECom.Services.Auth.Handler
         IHandleMessages<GetAllUser>,
         IHandleMessages<UpdateUser>,
         IHandleMessages<UserLoggedIn>,
-        IHandleMessages<RegisterCommand>
+        IHandleMessages<RegisterCommand>,
+        IHandleMessages<GetAllUsersCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<AccountHandler>();
@@ -164,6 +165,24 @@ namespace ECom.Services.Auth.Handler
             }
 
             await context.Reply(response);
+        }
+
+        public Task Handle(GetAllUsersCommand message, IMessageHandlerContext context)
+        {
+            try
+            {
+                List<User> users = DataAccess.Ins.DB.Users.ToList();
+
+                context.Send(new GetAllUsersResponse() { SagaId = message.SagaId, Users = users.Select(emp => mapper.Map<UserDto>(emp)).ToList() }).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                log.Error(e.StackTrace);
+                return Task.FromException(e);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
