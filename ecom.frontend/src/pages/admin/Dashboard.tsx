@@ -1,4 +1,4 @@
-import { Row, Col, Card, Avatar, Image } from 'antd'
+import { Row, Col, Card, Avatar, Image, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import NumberCard from '../../components/Card/NumberCard'
 import OrderIcon from '../../assets/icon/bill_96px.png'
@@ -18,6 +18,9 @@ import { fetchAllCustomers } from '../../api/admin/CustomerAPI'
 import { fetchAllProducts } from '../../api/CustomerAPI'
 import { fetchAllOrders } from '../../api/admin/OrderAPI'
 import { fetchActiveProduct } from '../../api/admin/productAPI'
+import { updateForecastData } from '../../api/admin/forecastAPI'
+import SuccessAlert from '../../components/Alert/SuccessAlert'
+import { updateRecommener } from '../../api/recommenderAPI'
 
 const { Meta } = Card;
 
@@ -43,11 +46,27 @@ const Dashboard = () => {
     })
     fetchAllOrders().then((data) => {
       setOrder(data.data)
-  })
+    })
   }, [])
 
   return (
     <div>
+      <Row style={{ marginBottom: 20 }}>
+        <Col>
+          <Button
+            type="primary"
+            onClick={() => {
+              updateForecastData().then(() => SuccessAlert("Đã gửi yêu cầu cập nhật dữ liệu dự báo. Vui lòng kiểm tra lại sau vài phút.")).catch(err => console.log(err));
+            }}>Cập nhật dự báo</Button>
+        </Col>
+        <Col offset={1}>
+          <Button
+            type="primary"
+            onClick={() => {
+              updateRecommener().then(() => SuccessAlert("Đã gửi yêu cầu cập nhật hệ thống gợi ý. Vui lòng kiểm tra lại sau vài phút.")).catch(err => console.log(err));
+            }}>Cập nhật hệ thống gợi ý</Button>
+        </Col>
+      </Row>
       <Row gutter={24} style={{ marginBottom: 20 }}>
         <Col lg={8} md={12}>
           <NumberCard title='Đơn hàng' icon={OrderIcon} description={order?.length.toString()} />

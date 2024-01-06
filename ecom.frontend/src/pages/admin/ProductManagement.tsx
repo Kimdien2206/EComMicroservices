@@ -60,12 +60,6 @@ const ProductManagement = () => {
                 dispatch({ type: SET_ACTION, payload: ACTION_CREATE })
               }}>Thêm mới</Button>
             <Input.Search value={searchText} size="middle" placeholder="Nhập tên sản phẩm" enterButton style={{ width: '100%' }} onChange={onChange} />
-            <Button
-              type="primary"
-              onClick={() => {
-                setLoading(true);
-                updateForecastData().then(() => SuccessAlert("Đã gửi yêu cầu cập nhật dự liệu. Vui lòng kiểm tra lại sau vài phút.")).catch(err => console.log(err)).finally(() => setLoading(false));
-              }}>Cập nhật dự báo</Button>
           </Space>
 
           {renderModal(isModalOpen, setIsModalOpen, state.action, setSearchData, selectedItem)}
