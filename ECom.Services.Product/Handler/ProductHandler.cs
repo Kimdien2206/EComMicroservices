@@ -20,7 +20,8 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<UpdateProduct>,
         IHandleMessages<ProductSold>,
         IHandleMessages<GetProductByItemID>,
-        IHandleMessages<GetAllProductIdsCommand>
+        IHandleMessages<GetAllProductIdsCommand>,
+        IHandleMessages<GetAllProductItemsCommand>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ProductHandler>();
@@ -306,6 +307,25 @@ namespace ECom.Services.Products.Handler
             return Task.CompletedTask;
         }
 
+        public Task Handle(GetAllProductItemsCommand message, IMessageHandlerContext context)
+        {
+            var respondMessage = new GetAllProductItemsResponse();
+            respondMessage.SagaId = message.SagaId;
+            try
+            {
+                List<ProductItem> products = DataAccess.Ins.DB.ProductItems.ToList();
+                respondMessage.ProductItems = products.Select(
+                    emp => mapper.Map<ProductItemDto>(emp)).ToList();
 
+                context.Send(respondMessage).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error: {ex.Message}");
+                log.Error(ex.StackTrace);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

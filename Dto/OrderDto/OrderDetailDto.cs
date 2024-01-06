@@ -13,5 +13,7 @@
         public int Price { get; set; }
 
         public ProductDto.ProductDto? Product { get; set; }
+
+        public ProductDto.ProductItemDto? ProductItem { get; set; }
     }
 }

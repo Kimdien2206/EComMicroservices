@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using CsvHelper;
-using Dto.OrderDto;
+﻿using Dto.OrderDto;
 using Ecom.Services.Recommendation.Models;
 using Microsoft.ML;
 using Microsoft.ML.Trainers;
@@ -14,103 +12,50 @@ namespace Ecom.Services.Recommendation.Service
         static public IDataView ConvertData(List<OrderDto> orderDtos)
         {
             IDataView dataView;
-            List<ProductRating> modelInputs = new List<ProductRating>();
+            List<UserPurchase> modelInputs = new List<UserPurchase>();
 
             foreach (OrderDto orderDto in orderDtos)
             {
-                if (orderDto.User != null)
+                if (orderDto.OrderDetails.Count > 1)
                 {
-                    foreach (OrderDetailDto detailDto in orderDto.OrderDetails)
+                    var orderDetails = orderDto.OrderDetails.ToList();
+                    for (int i = 1; i < orderDto.OrderDetails.Count; i++)
                     {
-                        var currentDate = DateTime.Now;
-                        var birthdate = orderDto.User.DateOfBirth;
-                        // Calculate age
-                        int age = currentDate.Year - birthdate.Year;
-
-                        // Check if the birthday has occurred this year
-                        if (birthdate.Date > currentDate.AddYears(-age))
-                        {
-                            age--;
-                        }
-
-                        modelInputs.Add(new ProductRating() { productId = detailDto.Product.Id, userId = orderDto.PhoneNumber, age = age, Label = 1 });
+                        var detailDto = orderDetails[0];
+                        var coPurchaseDetail = orderDetails[i];
+                        if (detailDto.ProductItem != null)
+                            modelInputs.Add(new UserPurchase() { ProductId = (float)detailDto.ProductItem.ProductId, CoPurchaseProducId = (float)coPurchaseDetail.ProductItem.ProductId, Label = 0 });
                     }
                 }
             }
 
-            dataView = MLContext.Data.LoadFromEnumerable<ProductRating>(modelInputs);
+            dataView = MLContext.Data.LoadFromEnumerable(modelInputs);
             return dataView;
         }
 
-        static public (IDataView training, IDataView test) LoadData(string source, double traningSetRatio)
-        {
-            (List<ProductRating> trainData, List<ProductRating> testData) = loadData(source, traningSetRatio);
-
-            IDataView trainingDataView = MLContext.Data.LoadFromEnumerable<ProductRating>(trainData);
-            IDataView testDataView = MLContext.Data.LoadFromEnumerable<ProductRating>(testData);
-
-            return (trainingDataView, testDataView);
-        }
-
-        private static (List<ProductRating>, List<ProductRating>) loadData(string source, double trainingSetRatio)
-        {
-            List<ProductRating> trainSamples = new List<ProductRating>();
-            List<ProductRating> testSamples = new List<ProductRating>();
-            // Open CSV file for reading
-            using (var fileReader = new StreamReader(source))
-            {
-                using (var csv = new CsvReader(fileReader, CultureInfo.InvariantCulture))
-                {
-                    var records = new List<ProductRating>();
-                    var rows = csv
-                        .GetRecords<ProductSample>()
-                        .ToList();
-                    for (var i = 0; i < rows.Count(); i++)
-                    {
-                        var record = new ProductRating
-                        {
-                            productId = rows[i].Id,
-                            age = rows[i].Age,
-                            Label = rows[i].Rating
-                        };
-                        if (i < rows.Count() * trainingSetRatio)
-                        {
-                            trainSamples.Add(record);
-                        }
-                        else
-                        {
-                            testSamples.Add(record);
-                        }
-                    }
-
-                }
-            }
-            return (trainSamples, testSamples);
-        }
-
-        static public ITransformer BuildAndTrainModel(IDataView trainingDataView)
+        static public ITransformer BuildAndTrainModel(IDataView trainData)
         {
             IEstimator<ITransformer> estimator = MLContext.Transforms.Conversion
-                .MapValueToKey(outputColumnName: "ageEncoded", inputColumnName: "age")
-    .Append(MLContext.Transforms.Conversion.MapValueToKey(outputColumnName: "productIdEncoded", inputColumnName: "productId"))
-    .Append(MLContext.Transforms.Conversion.MapValueToKey(outputColumnName: "userIdEncoded", inputColumnName: "userId"));
+                .MapValueToKey(outputColumnName: "productIdEncoded", inputColumnName: nameof(UserPurchase.ProductId))
+    .Append(MLContext.Transforms.Conversion.MapValueToKey(outputColumnName: "coPurchaseProductIdEncoded", inputColumnName: nameof(UserPurchase.CoPurchaseProducId)));
 
-            var options = new MatrixFactorizationTrainer.Options
-            {
-                MatrixColumnIndexColumnName = "userIdEncoded",
-                MatrixRowIndexColumnName = "productIdEncoded",
-                LabelColumnName = "Label",
-                NumberOfIterations = 100,
-                ApproximationRank = 100
-            };
+            MatrixFactorizationTrainer.Options options = new MatrixFactorizationTrainer.Options();
+            options.MatrixColumnIndexColumnName = "productIdEncoded";
+            options.MatrixRowIndexColumnName = "coPurchaseProductIdEncoded";
+            options.LabelColumnName = "Label";
+            options.LossFunction = MatrixFactorizationTrainer.LossFunctionType.SquareLossOneClass;
+            options.Alpha = 0.01;
+            options.Lambda = 0.025;
 
             var trainerEstimator = estimator.Append(MLContext.Recommendation().Trainers.MatrixFactorization(options));
+            //Step 4: Call the MatrixFactorization trainer by passing options.
+            var est = MLContext.Recommendation().Trainers.MatrixFactorization(options);
 
+            //STEP 5: Train the model fitting to the DataSet
             Console.WriteLine("=============== Training the model ===============");
-            ITransformer model = trainerEstimator.Fit(trainingDataView);
+            ITransformer model = trainerEstimator.Fit(trainData);
 
             return model;
-
         }
 
         static public void EvaluateModel(IDataView testDataView, ITransformer model)
@@ -123,5 +68,7 @@ namespace Ecom.Services.Recommendation.Service
             Console.WriteLine("Root Mean Squared Error : " + metrics.RootMeanSquaredError.ToString());
             Console.WriteLine("RSquared: " + metrics.RSquared.ToString());
         }
+
+        static public void LoadModel() { }
     }
 }

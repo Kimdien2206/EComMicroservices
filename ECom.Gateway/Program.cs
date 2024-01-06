@@ -8,6 +8,7 @@ using Messages.ImportingMessages;
 using Messages.OrderMessages;
 using Messages.ProductMessages;
 using Messages.ReceiptMessages;
+using Messages.RecommendMessages;
 using Messages.ReportMessages;
 using Messages.TagMessages;
 using Messages.UserMessages;
@@ -86,6 +87,9 @@ builder.Host.UseNServiceBus(context =>
     route.RouteToEndpoint(typeof(CreateCart), "Cart");
     route.RouteToEndpoint(typeof(UpdateQuantity), "Cart");
     route.RouteToEndpoint(typeof(RemoveCart), "Cart");
+
+    route.RouteToEndpoint(typeof(TrainRecommenderModelCommand), "Recommendation");
+    route.RouteToEndpoint(typeof(GetRecommendedProductCommand), "Recommendation");
 
     return endpointConfiguration;
 });

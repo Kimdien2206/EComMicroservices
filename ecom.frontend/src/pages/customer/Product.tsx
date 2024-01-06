@@ -21,8 +21,6 @@ const Product = () => {
   const [isViewedIncreasing, setIsViewedIncreasing] = useState(false)
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
     if (slug) {
       setLoading(true);
@@ -31,6 +29,9 @@ const Product = () => {
         setProduct(data[0]);
         if (!isViewedIncreasing)
           increaseViewForProduct(data[0].id).then(() => { setIsViewedIncreasing(true) });
+
+        getSimilarProducts(data[0].id).then(({ data: recProductRes }) => setRecProduct(recProductRes)).catch((err) => console.error(err))
+
       }).catch((err) => console.error(err)).finally(() => setLoading(false));
     }
     window.scrollTo({
@@ -46,7 +47,7 @@ const Product = () => {
           <Space style={{ paddingRight: '3%' }}>
             <ProductView product={product} />
           </Space>
-          <Space direction='vertical' style={{ width: '100%', margin: '0 20px', paddingRight: '3%' }}>
+          {recProduct ? <Space direction='vertical' style={{ width: '100%', margin: '0 20px', paddingRight: '3%' }}>
             <Title level={2} style={{ color: 'var(--main-color)', margin: '20px 0 10px 0' }}>CÓ THỂ BẠN SẼ THÍCH</Title>
             <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} Footer={null}>
               {recProduct.map((item: IProduct, index: number) => (
@@ -62,7 +63,8 @@ const Product = () => {
                 />
               ))}
             </ScrollMenu>
-          </Space>
+          </Space> : null}
+
         </Helmet>
       </Spin>) : (<NotFoundResult message="Sản phẩm không tồn tại vui lòng thử lại sau." />)
   )

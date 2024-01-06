@@ -11,16 +11,17 @@ interface QueryParams {
   [key: string]: string;
 }
 
-const extractQueryParams = (url: string): QueryParams => {
+const extractQueryParams = (url: string): { params: QueryParams, count: number } => {
   const queryParams = new URLSearchParams(url);
   console.log(queryParams)
   const params: QueryParams = {};
-
+  let countParams = 0;
   queryParams.forEach((value, key) => {
     params[key] = value;
+    countParams++;
   });
 
-  return params;
+  return { params, count: countParams };
 };
 
 const PaymentResultSuccess = () => {
@@ -30,21 +31,21 @@ const PaymentResultSuccess = () => {
   const [isLoading, setIsLoading] = useState(true);
   const nav = useNavigate();
   useEffect(() => {
-    if (orderID) {
-      console.log("🚀 ~ file: PaymentResultSuccess.tsx:34 ~ useEffect ~ orderID:", orderID)
-      const currentUrl = window.location.search;
-      const vnPayResQuery = extractQueryParams(currentUrl);
-      console.log("🚀 ~ file: PaymentResultSuccess.tsx:37 ~ useEffect ~ vnPayResQuery:", vnPayResQuery)
-      validateReiceptResult(vnPayResQuery['vnp_TxnRef'], vnPayResQuery).then(({ data }) => {
+    const currentUrl = window.location.search;
+    const vnPayResQuery = extractQueryParams(currentUrl);
+    if (orderID && vnPayResQuery.params['vnp_ResponseCode'] == "00") {
+      validateReiceptResult(vnPayResQuery.params['vnp_TxnRef'], vnPayResQuery.params).then(({ data }) => {
         console.log("🚀 ~ file: PaymentResultSuccess.tsx:38 ~ validateReiceptResult ~ data:", data)
         getOrder(orderID).then(({ data: orderRes }) => {
           console.log("🚀 ~ file: PaymentResultSuccess.tsx:40 ~ getOrder ~ orderRes:", orderRes)
           checkout?.setOrder(orderRes[0]);
-        })
+        }).catch((err) => { throw Error(err) })
       }).catch((err) => {
         setIsValidateError(true);
         console.error(err);
       }).finally(() => setIsLoading(false));
+    } else {
+      nav("/checkout/payment/fail");
     }
   }, [])
   return (

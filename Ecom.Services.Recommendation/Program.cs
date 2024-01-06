@@ -1,4 +1,5 @@
 ﻿using Messages.OrderMessages;
+using Messages.ProductMessages;
 using Messages.UserMessages;
 using Microsoft.Extensions.Hosting;
 
@@ -23,6 +24,7 @@ namespace ECom.Services.Recommendation
 
                     route.RouteToEndpoint(typeof(GetAllOrdersCommand), "Sales");
                     route.RouteToEndpoint(typeof(GetAllUsersCommand), "Auth");
+                    route.RouteToEndpoint(typeof(GetAllProductItemsCommand), "Product");
 
                     return endpointConfiguration;
                 })
@@ -78,5 +80,4 @@ namespace ECom.Services.Recommendation
 
 
     }
-}
 }
