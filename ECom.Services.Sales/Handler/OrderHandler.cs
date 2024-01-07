@@ -178,6 +178,8 @@ namespace ECom.Services.Sales.Handler
 
                 List<Order> orders = query.ToList();
 
+                log.Info($"send {orders.Count} orders to recommendation system");
+
                 context.Send(new GetAllOrdersResponse() { SagaId = message.SagaId, Orders = orders.Select(ele => mapper.Map<OrderDto>(ele)).ToList() }).ConfigureAwait(false);
             }
             catch (Exception e)

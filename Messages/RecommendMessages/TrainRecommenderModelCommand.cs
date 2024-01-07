@@ -1,6 +1,6 @@
 ﻿namespace Messages.RecommendMessages
 {
-    public class TrainModelCommand : ICommand
+    public class TrainRecommenderModelCommand : ICommand
     {
         public string SagaId { get; set; }
     }

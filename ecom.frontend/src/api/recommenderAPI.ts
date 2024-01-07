@@ -1,5 +1,9 @@
 import { http } from ".";
 
-export function getSimilarProducts(id: number){
-  return http.get(`/recommender/${id}`);
+export function getSimilarProducts(productId: number){
+  return http.get(`/Recommender/${productId}`);
 };
+
+export function updateRecommener() {
+  return http.post(`/Recommender`);
+}

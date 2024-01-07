@@ -1,5 +1,6 @@
 ﻿using Dto.AuthDto;
 using Dto.OrderDto;
+using Dto.ProductDto;
 
 namespace SagaData.Recommendation
 {
@@ -10,5 +11,7 @@ namespace SagaData.Recommendation
         public List<UserDto> Users { get; set; }
 
         public List<OrderDto> Orders { get; set; }
+
+        public List<ProductItemDto> ProductItems { get; set; }
     }
 }

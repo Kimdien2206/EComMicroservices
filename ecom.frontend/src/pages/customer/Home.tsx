@@ -77,25 +77,6 @@ const Home = () => {
             {/* end policy section */}
 
             <Space direction='vertical' style={{ padding: "0 20px", width: '100%' }}>
-                <Title level={2} style={{ color: 'var(--main-color)' }}>DÀNH CHO BẠN</Title>
-                <Row>
-                    <Col span={24}>
-                        <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} Footer={null}>
-                            {bestSellers.map((item, index) => (
-                                <ProductCard
-                                    id={index}
-                                    key={index}
-                                    img01={item.image[0]}
-                                    img02={item.image[1]}
-                                    name={item.name}
-                                    price={Number(item.price)}
-                                    slug={item.slug}
-                                    discount={item.discount?.discountAmount ? item.discount?.discountAmount : null}
-                                />
-                            ))}
-                        </ScrollMenu>
-                    </Col>
-                </Row>
                 {/* best selling section */}
                 <Title level={2} style={{ color: 'var(--main-color)' }}>BÁN CHẠY NHẤT</Title>
                 <Row>
