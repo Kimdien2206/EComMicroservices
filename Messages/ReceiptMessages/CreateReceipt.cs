@@ -9,6 +9,6 @@ namespace Messages.ReceiptMessages
 {
     public class CreateReceipt : ICommand
     {
-        public ReceiptDto newReceipt { get; set; }
+        public ReceiptCreateDto newReceipt { get; set; }
     }
 }

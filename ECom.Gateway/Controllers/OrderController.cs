@@ -247,7 +247,7 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(OrderDto newOrder)
+        public async Task<IActionResult> CreateOrder(OrderCreateDto newOrder)
         {
             if (newOrder == null)
             {
@@ -257,7 +257,7 @@ namespace ECom.Gateway.Controllers
             {
                 newOrder.TotalCost = 0;
 
-                foreach (OrderDetailDto detail in newOrder.OrderDetails)
+                foreach (OrderDetailCreateDto detail in newOrder.OrderDetails)
                 {
                     var getProductMessage = new GetProductByItemID() { ItemId = detail.ItemId };
                     var getProductResponse = await this.messageSession.Request<Response<ProductDto>>(getProductMessage);
@@ -267,6 +267,8 @@ namespace ECom.Gateway.Controllers
                     detail.Price = productPrice * detail.Quantity;
                     newOrder.TotalCost += productPrice * detail.Quantity;
                 }
+
+
 
 
                 var message = new CreateOrder() { newOrder = newOrder };

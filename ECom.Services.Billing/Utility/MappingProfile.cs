@@ -15,6 +15,8 @@ namespace ECom.Services.Sales.Utility
         public MappingProfile() {
             CreateMap<Receipt, ReceiptDto>();
             CreateMap<ReceiptDto, Receipt>();
+            CreateMap<Receipt, ReceiptCreateDto>();
+            CreateMap<ReceiptCreateDto, Receipt>();
         }
     }
 }

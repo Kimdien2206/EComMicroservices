@@ -13,7 +13,7 @@ namespace ECom.Gateway.Controllers
     [Route("api/[controller]")]
     public class ReceiptController : BaseController
     {
-        private readonly IMessageSession messageSession;
+        private readonly IMessageSession messageSession;    
         private readonly ILog log = LogManager.GetLogger(typeof(ReceiptController));
         public ReceiptController(IMessageSession messageSession)
         {
@@ -80,7 +80,7 @@ namespace ECom.Gateway.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReceipt(ReceiptDto newReceipt)
+        public async Task<IActionResult> CreateReceipt(ReceiptCreateDto newReceipt)
         {
             if (newReceipt == null)
             {

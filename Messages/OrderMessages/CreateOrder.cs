@@ -9,6 +9,6 @@ namespace Messages.OrderMessages
 {
     public class CreateOrder : ICommand
     {
-        public OrderDto newOrder { get; set; }
+        public OrderCreateDto newOrder { get; set; }
     }
 }
