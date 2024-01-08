@@ -210,6 +210,24 @@ namespace ECom.Gateway.Controllers
             try
             {
                 var response = await this.messageSession.Request<Response<OrderDto>>(message);
+
+                foreach (OrderDetailDto item in response.responseData.FirstOrDefault().OrderDetails)
+                {
+                    if(item != null)
+                    {
+                        var getProductIdMessage = new GetProductByItemID() { ItemId = item.ItemId };
+                        var getProductRes = await this.messageSession.Request<Response<ProductDto>>(getProductIdMessage);
+                        var publishMessage = new OrderFinished()
+                        {
+                            Date = DateOnly.FromDateTime(DateTime.Now),
+                            Quantity = (uint)item.Quantity,
+                            ProductId = getProductRes.responseData.FirstOrDefault().Id
+                        };
+
+                        await this.messageSession.Publish(publishMessage).ConfigureAwait(false);
+                    }
+                }
+
                 log.Info($"Message sent, received: {response.responseData}");
                 return ReturnWithStatus(response);
             }

@@ -6,6 +6,7 @@ using ECom.Services.Reports.Services;
 using ECom.Services.Reports.Utility;
 using Messages;
 using Messages.ImportingMessages;
+using Messages.OrderMessages;
 using Messages.ReceiptMessages;
 using Messages.ReportMessages;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ namespace ECom.Services.Reports.Handler
         IHandleMessages<GetYearlyReport>,
         IHandleMessages<ReceiptPaid>,
         IHandleMessages<GetAllDailyDetailReport>,
-        IHandleMessages<ImportingCreated>
+        IHandleMessages<ImportingCreated>,
+        IHandleMessages<OrderFinished>
     {
         private IMapper mapper;
         static ILog log = LogManager.GetLogger<ReportHandler>();
@@ -103,6 +105,46 @@ namespace ECom.Services.Reports.Handler
                     await DataAccess.Ins.DB.SaveChangesAsync(context.CancellationToken);
 
                     ReportServices.UpdateReport(message.Date);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                }
+            }
+        }
+        
+        public async Task Handle(OrderFinished message, IMessageHandlerContext context)
+        {
+            log.Info("Receive event");
+            if (message.Date == DateOnly.MinValue || message.ProductId == 0 || message.Quantity == 0)
+            {
+                log.Info("Missing parameter when handle ReceiptPaid event");
+            }
+            else
+            {
+                try
+                {
+                    DailyReportDetail detail = DataAccess.Ins.DB.DailyReportDetails.Where(u => u.ProductId == message.ProductId && u.Date == message.Date).FirstOrDefault();
+
+                    if(detail != null)
+                    {
+                        detail.Quantity += (int)message.Quantity;
+                    }
+                    else
+                    {
+                        DailyReport dailyReport = ReportServices.FindDailyReport(message.Date);
+                        DailyReportDetail newDetail = new DailyReportDetail()
+                        {
+                            Quantity = (int)message.Quantity,
+                            Date = message.Date,
+                            ProductId = message.ProductId,
+                            DailyReport = dailyReport
+                        };
+                        DataAccess.Ins.DB.Add(newDetail);
+                    }
+
+
+                    DataAccess.Ins.DB.SaveChanges();
                 }
                 catch (Exception ex)
                 {

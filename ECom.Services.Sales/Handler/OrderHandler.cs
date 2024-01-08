@@ -95,9 +95,12 @@ namespace ECom.Services.Sales.Handler
             {
                 try
                 {
-                    Order order = DataAccess.Ins.DB.Orders.Where(u => u.Id == updateID).First();
+                    Order order = DataAccess.Ins.DB.Orders.Include("OrderDetails").Where(u => u.Id == updateID).First();
                     order.Status = message.Status;
                     DataAccess.Ins.DB.SaveChanges();
+
+
+                    responseMessage.responseData = new List<OrderDto>() { mapper.Map<OrderDto>(order) };
                     responseMessage.ErrorCode = 200;
                     log.Info("Response sent");
                 }

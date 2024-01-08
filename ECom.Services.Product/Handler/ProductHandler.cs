@@ -28,7 +28,6 @@ namespace ECom.Services.Products.Handler
         IHandleMessages<GetProductDetail>,
         IHandleMessages<GetProductOfDiscount>,
         IHandleMessages<GetSimilarProducts>,
-        IHandleMessages<GetAllProductIdsCommand>
         IHandleMessages<GetAllProductIdsCommand>,
         IHandleMessages<GetAllProductItemsCommand>
     {
@@ -192,16 +191,16 @@ namespace ECom.Services.Products.Handler
                     List<int> tagIds = new List<int>(); 
                     foreach(HaveTag haveTag in haveTags)
                     {
-                        tagIds.Add(haveTag.Id);
+                        tagIds.Add(haveTag.TagId);
                     }
 
                     List<HaveTag> similarHaveTags = new List<HaveTag>();
                     foreach(int Id in tagIds)
                     {
-                        HaveTag similarHaveTag = DataAccess.Ins.DB.HasTags.FirstOrDefault(u => u.TagId == Id);
-                        if(similarHaveTags != null)
+                        List<HaveTag> similarHaveTag = DataAccess.Ins.DB.HasTags.Where(u => u.TagId == Id).ToList();
+                        if(similarHaveTag != null)
                         {
-                            similarHaveTags.Add(similarHaveTag);
+                            similarHaveTags.AddRange(similarHaveTag);
                         }
                     }
 

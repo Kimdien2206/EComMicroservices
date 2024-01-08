@@ -27,11 +27,23 @@ const Product = () => {
       fetchProductBySlug(slug).then(({ data }) => {
         console.log("🚀 ~ file: Product.tsx:28 ~ slug&&fetchProductBySlug ~ data:", data)
         setProduct(data[0]);
-        fetchSimilarProduct(data[0].id).then(({ data }) => setRecProduct(data)).catch((err) => console.error(err))
+        getSimilarProducts(data[0].id).then(({ data: recProductRes }) => {
+          console.log(recProductRes.length);
+          if(recProductRes.length === 0)
+          {
+            fetchSimilarProduct(data[0].id).then(({ data: similarProductRes }) => {
+              console.log(similarProductRes)
+              setRecProduct(similarProductRes)
+            }).catch((err) => console.error(err))
+          }  
+          else
+          {
+            setRecProduct(recProductRes)}
+          }
+        ).catch((err) => console.error(err))
         if (!isViewedIncreasing)
           increaseViewForProduct(data[0].id).then(() => { setIsViewedIncreasing(true) });
 
-        getSimilarProducts(data[0].id).then(({ data: recProductRes }) => setRecProduct(recProductRes)).catch((err) => console.error(err))
 
       }).catch((err) => console.error(err)).finally(() => setLoading(false));
 
