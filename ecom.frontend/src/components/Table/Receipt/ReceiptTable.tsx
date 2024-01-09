@@ -33,7 +33,7 @@ const ReceiptTable = (props: ReceiptTableProps) => {
       title: 'Tên khách hàng',
       dataIndex: 'customer_name',
       key: 'customer_name',
-      render: (_, record) => <p>{`${record.orderInfo.lastname} ${record.orderInfo.firstname}`}</p>,
+      render: (_, record) => <p>{`${record?.orderInfo?.lastname} ${record?.orderInfo?.firstname}`}</p>,
     },
     {
       title: 'Ngày',
@@ -68,8 +68,9 @@ const ReceiptTable = (props: ReceiptTableProps) => {
 
   const handlePaidOnClick = (item: IReceipt) => {
     paidReceipt(item.id).then((dataRes) => {
-      setData(prev => prev?.filter((data) => data.id !== item.id));
-      setSearchData(prev => prev?.filter((data) => data.id !== item.id));
+      console.log(dataRes)
+      setData(prev => prev?.filter((dataRes) => dataRes.id !== item.id));
+      setSearchData(prev => prev?.filter((dataRes) => dataRes.id !== item.id));
       SuccessAlert("Thanh toán thành công");
     })
   }
@@ -78,7 +79,7 @@ const ReceiptTable = (props: ReceiptTableProps) => {
     if (props.state === 'paid')
       fetchPaidReceipt().then(data => { console.log(data); setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
     else
-      fetchUnpaidReceipt().then(data => { setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
+      fetchUnpaidReceipt().then(data => { console.log(data); setData(data.data); setSearchData(data.data); }).finally(() => setLoading(false));
   }, [props.state])
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

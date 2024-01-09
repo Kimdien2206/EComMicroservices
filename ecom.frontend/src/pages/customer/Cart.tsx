@@ -199,7 +199,7 @@ const Cart = () => {
                                 >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item
+                                {/* <Form.Item
                                     style={{ flexDirection: 'row' }}
                                     label="Voucher"
                                     name="voucher"
@@ -209,7 +209,7 @@ const Cart = () => {
                                         enterButton="Kiểm tra"
                                         size="large"
                                         onSearch={handleOnSearch} />
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item
                                     label="Phương thức thanh toán"
                                     name="paymentMethod"

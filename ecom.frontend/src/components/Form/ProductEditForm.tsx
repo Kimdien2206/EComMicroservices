@@ -25,6 +25,7 @@ const ProductEditForm: FC<ProductEditFormProps> = ({ form, collectionInit, disco
 
   useEffect(() => {
     setImageList(fileList);
+    console.log(selectedItem);
   }, [])
   const [isOpen, setIsModalOpen] = useState(false);
 
@@ -110,7 +111,7 @@ const ProductEditForm: FC<ProductEditFormProps> = ({ form, collectionInit, disco
             </Form.Item>
           </Descriptions.Item>
           <Descriptions.Item label="Nhãn" span={3}>
-            <Form.Item name={'tags'} rules={[REQUIRED_RULE]} initialValue={selectedItem?.HaveTag.map((item) => { return { value: item.tagID, label: item.tag.name } })} style={FORM_NO_BOTTOM_MARGIN}>
+            <Form.Item name={'tags'} rules={[REQUIRED_RULE]} initialValue={selectedItem?.haveTags?.map((item) => { return { value: item?.tagId, label: item?.tag?.name } })} style={FORM_NO_BOTTOM_MARGIN}>
               <Select
                 mode="multiple"
                 allowClear

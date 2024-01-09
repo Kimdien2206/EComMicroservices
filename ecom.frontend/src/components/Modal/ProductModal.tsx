@@ -44,7 +44,7 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
     {
       key: '1',
       label: 'Tồn kho',
-      children: <ProductInventoryTable data={selectedItem?.productItem} />,
+      children: <ProductInventoryTable data={selectedItem?.productItems} />,
     },
     {
       key: '2',

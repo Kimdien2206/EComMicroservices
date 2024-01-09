@@ -49,7 +49,7 @@ namespace ECom.Services.Products.Handler
             var responseMessage = new Response<ProductDto>();
             try
             {
-                List<Product> products = DataAccess.Ins.DB.Products.Include("ProductItems").OrderBy(u => u.Id).ToList();
+                List<Product> products = DataAccess.Ins.DB.Products.Include("ProductItems").Include("HaveTags").OrderBy(u => u.Id).ToList();
                 log.Info(products.Count.ToString());
                 responseMessage.responseData = products.Select(
                     emp => mapper.Map<ProductDto>(emp)

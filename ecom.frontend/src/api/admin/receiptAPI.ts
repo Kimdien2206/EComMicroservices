@@ -9,7 +9,7 @@ export function fetchPaidReceipt() {
 }
 
 export function paidReceipt(id: number){
-    return http.patch(`/receipt/${id}`, {status: '1'});
+    return http.patch(`/receipt/paid/${id}`, {status: '1'});
 };
 
 export function fetchDetailOrder(id: number){

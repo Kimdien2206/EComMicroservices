@@ -150,7 +150,7 @@ const HeaderCustom = () => {
                                 <ShoppingCartOutlined />
                             </Link>
                         </div>
-                        <div className="header__menu__item header__menu__right__item">
+                        <div className="header__menu__item header__menu__right__item" style={{width: 100}}>
                             <Dropdown menu={appCtx?.user ? { items: itemsLogined } : { items }} placement='bottom'><UserOutlined /></Dropdown>
                         </div>
                     </div>

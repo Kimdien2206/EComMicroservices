@@ -9,8 +9,8 @@ const LineChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log(dayjs(new Date(new Date().getFullYear(),0,1)).format('DD-MM-YYYY').toString())
-    fetchReport(dayjs(new Date(new Date().getFullYear(),0,1)).format('DD-MM-YYYY').toString())
+    console.log(dayjs(new Date(new Date().getFullYear()-1,0,1)).format('DD-MM-YYYY').toString())
+    fetchReport(dayjs(new Date(new Date().getFullYear()-1,0,1)).format('DD-MM-YYYY').toString())
       .then(data => {
         console.log(data.data[0])
         setData(data.data[0].monthlyReports)

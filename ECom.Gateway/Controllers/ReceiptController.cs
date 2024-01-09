@@ -32,12 +32,14 @@ namespace ECom.Gateway.Controllers
                 var getReceiptResponse = await this.messageSession.Request<Response<ReceiptDto>>(getReceiptMessage);
                 log.Info($"Message sent, received: {getReceiptResponse.responseData}");
 
+                foreach(ReceiptDto item in getReceiptResponse.responseData)
+                {
+                    var getOrderMessage = new GetOrderById( ) { Id = item.OrderId };
+                    var getOrderResponse = await this.messageSession.Request<Response<OrderDto>>(getOrderMessage);
+                    log.Info($"Message sent, received: {getOrderResponse.responseData}");
+                    item.OrderInfo = getOrderResponse.responseData.First();
 
-                var getOrderMessage = new GetOrderById( ) { Id = getReceiptResponse.responseData.First().OrderId };
-                var getOrderResponse = await this.messageSession.Request<Response<OrderDto>>(getOrderMessage);
-                log.Info($"Message sent, received: {getOrderResponse.responseData}");
-
-                getReceiptResponse.responseData.First().OrderInfo = getOrderResponse.responseData.First();
+                }
                 
                 return ReturnWithStatus(getReceiptResponse);
             }

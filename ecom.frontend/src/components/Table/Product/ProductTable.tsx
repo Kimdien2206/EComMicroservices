@@ -80,6 +80,7 @@ const ProductTable: FC<ProductTableProps> = ({ data, setSelectedItem, dispatch, 
             if (isClickValidToOpenDetail(event)) {
               dispatch({ type: SET_ACTION, payload: ACTION_READ })
               setIsModalOpen((prev: boolean) => !prev);
+              console.log(record)
               setSelectedItem(record)
             }
           },
