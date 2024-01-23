@@ -98,11 +98,11 @@ const menu: MenuProps['items'] = [
     label: 'Giảm giá',
     icon: generateImageIcon(DiscountIcon)
   },
-  {
-    key: 'voucher',
-    label: 'Voucher',
-    icon: generateImageIcon(VoucherIcon)
-  },
+  // {
+  //   key: 'voucher',
+  //   label: 'Voucher',
+  //   icon: generateImageIcon(VoucherIcon)
+  // },
   {
     key: 'policy',
     label: 'Chính sách',

@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Row style={{ marginBottom: 20 }}>
+      {/* <Row style={{ marginBottom: 20 }}>
         <Col>
           <Button
             type="primary"
@@ -67,7 +67,7 @@ const Dashboard = () => {
               updateRecommener().then(() => SuccessAlert("Đã gửi yêu cầu cập nhật hệ thống gợi ý. Vui lòng kiểm tra lại sau vài phút.")).catch(err => console.log(err));
             }}>Cập nhật hệ thống gợi ý</Button>
         </Col>
-      </Row>
+      </Row> */}
       <Row gutter={24} style={{ marginBottom: 20 }}>
         <Col lg={8} md={12}>
           <NumberCard title='Đơn hàng' icon={OrderIcon} description={order?.length.toString()} />

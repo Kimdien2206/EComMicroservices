@@ -74,7 +74,7 @@ function App() {
             <Route key={'delivery'} path='delivery' element={<Delivery />} />
             <Route key={'feedback'} path='feedback' element={<Feedback />} />
             <Route key={'discount'} path='discount' element={<Discount />} />
-            <Route key={'voucher'} path='voucher' element={<Voucher />} />
+            {/* <Route key={'voucher'} path='voucher' element={<Voucher />} /> */}
             <Route key={'policy'} path='policy' element={<Policy />} />
             <Route key={'customer-management'} path='customer-management' element={<CustomerManagement />}></Route>
             <Route key={'importing'} path='importing'>

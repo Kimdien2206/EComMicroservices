@@ -246,7 +246,7 @@ const ProductModal: FC<ProductModalProps> = ({ isOpen, setIsModalOpen, action, s
 }
 async function clearHaveTag(selectedItem: IProduct): Promise<any> {
   return new Promise((resolve, reject) => {
-    selectedItem.HaveTag.forEach((item: IHaveTag) => {
+    selectedItem.haveTags.forEach((item: IHaveTag) => {
       deleteHaveTag(item);
     })
     resolve(true);
